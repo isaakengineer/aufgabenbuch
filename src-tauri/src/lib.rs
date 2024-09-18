@@ -18,19 +18,7 @@ fn file_waehlen(app: AppHandle) {
     });
 }
 
-#[tauri::command]
-async fn greet(app: AppHandle, name: String) -> String {
-    let result = app.dialog().file().pick_file(move |file_path| {
-        if let Some(file_path) = file_path {
-            println!("Selected file: {}", file_path.to_string());
-        } else {
-            println!("No file selected");
-        }
-    });
-
-    // return a default value or an error message
-    "File selection result".to_string()
-}
+// #[tauri::command] // JUST SOME INITIAL TESTS with dialog.message AND ipc
 // fn greet(app: AppHandle, name: String) -> String {
 //     // let file_path = app.dialog().file().blocking_pick_file();
 
