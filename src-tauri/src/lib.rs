@@ -1,10 +1,22 @@
-use tauri::{AppHandle, Emitter};
+use tauri::{AppHandle, Emitter, Listener};
 use tauri_plugin_dialog::{DialogExt, MessageDialogKind};
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 
 
 use std::path::PathBuf;
+
+fn file_waehlen(app: AppHandle) {
+    println!("File waehlen");
+    app.dialog().file().pick_file(move |file_path| {
+        if let Some(file_path) = file_path {
+            println!("Selected file: {}", file_path.to_string());
+            app.emit("file-gewaehlt", true).unwrap();
+        } else {
+            println!("No file selected");
+        }
+    });
+}
 
 #[tauri::command]
 async fn greet(app: AppHandle, name: String) -> String {
@@ -64,6 +76,19 @@ pub fn run() {
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_shell::init())
         .invoke_handler(tauri::generate_handler![greet])
+        .setup(|app| {
+            // let handle = app.handle().clone();
+            let handle_clone = app.handle().clone();
+            app.listen("file-waehlen", move |event| {
+                if let Ok(flag) = serde_json::from_str::<bool>(event.payload()) {
+                    file_waehlen(handle_clone.clone());
+                    println!("Flag: {}", flag.to_string());
+                    
+                    handle_clone.unlisten(event.id());
+                }
+            });
+            Ok(())
+        })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

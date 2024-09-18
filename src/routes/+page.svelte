@@ -1,8 +1,16 @@
 <script>
   import { invoke } from "@tauri-apps/api/core";
+  import { emit, once } from '@tauri-apps/api/event';
 
   let name = "";
   let greetMsg = "";
+  let ausstatung = {
+    haupt: 'nichts',
+  };
+
+  once('file-gewaehlt', (event) => {
+    ausstatung.haupt = 'liste'
+  })
 
   async function greet() {
     // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
@@ -10,6 +18,19 @@
     // invoke("greet", { name });
   }
 </script>
+
+{#if ausstatung.haupt === 'nichts'}
+  <div>
+    <h1>Aufgabenbuch</h1>
+    <p>Kein File gewählt, bitte etwas wählen</p>
+    <button on:click={() => emit('file-waehlen', true)}>File Wählen</button>
+  </div>
+{:else if ausstatung.haupt === 'liste'}
+  <div>
+    <h1>Aufgabenbuch</h1>
+    <p>Mehr sollte gleich da sein</p>
+  </div>
+{/if}
 
 <div class="container">
   <h1>Welcome to Tauri!</h1>
