@@ -18,8 +18,9 @@ fn file_waehlen(app: AppHandle) {
     });
 }
 
-// #[tauri::command] // JUST SOME INITIAL TESTS with dialog.message AND ipc
-// fn greet(app: AppHandle, name: String) -> String {
+#[tauri::command] // JUST SOME INITIAL TESTS with dialog.message AND ipc
+fn greet(app: AppHandle, name: String) -> String {
+    let message = format!("Hello, {}! You've been greeted from Rust!", name);
 //     // let file_path = app.dialog().file().blocking_pick_file();
 
 //     // format!("Hello, {}! You've been greeted from Rust!", name);
@@ -54,8 +55,8 @@ fn file_waehlen(app: AppHandle) {
 //         result.unwrap_or("Error selecting file".to_string())
 //     };
 
-//     message
-// }
+    message
+}
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
