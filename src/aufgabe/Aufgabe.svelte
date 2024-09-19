@@ -1,6 +1,7 @@
 <script>
     import { Aufgabe, updateStore } from './store.js';
     import { onMount } from 'svelte';
+    import { invoke } from "@tauri-apps/api/core";
 
     import ResetAufgabe from './ResetAufgabe.svelte';
     import Erledigen from './Erledigen.svelte';
@@ -30,6 +31,10 @@
         fokus = 'aktionen';
     }
 
+    async function hinfuegen() {
+        console.log("hinfuegen", formData);
+        await invoke('aufgabe_hinfuegen', { beschreibung: formData.beschreibung });
+    }
 </script>
 
 <form>
@@ -61,7 +66,7 @@
         </fieldset>
         <fieldset id="actions">
             <legend>Aktionen</legend>
-            <button >Neu</button>
+            <button on:click={hinfuegen}>Neu</button>
             <div class="btn-group">
                 <button on:click={() => fokus = 'normal'}>Normal</button>
                 <button on:click={() => fokus = 'notiz'}>Notiz</button>
@@ -80,7 +85,6 @@
                         {/each}
                     </select>
                 </div>
-    
                 <div>
                     <select name="prioritaet" on:change={handleChange} bind:value={formData.prioritaet} placeholder="Priorität">
                         <option value="" disabled selected>Priorität</option>
@@ -88,6 +92,12 @@
                             <option value={prioritaet}>{prioritaet}</option>
                         {/each}
                     </select>
+                </div>
+                <div>
+                    (?Notiz)
+                </div>
+                <div>
+                    (?Link)
                 </div>
             {:else if fokus === 'link'}
                 <input type="text" name="link" on:input={handleChange} bind:value={formData.link} placeholder="Link" />

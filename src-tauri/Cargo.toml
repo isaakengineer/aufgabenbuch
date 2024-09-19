@@ -25,3 +25,4 @@ tokio = { version="1.40.0", features= ["full"] }
 sqlx = { version="0.8.2", features = ["sqlite", "runtime-tokio"] }
 
 futures = "0.3"
+chrono = { version="0.4.38", features = ["serde"] }

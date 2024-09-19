@@ -11,6 +11,28 @@ struct AppData {
     pool: Option<Pool<Sqlite>>,
 }
 
+use chrono::{NaiveDate, DateTime};
+use serde::{Serialize, Deserialize};
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct Aufgabe {
+    pub gruppe: Option<String>,          // string (disabled)
+    pub beschreibung: String,            // string (textarea)
+    pub notiz: Option<String>,           // text (textarea)
+    pub link: Option<String>,            // text (input)
+    pub wochentag: u8,                   // integer (drop down 0-7)
+    pub prioritaet: u8,                  // integer (drop down 0-4)
+    pub position: Option<u32>,           // integer (disabled, wrapped in Option for nullable)
+
+    pub verschoben: Option<DateTime<chrono::Utc>>, // date (checkbox)
+    pub getan: Option<DateTime<chrono::Utc>>,      // date (checkbox)
+    pub vernachlaessigt: Option<DateTime<chrono::Utc>>, // date (checkbox)
+    pub kommentar: String,               // string (input)
+
+    pub erstellt_an: Option<DateTime<chrono::Utc>>, // date (disabled)
+    pub geaendert_an: Option<DateTime<chrono::Utc>>, // date (disabled)
+}
+
 use std::path::PathBuf;
 
  
@@ -60,6 +82,24 @@ async fn file_waehlen(app: AppHandle) -> String {
     // println!("DB Path: {}", db_path);
     // format!("DB Path: {}", db_path)
     format!("lass uns mal sehen")
+}
+
+#[tauri::command]
+async fn aufgabe_hinfuegen(app: AppHandle, beschreibung: &str) -> Result<(), String> {
+
+    println!("aufgabe_hinfuegen: {}", &beschreibung);
+    // let db = state.pool.unwrap().clone();
+
+    let data = app.state::<Mutex<AppData>>();
+    let db = data.lock().unwrap().pool.clone().unwrap();
+
+    sqlx::query("INSERT INTO liste (beschreibung) VALUES (?1)")
+        .bind(beschreibung)
+        // .bind(TodoStatus::Incomplete)
+        .execute(&db)
+        .await
+        .map_err(|e| format!("Error saving todo: {}", e))?;
+    Ok(())
 }
 
 #[tauri::command]
@@ -159,6 +199,7 @@ pub async fn run() {
             greet,
             file_waehlen,
             list,
+            aufgabe_hinfuegen,
         ])
         .setup(|app| {
             // let handle = app.handle().clone();
