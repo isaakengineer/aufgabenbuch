@@ -7,11 +7,18 @@
   let ausstatung = {
     haupt: 'nichts',
   };
+  let list = {};
+  let file = {};
 
-  once('file-gewaehlt', (event) => {
+  once('file-gewaehlt', async (event) => {
     ausstatung.haupt = 'liste'
+    list = await invoke("list", { file });
   })
 
+  async function file_waehlen() {
+    file = await invoke("file_waehlen");
+    
+  }
   async function greet() {
     // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
     greetMsg = await invoke("greet", { name });
@@ -19,45 +26,71 @@
   }
 </script>
 
-{#if ausstatung.haupt === 'nichts'}
-  <div>
-    <h1>Aufgabenbuch</h1>
-    <p>Kein File gewählt, bitte etwas wählen</p>
-    <button on:click={() => emit('file-waehlen', true)}>File Wählen</button>
-  </div>
-{:else if ausstatung.haupt === 'liste'}
-  <div>
-    <h1>Aufgabenbuch</h1>
-    <p>Mehr sollte gleich da sein</p>
-  </div>
-{/if}
-
-<div class="container">
-  <h1>Welcome to Tauri!</h1>
-
-  <div class="row">
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo vite" alt="Vite Logo" />
-    </a>
-    <a href="https://tauri.app" target="_blank">
-      <img src="/tauri.svg" class="logo tauri" alt="Tauri Logo" />
-    </a>
-    <a href="https://kit.svelte.dev" target="_blank">
-      <img src="/svelte.svg" class="logo svelte-kit" alt="SvelteKit Logo" />
-    </a>
-  </div>
-
-  <p>Click on the Tauri, Vite, and SvelteKit logos to learn more.</p>
-
-  <form class="row" on:submit|preventDefault={greet}>
-    <input id="greet-input" placeholder="Enter a name..." bind:value={name} />
-    <button type="submit">Greet</button>
-  </form>
-
-  <p>{greetMsg}</p>
+<div class="app">
+  <header></header>
+  <main>
+    {#if ausstatung.haupt === 'nichts'}
+      <div>
+        <h1>Aufgabenbuch</h1>
+        <p>Kein File gewählt, bitte etwas wählen</p>
+        <button on:click={file_waehlen}>File Wählen</button>
+      </div>
+    {:else if ausstatung.haupt === 'liste'}
+      <div>
+        <h1>Aufgabenbuch</h1>
+        <p>Mehr sollte gleich da sein</p>
+        <p>{ file }</p>
+        <p>{ list }</p>
+      </div>
+    {/if}
+    <div class="container">
+      <h1>Welcome to Tauri!</h1>
+    
+      <div class="row">
+      </div>
+      <p>Click on the Tauri, Vite, and SvelteKit logos to learn more.</p>
+    
+      <form class="row" on:submit|preventDefault={greet}>
+        <input id="greet-input" placeholder="Enter a name..." bind:value={name} />
+        <button type="submit">Greet</button>
+      </form>
+    
+      <p>{greetMsg}</p>
+    </div>
+  </main>
+  <footer></footer>
 </div>
 
-<style>
+<style lang="scss">
+
+.app {
+  display: grid;
+  grid-template: "header" "." "main" "." "footer";
+  grid-template-rows: 2.8rem 1px 1fr 1px 2.8rem;
+  flex-direction: column;
+  background-color: black;
+  height: 100vh;
+  width: 100vw;
+
+  > header {
+    grid-area: header;
+    background-color: #24c8db;
+  }
+  > footer {
+    grid-area: footer;
+    background-color: orchid;
+  }
+  > main {
+    grid-area: main;
+    background-color: #f6f6f6;
+    overflow-y: auto;
+  }
+}
+
+.app > main > .container {
+  background-color: gray;
+}
+
   .logo.vite:hover {
     filter: drop-shadow(0 0 2em #747bff);
   }

@@ -1,16 +1,30 @@
-use tauri::{AppHandle, Emitter, Listener};
+use tauri::{AppHandle, Emitter, Listener, Builder, Manager};
 use tauri_plugin_dialog::{DialogExt, MessageDialogKind};
+use std::sync::Mutex;
+use sqlx::{sqlite::{SqliteConnection, SqlitePoolOptions}, Pool, Sqlite};
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 
+#[derive(Default)]
+struct AppData {
+    db_path: String,
+    pool: Option<Pool<Sqlite>>,
+}
 
 use std::path::PathBuf;
 
-fn file_waehlen(app: AppHandle) {
+ 
+fn file_waehlen_0(app: AppHandle) {
     println!("File waehlen");
     app.dialog().file().pick_file(move |file_path| {
         if let Some(file_path) = file_path {
             println!("Selected file: {}", file_path.to_string());
+
+            let data = app.state::<Mutex<AppData>>();
+            let mut data = data.lock().unwrap();
+
+            data.db_path =  file_path.to_string();
+
             app.emit("file-gewaehlt", true).unwrap();
         } else {
             println!("No file selected");
@@ -18,8 +32,84 @@ fn file_waehlen(app: AppHandle) {
     });
 }
 
+#[tauri::command]
+async fn file_waehlen(app: AppHandle) -> String {
+    let app_handle = app.clone();
+    app_handle.dialog().file().pick_file(move |file_path| {
+        if let Some(file_path) = file_path {
+
+            println!("Selected file: {}", file_path.to_string());
+            
+            let data = app_handle.state::<Mutex<AppData>>();
+            let mut data = data.lock().unwrap();
+            data.db_path =  file_path.to_string();
+
+            app.emit("file-gewaehlt", true).unwrap();
+
+        } else {
+            
+            println!("No file selected");
+        
+        }
+    });
+
+    // let data = app.state::<Mutex<AppData>>();
+    // let data_lock = data.lock().unwrap();
+    // let db_path = data_lock.db_path.clone();
+    
+    // println!("DB Path: {}", db_path);
+    // format!("DB Path: {}", db_path)
+    format!("lass uns mal sehen")
+}
+
+#[tauri::command]
+async fn list(app: AppHandle) -> String {
+    println!("list");
+
+    // 
+    let data = app.state::<Mutex<AppData>>();
+    let db_path = data.lock().unwrap().db_path.clone();
+    // println!("DB Path: {}", &db_path);
+    // drop(data_lock);
+
+    let pool = SqlitePoolOptions::new()
+        .connect(&db_path).await.unwrap();
+
+    sqlx::migrate!("./migrations").run(&pool).await.unwrap();
+
+    let data = app.state::<Mutex<AppData>>();
+    let mut data = data.lock().unwrap();
+    data.pool = Some(pool);
+    
+
+    format!("DB Path:")
+}
+
+#[tauri::command]
+async fn greet(app: AppHandle, name: String) -> String {
+    let data = app.state::<Mutex<AppData>>();
+    let data_lock = data.lock().unwrap();
+    let db_path = data_lock.db_path.clone();
+    format!("DB Path: {}", db_path)
+}
+
+// async fn database_init(app: AppHandle) {
+
+//     let data = app.state::<Mutex<AppData>>();
+    
+//     
+//     let mut data = data.lock().unwrap();
+
+//     data.pool = Some(pool.unwrap());
+
+//     let app_data = app.state::<Mutex<AppData>>();
+//     let db = app_data.lock().unwrap().db_path.clone();
+//     sqlx::migrate!("./migrations").run(&db).await.unwrap();
+// }
+
+
 #[tauri::command] // JUST SOME INITIAL TESTS with dialog.message AND ipc
-fn greet(app: AppHandle, name: String) -> String {
+fn greet_2(app: AppHandle, name: String) -> String {
     let message = format!("Hello, {}! You've been greeted from Rust!", name);
 //     // let file_path = app.dialog().file().blocking_pick_file();
 
@@ -59,18 +149,25 @@ fn greet(app: AppHandle, name: String) -> String {
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
-pub fn run() {
+#[tokio::main]
+pub async fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_shell::init())
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![
+            greet,
+            file_waehlen,
+            list,
+        ])
         .setup(|app| {
             // let handle = app.handle().clone();
+            app.manage(Mutex::new(AppData::default()));
             let handle_clone = app.handle().clone();
             app.listen("file-waehlen", move |event| {
                 if let Ok(flag) = serde_json::from_str::<bool>(event.payload()) {
-                    file_waehlen(handle_clone.clone());
+                    file_waehlen_0(handle_clone.clone(), );
+                    // print_db_path(handle_clone.clone());
                     println!("Flag: {}", flag.to_string());
                     
                     handle_clone.unlisten(event.id());
