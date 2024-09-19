@@ -2,6 +2,8 @@
   import { invoke } from "@tauri-apps/api/core";
   import { emit, once } from '@tauri-apps/api/event';
 
+  import Aufgabe from '../aufgabe/Aufgabe.svelte';
+
   let name = "";
   let greetMsg = "";
   let ausstatung = {
@@ -58,20 +60,27 @@
       <p>{greetMsg}</p>
     </div>
   </main>
-  <footer></footer>
+  <aside>
+    <Aufgabe />
+  </aside>
+  <footer>
+  </footer>
 </div>
 
 <style lang="scss">
 
 .app {
   display: grid;
-  grid-template: "header" "." "main" "." "footer";
-  grid-template-rows: 2.8rem 1px 1fr 1px 2.8rem;
+  grid-template: "header" "." "main" "." "aside" "." "footer";
+  grid-template-rows: 2.8rem 1px 5fr 1px 1fr 1px 2.8rem;
   flex-direction: column;
   background-color: black;
   height: 100vh;
   width: 100vw;
-
+  > aside {
+    grid-area: aside;
+    background-color: #76d194;
+  }
   > header {
     grid-area: header;
     background-color: #24c8db;
