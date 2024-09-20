@@ -38,7 +38,7 @@
           {#if istErledigt(aufgabe)}
             <div class="kommentar">{aufgabe.kommentar}</div>
           {/if}
-          {#if import.meta.env.DEV}
+          <!-- {#if import.meta.env.DEV}
             <div class="dev debug">
               <div>Gruppe: {aufgabe.gruppe}</div>
               <div>Notiz: {aufgabe.notiz}</div>
@@ -53,7 +53,7 @@
               <div>Erstellt am: {aufgabe.erstellt_an ? aufgabe.erstellt_an : 'N/A'}</div>
               <div>Geändert am: {aufgabe.geaendert_an ? aufgabe.geaendert_an : 'N/A'}</div>
             </div>
-          {/if}
+          {/if} -->
       </div>
     {/each}
   </div>

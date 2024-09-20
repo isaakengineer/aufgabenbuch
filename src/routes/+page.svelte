@@ -18,7 +18,7 @@
   let list = {};
   let file = {};
 
-  const haupt = ["liste", "suche", "gruppen", "kalendar", "buch", "schließen"];
+  const haupt = ["liste", "suche", "buch", "kalendar", "gruppen", "Inbox"];
 
   // let aufgabenList = [];
 
