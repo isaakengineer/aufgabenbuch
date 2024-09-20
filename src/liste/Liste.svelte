@@ -21,15 +21,23 @@
     async function aufgabeGewaelt(aufgabe) {
         $Aufgabe = aufgabe;
     }
+
+    const istErledigt = (a) => {
+        return a.getan !== null || a.vernachlaessigt !== null || a.verschoben !== null;
+    };
+
   </script>
 
 {#if $liste.length > 0 }
   <div class="liste">
-  {#each $liste as aufgabe}
-      <header>Aufgaben liste</header>
-      <div class="aufgabe" on:click={() => aufgabeGewaelt(aufgabe)}>
+    <header>Aufgaben liste</header>
+    {#each $liste as aufgabe}
+      <div class="aufgabe" class:erledigt={istErledigt(aufgabe)} on:click={() => aufgabeGewaelt(aufgabe)}>
           <div class="id">{aufgabe.id}</div>
           <div class="beschreibung">{aufgabe.beschreibung}</div>
+          {#if istErledigt(aufgabe)}
+            <div class="kommentar">{aufgabe.kommentar}</div>
+          {/if}
           {#if import.meta.env.DEV}
             <div class="dev debug">
               <div>Gruppe: {aufgabe.gruppe}</div>
@@ -47,7 +55,7 @@
             </div>
           {/if}
       </div>
-  {/each}
+    {/each}
   </div>
 {:else}
   <section class="message">
@@ -63,12 +71,30 @@
   gap: .2rem;
 }
 .aufgabe {
+  > div {
+    display: inline;
+    padding: .2rem;
+  }
+  > .id {
+    background-color: #eee;
+    
+    border-radius: .2rem;
+    margin-right: .2rem;
+  }
+  > .kommentar {
+    color: rgb(6, 6, 100);
+  }
   margin: 0 .2rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: .5rem;
+    // display: flex;
+    // flex-wrap: wrap;
+    // gap: .5rem;
     > .beschreibung {
       flex: 1;
+    }
+    &.erledigt {
+      > .beschreibung {
+        text-decoration: line-through;
+      }
     }
     > .dev {
       flex: 1;
@@ -77,7 +103,7 @@
       flex-wrap: wrap;
     }
     box-shadow: 0px 0px 1px black;
-    padding: .4rem;
+    // padding: .4rem;
     background-color: #ddd;
     &:hover {
       background-color: #eee;

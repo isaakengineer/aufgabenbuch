@@ -1,46 +1,74 @@
 <script>
     import { invoke } from "@tauri-apps/api/core";
-    import { Aufgabe, updateStore } from './store.js';
-
-    let selectedOption = null;
-
-  // Determine the initial selected option based on Aufgabe properties
-    if ($Aufgabe.vernachlaessigt !== null) {
-        selectedOption = 'vernachlaessigt';
-    } else if ($Aufgabe.getan !== null) {
-        selectedOption = 'getan';
-    } else if ($Aufgabe.verschoben !== null) {
-        selectedOption = 'verschoben';
-    }
+    import { Aufgabe, AufgabeIstErledigt, updateStore } from './store.js';
 
     async function erledigen() {
-        console.log(selectedOption);
-        if (selectedOption === 'vernachlaessigt') {
+        console.log($AufgabeIstErledigt);
+        if ($AufgabeIstErledigt === 'vernachlaessigt') {
             $Aufgabe.vernachlaessigt = new Date().toISOString();
-        } else if (selectedOption === 'getan') {
+            $Aufgabe.getan = null;
+            $Aufgabe.verschoben = null;
+        } else if ($AufgabeIstErledigt === 'getan') {
             $Aufgabe.getan = new Date().toISOString();
-        } else if (selectedOption === 'verschoben') {
+            $Aufgabe.vernachlaessigt = null;
+            $Aufgabe.verschoben = null;
+        } else if ($AufgabeIstErledigt === 'verschoben') {
             $Aufgabe.verschoben = new Date().toISOString();
+            $Aufgabe.getan = null;
+            $Aufgabe.vernachlaessigt = null;
         }
         await invoke("aufgabe_erledigen", { aufgabe: $Aufgabe });
     }
 </script>
 
-<label>
-    Vernachlässigt:
-    <input type="radio" name="status" value="vernachlaessigt" bind:group={selectedOption} />
-</label>
-  
-<label>
-    Getan:
-    <input type="radio" name="status" value="getan" bind:group={selectedOption} />
-</label>
-  
-<label>
-    Verschoben:
-    <input type="radio" name="status" value="verschoben" bind:group={selectedOption} />
-</label>
+<div class="radio-container">
+{#each ['verschoben', 'getan', 'vernachlaessigt'] as status}
+    
+    <input type="radio" id={status} name="status" value={status} bind:group={$AufgabeIstErledigt} />
+    <label for={status}>{status.charAt(0).toUpperCase() + status.slice(1)}</label>
+{/each}
+</div>
 
 <input type="text" name="kommentar" bind:value={$Aufgabe.kommentar} placeholder="Kommentar" />
 
 <button on:click={erledigen}>Erledigen</button>
+
+<style lang="scss">
+.radio-container {
+    display: flex;
+    font-size: .9rem;
+    gap: 0;
+    border: 1px solid #ccc;
+    border-radius: .4rem;
+    box-shadow: inset 0 1px 3px #ddd;
+    > input:first-child + label {
+        border-radius: .4rem 0 0 .4rem;
+    }
+    > label:last-child {
+        border-radius: 0 .4rem .4rem 0;
+    }
+}
+input[type="radio"]{
+  visibility: hidden;
+  height: 0;
+  width: 0;
+  display: none;
+}
+label {
+    margin: 0;
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  cursor: pointer;
+  background-color: #ddd;
+  color: #333;
+  padding: .2rem .5rem;
+  transition: all .3s ease-out;
+}
+input[type="radio"]:checked + label{
+  background-color: #fff;
+  color: #000;
+  box-shadow: 0 1px 3px #ddd;
+}
+
+</style>
