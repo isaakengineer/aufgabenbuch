@@ -6,6 +6,8 @@
   import Liste from '../liste/Liste.svelte';
   import { liste } from '../liste/store.js';
 
+  import File from '../file/File.svelte';
+
   let aufgabenList = $liste;
 
   let name = "";
@@ -15,6 +17,9 @@
   };
   let list = {};
   let file = {};
+
+  const haupt = ["liste", "suche", "gruppen", "kalendar", "buch", "schließen"];
+
   // let aufgabenList = [];
 
   once('file-gewaehlt', async (event) => {
@@ -23,10 +28,6 @@
     $liste = await(invoke("list_alle"));
   })
 
-  async function file_waehlen() {
-    file = await invoke("file_waehlen");
-    
-  }
   async function greet() {
     // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
     greetMsg = await invoke("greet", { name });
@@ -38,47 +39,66 @@
   <header></header>
   <main>
     {#if ausstatung.haupt === 'nichts'}
-      <div>
-        <h1>Aufgabenbuch</h1>
-        <p>Kein File gewählt, bitte etwas wählen</p>
-        <button on:click={file_waehlen}>File Wählen</button>
-      </div>
+      <File />
     {:else if ausstatung.haupt === 'liste'}
-      <div>
-        <h1>Aufgabenbuch</h1>
-        <p>Mehr sollte gleich da sein</p>
-        <p>{ file }</p>
-        <p>{ list }</p>
-        <p>{ $liste }</p>
-      </div>
-      <div>
         <Liste />
-      </div>
     {/if}
-    <div class="container">
-      <h1>Welcome to Tauri!</h1>
-    
-      <div class="row">
-      </div>
-      <p>Click on the Tauri, Vite, and SvelteKit logos to learn more.</p>
-    
-      <form class="row" on:submit|preventDefault={greet}>
-        <input id="greet-input" placeholder="Enter a name..." bind:value={name} />
-        <button type="submit">Greet</button>
-      </form>
-    
-      <p>{greetMsg}</p>
-    </div>
   </main>
   <aside>
     <Aufgabe />
   </aside>
   <footer>
+    <nav class="kontrollen">
+      {#each haupt as item}
+        <a href="#">{item}</a>
+      {/each}
+    </nav>
   </footer>
 </div>
 
 <style lang="scss">
+:global(.debug) {
+  color: #333;
+  background-color: #bcd8db;
+  // margin: .2em;
+  padding: .2em;
+  box-sizing: border-box;
+}
+:global(section.message) {
+    padding: .5rem;
+}
+nav.kontrollen {
+  display: flex;
+  justify-content: space-around;
+  a {
+    display: block;
+    padding: .5rem;
+    padding-bottom: 0;
+    color: #333;
+    text-decoration: none;
+    text-transform: capitalize;
+    position: relative;
+    &:hover {
+      color: #000;
+      &::before {
+        transform: scaleX(1);
+      }
+    }
+    &::before {
+      content: "";
+      position: absolute;
+      display: block;
+      width: 100%;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: #000;
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
 
+  }
+}
 .app {
   display: grid;
   grid-template: "header" "." "main" "." "aside" "." "footer";
@@ -89,7 +109,7 @@
   width: 100vw;
   > aside {
     grid-area: aside;
-    background-color: #76d194;
+    background-color: #eee;
   }
   > header {
     grid-area: header;
@@ -97,7 +117,7 @@
   }
   > footer {
     grid-area: footer;
-    background-color: orchid;
+    background-color: #fff;
   }
   > main {
     grid-area: main;

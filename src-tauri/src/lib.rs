@@ -85,21 +85,40 @@ async fn file_waehlen(app: AppHandle) -> String {
     format!("lass uns mal sehen")
 }
 
+
+fn process_beschreibung(beschreibung: &str) -> Option<String> {
+    if let Some(pos) = beschreibung.find('.') {
+        let substring = &beschreibung[..pos];
+        if substring.len() < 9 {
+            return Some(substring.to_string());
+        }
+    }
+    None
+}
+
 #[tauri::command]
 async fn aufgabe_hinfuegen(app: AppHandle, beschreibung: &str) -> Result<(), String> {
 
     println!("aufgabe_hinfuegen: {}", &beschreibung);
-    // let db = state.pool.unwrap().clone();
 
     let data = app.state::<Mutex<AppData>>();
     let db = data.lock().unwrap().pool.clone().unwrap();
 
-    sqlx::query("INSERT INTO liste (beschreibung, wochentag, prioritaet) VALUES (?1, 0, 0)")
-        .bind(beschreibung)
-        // .bind(TodoStatus::Incomplete)
-        .execute(&db)
-        .await
-        .map_err(|e| format!("Error saving todo: {}", e))?;
+    let gruppe = process_beschreibung(&beschreibung);
+    if let Some(gruppe_value) = gruppe {
+        sqlx::query("INSERT INTO liste (gruppe, beschreibung, wochentag, prioritaet) VALUES (?1, ?2, 0, 0)")
+            .bind(&gruppe_value)
+            .bind(beschreibung)
+            .execute(&db)
+            .await
+            .map_err(|e| format!("Error saving todo: {}", e))?;
+    } else {
+        sqlx::query("INSERT INTO liste (beschreibung, wochentag, prioritaet) VALUES (?1, 0, 0)")
+            .bind(beschreibung)
+            .execute(&db)
+            .await
+            .map_err(|e| format!("Error saving todo: {}", e))?;
+    }
     Ok(())
 }
 
@@ -114,26 +133,15 @@ async fn list_alle(app: AppHandle) -> Result<Vec<Aufgabe>, String> {
         .await
         .map(|rows| rows.into_iter().collect())
         .map_err(|e| format!("Failed to get todos {}", e))?;
-    debug_liste(liste.clone());
+    if cfg!(dev) {
+        debug_liste(liste.clone());
+    }
     Ok(liste)
 }
 
 fn debug_liste(liste: Vec<Aufgabe>) {
     for aufgabe in liste {
-        println!("Gruppe: {:?}", aufgabe.gruppe);
-        println!("Beschreibung: {}", aufgabe.beschreibung);
-        println!("Notiz: {:?}", aufgabe.notiz);
-        println!("Link: {:?}", aufgabe.link);
-        println!("Wochentag: {}", aufgabe.wochentag);
-        println!("Priorität: {}", aufgabe.prioritaet);
-        println!("Position: {:?}", aufgabe.position);
-        println!("Verschoben: {:?}", aufgabe.verschoben);
-        println!("Getan: {:?}", aufgabe.getan);
-        println!("Vernachlässigt: {:?}", aufgabe.vernachlaessigt);
-        println!("Kommentar: {}", aufgabe.kommentar);
-        println!("Erstellt am: {:?}", aufgabe.erstellt_an);
-        println!("Geändert am: {:?}", aufgabe.geaendert_an);
-        println!("-----------------------------");
+        println!("{:?}\n-----------------------------", aufgabe);
     }
 }
 
