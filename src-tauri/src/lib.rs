@@ -1,7 +1,7 @@
 use tauri::{AppHandle, Emitter, Listener, Builder, Manager};
 use tauri_plugin_dialog::{DialogExt, MessageDialogKind};
 use std::sync::Mutex;
-use sqlx::{sqlite::{SqliteConnection, SqlitePoolOptions}, Pool, Sqlite};
+use sqlx::{sqlite::{SqliteConnection, SqlitePoolOptions}, Pool, Sqlite, FromRow};
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 
@@ -14,8 +14,9 @@ struct AppData {
 use chrono::{NaiveDate, DateTime};
 use serde::{Serialize, Deserialize};
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug, FromRow)]
 pub struct Aufgabe {
+    pub id: Option<i32>,                 // integer (disabled)
     pub gruppe: Option<String>,          // string (disabled)
     pub beschreibung: String,            // string (textarea)
     pub notiz: Option<String>,           // text (textarea)
@@ -93,13 +94,47 @@ async fn aufgabe_hinfuegen(app: AppHandle, beschreibung: &str) -> Result<(), Str
     let data = app.state::<Mutex<AppData>>();
     let db = data.lock().unwrap().pool.clone().unwrap();
 
-    sqlx::query("INSERT INTO liste (beschreibung) VALUES (?1)")
+    sqlx::query("INSERT INTO liste (beschreibung, wochentag, prioritaet) VALUES (?1, 0, 0)")
         .bind(beschreibung)
         // .bind(TodoStatus::Incomplete)
         .execute(&db)
         .await
         .map_err(|e| format!("Error saving todo: {}", e))?;
     Ok(())
+}
+
+#[tauri::command]
+async fn list_alle(app: AppHandle) -> Result<Vec<Aufgabe>, String> {
+    
+    let data = app.state::<Mutex<AppData>>();
+    let db = data.lock().unwrap().pool.clone().unwrap();
+
+    let liste: Vec<Aufgabe> = sqlx::query_as::<_, Aufgabe>("SELECT * FROM liste")
+        .fetch_all(&db)
+        .await
+        .map(|rows| rows.into_iter().collect())
+        .map_err(|e| format!("Failed to get todos {}", e))?;
+    debug_liste(liste.clone());
+    Ok(liste)
+}
+
+fn debug_liste(liste: Vec<Aufgabe>) {
+    for aufgabe in liste {
+        println!("Gruppe: {:?}", aufgabe.gruppe);
+        println!("Beschreibung: {}", aufgabe.beschreibung);
+        println!("Notiz: {:?}", aufgabe.notiz);
+        println!("Link: {:?}", aufgabe.link);
+        println!("Wochentag: {}", aufgabe.wochentag);
+        println!("Priorität: {}", aufgabe.prioritaet);
+        println!("Position: {:?}", aufgabe.position);
+        println!("Verschoben: {:?}", aufgabe.verschoben);
+        println!("Getan: {:?}", aufgabe.getan);
+        println!("Vernachlässigt: {:?}", aufgabe.vernachlaessigt);
+        println!("Kommentar: {}", aufgabe.kommentar);
+        println!("Erstellt am: {:?}", aufgabe.erstellt_an);
+        println!("Geändert am: {:?}", aufgabe.geaendert_an);
+        println!("-----------------------------");
+    }
 }
 
 #[tauri::command]
@@ -200,6 +235,7 @@ pub async fn run() {
             file_waehlen,
             list,
             aufgabe_hinfuegen,
+            list_alle,
         ])
         .setup(|app| {
             // let handle = app.handle().clone();

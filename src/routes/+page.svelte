@@ -3,6 +3,10 @@
   import { emit, once } from '@tauri-apps/api/event';
 
   import Aufgabe from '../aufgabe/Aufgabe.svelte';
+  import Liste from '../liste/Liste.svelte';
+  import { liste } from '../liste/store.js';
+
+  let aufgabenList = $liste;
 
   let name = "";
   let greetMsg = "";
@@ -11,10 +15,12 @@
   };
   let list = {};
   let file = {};
+  // let aufgabenList = [];
 
   once('file-gewaehlt', async (event) => {
     ausstatung.haupt = 'liste'
     list = await invoke("list", { file });
+    $liste = await(invoke("list_alle"));
   })
 
   async function file_waehlen() {
@@ -43,6 +49,10 @@
         <p>Mehr sollte gleich da sein</p>
         <p>{ file }</p>
         <p>{ list }</p>
+        <p>{ $liste }</p>
+      </div>
+      <div>
+        <Liste />
       </div>
     {/if}
     <div class="container">
