@@ -5,7 +5,7 @@ use sqlx::{sqlite::{SqliteConnection, SqlitePoolOptions}, Pool, Sqlite, FromRow}
 use std::path::PathBuf;
 
 mod aufgabe;
-use aufgabe::{aufgabe_hinfuegen, list_alle, aufgabe_erledigen};
+use aufgabe::{aufgabe_hinfuegen, list_alle, aufgabe_erledigen, list_erledigt};
 
 mod liste;
 use liste::AppData;
@@ -158,8 +158,18 @@ pub async fn run() {
             aufgabe_hinfuegen,
             list_alle,
             aufgabe_erledigen,
+            list_erledigt,
         ])
         .setup(|app| {
+
+            #[cfg(debug_assertions)] // only include this code on debug builds
+            {
+              let window = app.get_webview_window("main").unwrap();
+              window.open_devtools();
+              window.close_devtools();
+            }
+
+            
             // let handle = app.handle().clone();
             app.manage(Mutex::new(AppData::default()));
             let handle_clone = app.handle().clone();

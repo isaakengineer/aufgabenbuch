@@ -1,4 +1,7 @@
 <script>
+
+    import { format } from 'date-fns'; // Assuming date-fns is the internal library for date formatting
+
 	import { liste } from "./store.js";
 	import { Aufgabe } from "../aufgabe/store.js";
 
@@ -29,6 +32,26 @@
 			a.verschoben !== null
 		);
 	};
+    const formatDate = (date) => {
+		return format(new Date(date), 'yyyy-MM-dd'); // Format the date as 'day.month.year'
+	};
+    const getHumanReadable = (a) => {
+        let readable = {
+            date: 'No date available',
+            status: 'No status available'
+        }
+		if (a.getan !== null) {
+            readable.status = 'Getan';
+			readable.date = formatDate(a.getan);
+        } else if (a.vernachlaessigt !== null) {
+            readable.status = 'Vernachlaessigt';
+            readable.date = formatDate(a.vernachlaessigt);
+        } else if (a.verschoben !== null) {
+            readable.status = 'Verschoben';
+            readable.date = formatDate(a.verschoben);
+        }
+        return readable;
+	};  
 </script>
 
 {#if $liste.length > 0}
@@ -41,12 +64,11 @@
 				on:click={() => aufgabeGewaelt(aufgabe)}
 			>
 				<div class="satz">
-					<div class="id">{aufgabe.id}</div>
-					<div class="beschreibung">{aufgabe.beschreibung}</div>
-					{#if istErledigt(aufgabe)}
-						<div class="kommentar">{aufgabe.kommentar}</div>
-					{/if}
-				</div>
+                    <div class="datum">{getHumanReadable(aufgabe).date}</div>
+                    <div class="status">{getHumanReadable(aufgabe).status}</div>
+                    <div class="kommentar">{aufgabe.kommentar}</div>
+                    <div class="beschreibung">{aufgabe.beschreibung}</div>
+			    </div>
 				
 				<!-- {#if import.meta.env.DEV}
             <div class="dev debug">
@@ -100,6 +122,10 @@
 			> .id {
 				color: blue;
 			}
+            > .status {
+                background-color: orangered;
+                color: white;
+            }
 			> .kommentar {
 				color: rgb(6, 6, 100);
 			}

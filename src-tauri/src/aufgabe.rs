@@ -96,7 +96,24 @@ pub async fn list_alle(app: AppHandle) -> Result<Vec<Aufgabe>, String> {
     let data = app.state::<Mutex<AppData>>();
     let db = data.lock().unwrap().pool.clone().unwrap();
 
-    let liste: Vec<Aufgabe> = sqlx::query_as::<_, Aufgabe>("SELECT * FROM liste")
+    let liste: Vec<Aufgabe> = sqlx::query_as::<_, Aufgabe>("SELECT * FROM liste WHERE vernachlaessigt IS NULL AND getan IS NULL AND verschoben IS NULL")
+        .fetch_all(&db)
+        .await
+        .map(|rows| rows.into_iter().collect())
+        .map_err(|e| format!("Failed to get todos {}", e))?;
+    if cfg!(dev) {
+        debug_liste(liste.clone());
+    }
+    Ok(liste)
+}
+
+#[tauri::command]
+pub async fn list_erledigt(app: AppHandle) -> Result<Vec<Aufgabe>, String> {
+    
+    let data = app.state::<Mutex<AppData>>();
+    let db = data.lock().unwrap().pool.clone().unwrap();
+
+    let liste: Vec<Aufgabe> = sqlx::query_as::<_, Aufgabe>("SELECT * FROM liste WHERE vernachlaessigt IS NOT NULL OR getan IS NOT NULL OR verschoben IS NOT NULL")
         .fetch_all(&db)
         .await
         .map(|rows| rows.into_iter().collect())
