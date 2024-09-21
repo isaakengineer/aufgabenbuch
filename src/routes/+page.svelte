@@ -1,6 +1,6 @@
 <script>
 	import { invoke } from "@tauri-apps/api/core";
-	import { emit, once } from "@tauri-apps/api/event";
+	import { emit, once, listen } from "@tauri-apps/api/event";
 
 	import Aufgabe from "../aufgabe/Aufgabe.svelte";
 	import Liste from "../liste/Liste.svelte";
@@ -23,9 +23,8 @@
 
 	// let aufgabenList = [];
 
-	once("file-gewaehlt", async (event) => {
+	listen("file-gewaehlt", async (event) => {
 		ausstatung.haupt = "liste";
-		list = await invoke("list", { file });
 		$liste = await invoke("list_alle");
 	});
 
