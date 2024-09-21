@@ -1,23 +1,50 @@
 import { writable, derived } from 'svelte/store';
 
-export const Aufgabe = writable({
-    id: null,                   // integer (disabled)
-    gruppe: '',                 // string (disabled)
-    beschreibung: '',           // string (textarea)
-    notiz: '',                  // text (textarea)
-    link: '',                   // text (input)
-    wochentag: 0,               // integer (drop down 0-7)
-    prioritaet: 0,              // integer (drop down 0-4)
-    position: null,             // integer (disabled)
-    
-    verschoben: null,           // date (checkbox)
-    getan: null,                // date (checkbox)
-    vernachlaessigt: null,      // date (checkbox)
-    kommentar: '',              // string (input)
+function createAufgabe() {
+    const { subscribe, set, update } = writable({
+        id: null,                   // integer (disabled)
+        gruppe: '',                 // string (disabled)
+        beschreibung: '',           // string (textarea)
+        notiz: '',                  // text (textarea)
+        link: '',                   // text (input)
+        wochentag: 0,               // integer (drop down 0-7)
+        prioritaet: 0,              // integer (drop down 0-4)
+        position: null,             // integer (disabled)
+        
+        verschoben: null,           // date (checkbox)
+        getan: null,                // date (checkbox)
+        vernachlaessigt: null,      // date (checkbox)
+        kommentar: '',              // string (input)
 
-    erstellt_an: null,          // date (disabled)
-    geaendert_an: null          // date (disabled)
-});
+        erstellt_an: null,          // date (disabled)
+        geaendert_an: null          // date (disabled)
+    });
+
+    return {
+        subscribe,
+        set,
+        update,
+        reset: () => set({
+            id: null,
+            gruppe: '',
+            beschreibung: '',
+            notiz: '',
+            link: '',
+            wochentag: 0,
+            prioritaet: 0,
+            position: null,
+            verschoben: null,
+            getan: null,
+            vernachlaessigt: null,
+            kommentar: '',
+            erstellt_an: null,
+            geaendert_an: null
+        }),
+        markAsDone: () => update(n => ({ ...n, getan: new Date() }))
+    };
+}
+
+export const Aufgabe = createAufgabe();
 
 export const AufgabeIstErledigt = derived(Aufgabe, $Aufgabe => {
     if ($Aufgabe.vernachlaessigt !== null) {

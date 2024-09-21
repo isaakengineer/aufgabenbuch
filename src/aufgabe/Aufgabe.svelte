@@ -34,6 +34,7 @@
     async function hinfuegen() {
         console.log("hinfuegen", formData);
         await invoke('aufgabe_hinfuegen', { beschreibung: formData.beschreibung });
+        Aufgabe.reset();
     }
 
     function setFokus(tab) {
