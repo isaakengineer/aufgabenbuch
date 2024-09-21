@@ -91,10 +91,10 @@
 	</div>
 {:else}
 	<section class="message">
-		<p>Gerade gibt es keine Aufgaben auf Ihre Liste.</p>
+		<p>Es gibt noch keine erledigte Aufgaben auf Ihre Liste.</p>
 		<p>
 			Vielleicht versuchen Sie ein Paar Aufgaben auf Ihre Liste
-			hinzufügen, indem Sie die daunten gedrückte Formulare nutzen.
+			mal als erledigt zu markieren!
 		</p>
 	</section>
 {/if}
