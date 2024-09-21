@@ -1,5 +1,6 @@
 <script>
     import { Aufgabe, updateStore } from './store.js';
+    import { liste, addAufgabe } from '../liste/store.js';
     import { onMount } from 'svelte';
     import { invoke } from "@tauri-apps/api/core";
 
@@ -12,6 +13,8 @@
     let formData = {};
     let wochentagOptions = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
     let prioritaetOptions = [0, 1, 2, 3, 4];
+    let neueAufgabe = {};
+    let neueAufgabeId = null;
 
     onMount(() => {
         Aufgabe.subscribe(value => {
@@ -33,7 +36,8 @@
 
     async function hinfuegen() {
         console.log("hinfuegen", formData);
-        await invoke('aufgabe_hinfuegen', { beschreibung: formData.beschreibung });
+        neueAufgabe = await invoke('aufgabe_hinfuegen', { beschreibung: formData.beschreibung });
+        addAufgabe(neueAufgabe);
         Aufgabe.reset();
     }
 

@@ -60,7 +60,7 @@ pub async fn aufgabe_erledigen(app: AppHandle, aufgabe: Aufgabe) -> Result<(), S
 }
 
 #[tauri::command]
-pub async fn aufgabe_hinfuegen(app: AppHandle, beschreibung: &str) -> Result<(), String> {
+pub async fn aufgabe_hinfuegen(app: AppHandle, beschreibung: &str) -> Result<Aufgabe, String> {
 
     println!("aufgabe_hinfuegen: {}", &beschreibung);
 
@@ -68,21 +68,36 @@ pub async fn aufgabe_hinfuegen(app: AppHandle, beschreibung: &str) -> Result<(),
     let db = data.lock().unwrap().pool.clone().unwrap();
 
     let gruppe = process_beschreibung(&beschreibung);
+	let result;
     if let Some(gruppe_value) = gruppe {
-        sqlx::query("INSERT INTO liste (gruppe, beschreibung, wochentag, prioritaet) VALUES (?1, ?2, 0, 0)")
+        result = sqlx::query("INSERT INTO liste (gruppe, beschreibung, wochentag, prioritaet) VALUES (?1, ?2, 0, 0)")
             .bind(&gruppe_value)
             .bind(beschreibung)
             .execute(&db)
-            .await
-            .map_err(|e| format!("Error saving todo: {}", e))?;
+            .await;
+		
     } else {
-        sqlx::query("INSERT INTO liste (beschreibung, wochentag, prioritaet) VALUES (?1, 0, 0)")
+        result = sqlx::query("INSERT INTO liste (beschreibung, wochentag, prioritaet) VALUES (?1, 0, 0)")
             .bind(beschreibung)
             .execute(&db)
-            .await
-            .map_err(|e| format!("Error saving todo: {}", e))?;
+            .await;
     }
-    Ok(())
+	match result {
+		Ok(res) => {
+			let id = res.last_insert_rowid();
+			let aufgabe = sqlx::query_as::<_, Aufgabe>("SELECT * FROM liste WHERE id = ?1")
+				.bind(id)
+				.fetch_one(&db)
+				.await
+				.map_err(|e| format!("Failed to get todo {}", e))?;
+
+			return Ok(aufgabe);
+		}
+		Err(e) => {
+			return Err(format!("Error saving todo: {}", e));
+		},
+	}
+    
 }
 
 fn debug_liste(liste: Vec<Aufgabe>) {

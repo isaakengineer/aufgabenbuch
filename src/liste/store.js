@@ -1,3 +1,9 @@
 import { writable } from 'svelte/store';
 
-export const liste = writable([]);
+const liste = writable([]);
+
+function addAufgabe(newAufgabe) {
+    liste.update(currentList => [...currentList, newAufgabe]);
+}
+
+export { liste, addAufgabe };
