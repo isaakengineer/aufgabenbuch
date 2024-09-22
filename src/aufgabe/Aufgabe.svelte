@@ -18,6 +18,7 @@
     let prioritaetOptions = [0, 1, 2, 3, 4];
     let neueAufgabe = {};
     let neueAufgabeId = null;
+    let rueckmeldung = false;
 
     onMount(() => {
         Aufgabe.subscribe(value => {
@@ -47,16 +48,29 @@
     } else {
         fokus = 'aktionen';
     }
+    const resetFormular = () => {
+        Aufgabe.reset();
+        rueckmeldung = false;
+    }
 
     async function hinfuegen() {
-        console.log("hinfuegen", formData);
-        neueAufgabe = await invoke('aufgabe_hinfuegen', { aufgabe: formData });
-        addAufgabe(neueAufgabe);
-        Aufgabe.reset();
+        if ( formData.beschreibung.length == 0 ) {
+            rueckmeldung = "Beschreibung darf nicht leer sein!";
+        } else {
+            console.log("hinfuegen", formData);
+            neueAufgabe = await invoke('aufgabe_hinfuegen', { aufgabe: formData });
+            addAufgabe(neueAufgabe);
+            resetFormular();
+        }
     }
     const aendern = async function() {
-        let aufgabe = $Aufgabe;
-        neueAufgabe = await invoke('aufgabe_aendern', { aufgabe: aufgabe });
+        if ( formData.beschreibung.length == 0 ) {
+            rueckmeldung = "Beschreibung darf nicht leer sein!";
+        } else {
+            let aufgabe = $Aufgabe;
+            neueAufgabe = await invoke('aufgabe_aendern', { aufgabe: aufgabe });
+            rueckmeldung = false;
+        }
         // TODO: ersetze die alte Aufgabe mit der neuen Aufgabe
     }
 
@@ -70,6 +84,9 @@
 </script>
 
 <form>
+    {#if rueckmeldung}<aside>
+        <p>{ rueckmeldung }</p>
+    </aside>{/if}
     <div class="content">
         {#if import.meta.env.DEV}
             <fieldset id="dev">
@@ -136,7 +153,7 @@
         {/if}
     </div>
     <div class="tabs-container">
-        <ResetAufgabe />
+        <button on:click={resetFormular}>Reset</button>
         <div class="tabs">
             <div class={`tab ${fokus === 'normal' ? 'active' : ''}`} on:click={() => setFokus('normal')}>Wesentliche</div>
             <div class={`tab ${fokus === 'link' ? 'active' : ''}`} on:click={() => setFokus('link')}>Link</div>
@@ -155,6 +172,13 @@
 :global(textarea) {
     border-radius: 0;
     border: 0;
+}
+form > aside {
+    padding: 0px 0;
+    > p {
+        margin: .2rem;
+        padding: .2rem 1rem;
+    }
 }
 form {
     display: flex;
