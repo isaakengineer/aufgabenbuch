@@ -1,6 +1,7 @@
 <script>
 	import { liste } from "./store.js";
 	import { Aufgabe } from "../aufgabe/store.js";
+	import { format } from "date-fns";
 
 	let aufgaben = $liste;
 
@@ -29,6 +30,10 @@
 			a.verschoben !== null
 		);
 	};
+
+	const datumLeserlich = (datumString) => {
+		return format( new Date(datumString), "yyyy-MM-dd");
+	}
 </script>
 
 {#if $liste.length > 0}

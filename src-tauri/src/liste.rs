@@ -33,37 +33,6 @@ fn pool_fuellen(app: AppHandle, pool: Pool<Sqlite>) {
     data.pool = Some(pool);
 }
 
-
-
-
-// match File::create(&dateipfad) {
-//     Ok(mut file) => {
-//         let pfad = dateipfad.to_str().unwrap().to_string();
-//         datenbankpfad_fuellen(app.clone(), pfad.clone());
-//         datenbank_aktivieren_oder_herstellen(app.clone(), pfad.clone()).await;
-        
-//         app.emit("file-gewaehlt", true).unwrap();
-//         return Ok(format!("File created at ..."));
-//     },
-//     Err(e) => return Err(format!("Failed to create file: {:?}", e)),
-// }
-
-// match File::create(&pfad_mit_endung) {
-//     Ok(mut file) => {
-//         let data = app.state::<Mutex<AppData>>();
-//         let db_path = pfad_mit_endung.to_str().unwrap().to_string();
-//         {
-//             let mut data = data.lock().unwrap();
-//             data.db_path = db_path.clone();
-            
-//         }
-//         datenbank_aktivieren_oder_herstellen(app.clone(), db_path).await;
-//             app.emit("file-gewaehlt", true).unwrap();
-//         return Ok(format!("File created at ..."));
-//     },
-//     Err(e) => return Err(format!("Failed to create file: {:?}", e)),
-// }
-
 fn neue_dateipfad_pruefen(pfad: FilePath) -> Result<String, String> {
     
     let dateipfad = pfad.into_path().unwrap(); // nur für Desktop wegen TAURI
@@ -95,7 +64,7 @@ fn neue_dateipfad_pruefen(pfad: FilePath) -> Result<String, String> {
 
 #[tauri::command]
 pub async fn file_erstellen(app: AppHandle) -> Result<String, String> {
-    let app_handle = app.clone();
+
     if let Some(neue_pfad) = app
         .dialog()
         .file()
@@ -106,7 +75,7 @@ pub async fn file_erstellen(app: AppHandle) -> Result<String, String> {
             Ok(pfad) => {
                 // return Ok(dateipfad.to_string());
                 match File::create(&pfad) {
-                    Ok(mut file) => {
+                    Ok(file) => {
 
                         datenbankpfad_fuellen(app.clone(), pfad.clone());
                         datenbank_aktivieren_oder_herstellen(app.clone(), pfad.clone()).await;
@@ -156,9 +125,6 @@ pub async fn file_waehlen(app: AppHandle) -> Result<String, String> {
                 data.db_path = file_path.to_string();
             }
 
-            
-
-            // Send the file path through the channel
             tx.send(file_path.to_string()).unwrap();
         } else {
             println!("No file selected");
@@ -189,13 +155,12 @@ async fn has_migration_been_applied(pool: &Pool<Sqlite>, migration_name: &str) -
         .fetch_one(pool)
         .await;
     
-    match(result) {
+    match result {
         Ok(_) => Ok(true),
         Err(e) => {
 			return Err(format!("{:?}", e));
 		},
     }
-   
 }
 
 async fn datenbank_aktivieren_oder_herstellen(app: AppHandle, path: String) -> Result<String, String> {
@@ -241,9 +206,6 @@ async fn datenbank_aktivieren_oder_herstellen(app: AppHandle, path: String) -> R
         }
         
     }
-
-
-
     
     app.clone().emit("file-gewaehlt", true).unwrap();
 
@@ -254,7 +216,6 @@ pub async fn datenbank_erstellen(app: AppHandle) -> String {
 
     let data = app.state::<Mutex<AppData>>();
     let db_path = data.lock().unwrap().db_path.clone();
-
 
     println!("db_path während Aktivierung: {}", &db_path);
 

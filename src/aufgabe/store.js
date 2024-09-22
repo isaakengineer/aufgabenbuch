@@ -58,11 +58,11 @@ export const AufgabeIstErledigt = derived(Aufgabe, $Aufgabe => {
 AufgabeIstErledigt.set = (value) => {
     Aufgabe.update(current => ({ ...current, verschoben: null, getan: null, vernachlaessigt: null }));
     if (value === 'vernachlaessigt') {
-        Aufgabe.update(current => ({ ...current, vernachlaessigt: new Date() }));
+        Aufgabe.update(current => ({ ...current, vernachlaessigt: new Date().toISOString() }));
     } else if (value === 'getan') {
-        Aufgabe.update(current => ({ ...current, getan: new Date() }));
+        Aufgabe.update(current => ({ ...current, getan: new Date().toISOString() }));
     } else if (value === 'verschoben') {
-        Aufgabe.update(current => ({ ...current, verschoben: new Date() }));
+        Aufgabe.update(current => ({ ...current, verschoben: new Date().toISOString() }));
     }
 }
 

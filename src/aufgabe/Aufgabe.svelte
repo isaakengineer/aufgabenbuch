@@ -4,10 +4,11 @@
     import { onMount } from 'svelte';
     import { invoke } from "@tauri-apps/api/core";
 
+    import { format } from "date-fns";
+
     import ResetAufgabe from './ResetAufgabe.svelte';
     import Erledigen from './Erledigen.svelte';
     import Notiz from './Notiz.svelte';
-
 
   
     let formData = {};
@@ -40,10 +41,19 @@
         addAufgabe(neueAufgabe);
         Aufgabe.reset();
     }
+    const aendern = async function() {
+        let aufgabe = $Aufgabe;
+        neueAufgabe = await invoke('aufgabe_aendern', { aufgabe: aufgabe });
+        // TODO: ersetze die alte Aufgabe mit der neuen Aufgabe
+    }
 
     function setFokus(tab) {
         fokus = tab;
     }
+
+    const datumLeserlich = (datumString) => {
+		return format( new Date(datumString), "yyyy-MM-dd");
+	}
 </script>
 
 <form>
@@ -61,12 +71,12 @@
                 </div>
                 <label>
                     Erstellt am:
-                    <input type="date" name="erstellt_an" value={formData.erstellt_an ? formData.erstellt_an.toISOString().split('T')[0] : ''} disabled />
+                    <input type="date" name="erstellt_an" value={formData.erstellt_an ? datumLeserlich(formData.erstellt_an) : ''} disabled />
                 </label>
 
                 <label>
                     Geändert am:
-                    <input type="date" name="geaendert_an" value={formData.geaendert_an ? formData.geaendert_an.toISOString().split('T')[0] : ''} disabled />
+                    <input type="date" name="geaendert_an" value={formData.geaendert_an ? datumLeserlich(formData.geaendert_an) : ''} disabled />
                 </label>
             </fieldset>
         {/if}
@@ -123,7 +133,7 @@
             <div class={`tab ${fokus === 'notiz' ? 'active' : ''}`} on:click={() => setFokus('notiz')}>Notiz</div>
         </div>
         {#if $Aufgabe.id}
-            <button on:click={() => console.log('fun schreiben')}>Ändern</button>
+            <button on:click={aendern}>Ändern</button>
         {:else}
             <button on:click={hinfuegen}>Neu</button>
         {/if}

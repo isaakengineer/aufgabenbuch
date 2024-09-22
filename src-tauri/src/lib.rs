@@ -5,7 +5,7 @@ use sqlx::{sqlite::{SqliteConnection, SqlitePoolOptions}, Pool, Sqlite, FromRow}
 use std::path::PathBuf;
 
 mod aufgabe;
-use aufgabe::{aufgabe_hinfuegen, list_alle, aufgabe_erledigen, list_erledigt};
+use aufgabe::{aufgabe_hinfuegen, aufgabe_aendern, list_alle, aufgabe_erledigen, list_erledigt};
 
 mod liste;
 use liste::{AppData, file_waehlen, datenbank_erstellen, file_erstellen};
@@ -24,6 +24,7 @@ pub async fn run() {
             datenbank_erstellen,
 
             aufgabe_hinfuegen,
+            aufgabe_aendern,
             aufgabe_erledigen,
 
             list_alle,

@@ -1,7 +1,7 @@
 use tauri::{AppHandle, Emitter, Listener, Builder, Manager};
 use tauri_plugin_dialog::{DialogExt, MessageDialogKind};
 use std::sync::Mutex;
-use sqlx::{sqlite::{SqliteConnection, SqlitePoolOptions}, Pool, Sqlite, FromRow};
+use sqlx::{query, sqlite::{SqliteConnection, SqlitePoolOptions, SqliteQueryResult}, FromRow, Pool, Sqlite};
 
 use chrono::{NaiveDate, DateTime};
 use serde::{Serialize, Deserialize};
@@ -46,17 +46,61 @@ pub async fn aufgabe_erledigen(app: AppHandle, aufgabe: Aufgabe) -> Result<(), S
     let data = app.state::<Mutex<AppData>>();
     let db = data.lock().unwrap().pool.clone().unwrap();
 
-    sqlx::query("UPDATE liste SET verschoben = ?1, getan = ?2, vernachlaessigt = ?3, kommentar = ?4 WHERE id = ?5")
+    let query = include_str!("../queries/aufgabe_erledigen.sql");
+    sqlx::query(query)
         .bind(aufgabe.verschoben)
         .bind(aufgabe.getan)
         .bind(aufgabe.vernachlaessigt)
         .bind(aufgabe.kommentar)
+        // .bind(chrono::Utc::now().to_rfc3339()) // geändert an
         .bind(aufgabe.id)
         .execute(&db)
         .await
         .map_err(|e| format!("could not update Aufgabe {}", e))?;
 
     Ok(())
+}
+
+pub async fn letzte_aktualisierung(db: Pool<Sqlite>, res: SqliteQueryResult) -> Result<Aufgabe, String> {
+    let id = res.last_insert_rowid();
+    let aufgabe = sqlx::query_as::<_, Aufgabe>("SELECT * FROM liste WHERE id = ?1")
+        .bind(id)
+        .fetch_one(&db)
+        .await
+        .map_err(|e| format!("Failed to get todo {}", e))?;
+    Ok(aufgabe)
+}
+
+#[tauri::command]
+pub async fn aufgabe_aendern(app: AppHandle, aufgabe: Aufgabe) -> Result<Aufgabe, String> {
+
+    let data = app.state::<Mutex<AppData>>();
+    let db = data.lock().unwrap().pool.clone().unwrap();
+
+    let gruppe = process_beschreibung(&aufgabe.beschreibung);
+
+    let query = include_str!("../queries/aufgabe_aendern.sql");
+    let result = sqlx::query(query)
+        .bind(gruppe)
+        .bind(aufgabe.beschreibung)
+        .bind(aufgabe.notiz)
+        .bind(aufgabe.link)
+        .bind(aufgabe.wochentag)
+        .bind(aufgabe.prioritaet)
+        // .bind(chrono::Utc::now().to_rfc3339()) // geändert an
+        .bind(aufgabe.id)
+        .execute(&db)
+        .await;
+
+    match result {
+        Ok(res) => {
+            let aufgabe = letzte_aktualisierung(db, res).await?;
+			return Ok(aufgabe);
+        }
+        Err(e) => {
+			return Err(format!("Error saving todo: {}", e));
+        }
+    }
 }
 
 #[tauri::command]
@@ -70,27 +114,26 @@ pub async fn aufgabe_hinfuegen(app: AppHandle, beschreibung: &str) -> Result<Auf
     let gruppe = process_beschreibung(&beschreibung);
 	let result;
     if let Some(gruppe_value) = gruppe {
-        result = sqlx::query("INSERT INTO liste (gruppe, beschreibung, wochentag, prioritaet) VALUES (?1, ?2, 0, 0)")
+        let query = include_str!("../queries/aufgabe_hinfuegen_mit_gruppe.sql");
+        result = sqlx::query(query)
             .bind(&gruppe_value)
             .bind(beschreibung)
+            // .bind(wochentag)
+            // .bind(prioritaet)
+            // .bind(chrono::Utc::now().to_rfc3339()) // erstellt an
             .execute(&db)
             .await;
 		
     } else {
-        result = sqlx::query("INSERT INTO liste (beschreibung, wochentag, prioritaet) VALUES (?1, 0, 0)")
+        let query = include_str!("../queries/aufgabe_hinfuegen.sql");
+        result = sqlx::query(query)
             .bind(beschreibung)
             .execute(&db)
             .await;
     }
 	match result {
-		Ok(res) => {
-			let id = res.last_insert_rowid();
-			let aufgabe = sqlx::query_as::<_, Aufgabe>("SELECT * FROM liste WHERE id = ?1")
-				.bind(id)
-				.fetch_one(&db)
-				.await
-				.map_err(|e| format!("Failed to get todo {}", e))?;
-
+		Ok(res) => {		
+            let aufgabe = letzte_aktualisierung(db, res).await?;
 			return Ok(aufgabe);
 		}
 		Err(e) => {
