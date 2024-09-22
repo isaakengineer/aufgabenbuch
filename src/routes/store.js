@@ -20,7 +20,9 @@ const prioritaeten = [
     { id: 5, name: 'jetzt' }
 ];
 
-const Darstellung = writable({});
+const Ausstattung = writable({
+    haupt:  'nichts',
+});
 const Aussehen = readable({
     optionen: {
         wochentagen: wochentagen,
@@ -28,4 +30,4 @@ const Aussehen = readable({
     },
 });
 
-export { Darstellung, Aussehen };
+export { Ausstattung, Aussehen };

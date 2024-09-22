@@ -8,6 +8,7 @@
 	import { liste } from "../liste/store.js";
 
 	import File from "../file/File.svelte";
+	import { Aussehen, Ausstattung } from "./store.js";
 
 	let aufgabenList = $liste;
 
@@ -24,7 +25,7 @@
 	// let aufgabenList = [];
 
 	listen("file-gewaehlt", async (event) => {
-		ausstatung.haupt = "liste";
+		$Ausstattung.haupt = "liste";
 		$liste = await invoke("list_alle");
 	});
 
@@ -39,11 +40,11 @@
 		switch (item) {
 			case "liste":
 				console.log("liste aktualizieren");
-				ausstatung.haupt = "liste";
+				$Ausstattung.haupt = "liste";
 				$liste = await invoke("list_alle");
 				break;
 			case "buch":
-				ausstatung.haupt = "buch";
+				$Ausstattung.haupt = "buch";
 				$liste = await invoke("list_erledigt");
 			default:
 				break;
@@ -54,16 +55,16 @@
 <div class="app">
 	<header></header>
 	<main>
-		{#if ausstatung.haupt === "nichts"}
+		{#if $Ausstattung.haupt === "nichts"}
 			<File />
-		{:else if ausstatung.haupt === "liste"}
+		{:else if $Ausstattung.haupt === "liste"}
 			<Liste />
-		{:else if ausstatung.haupt === "buch"}
+		{:else if $Ausstattung.haupt === "buch"}
 			<Buch />
 		{/if}
 	</main>
 	<aside>
-		<Aufgabe />
+		<Aufgabe deaktiviert={($Ausstattung.haupt === "nichts")} />
 	</aside>
 	<footer>
 		<nav class="kontrollen">

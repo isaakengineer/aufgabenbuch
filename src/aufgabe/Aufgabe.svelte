@@ -6,12 +6,13 @@
 
     import { format } from "date-fns";
 
-    import ResetAufgabe from './ResetAufgabe.svelte';
     import Erledigen from './Erledigen.svelte';
     import Notiz from './Notiz.svelte';
 
-    import { Aussehen, Darstellung } from '../routes/store.js';
+    import { Aussehen, Ausstattung } from '../routes/store.js';
     import { Value } from 'sass';
+
+    export let deaktiviert;
 
     let formData = {};
     let wochentagOptions = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
@@ -83,7 +84,7 @@
 	}
 </script>
 
-<form>
+<form class:deaktiviert={deaktiviert}>
     {#if rueckmeldung}<aside>
         <p>{ rueckmeldung }</p>
     </aside>{/if}
@@ -172,6 +173,12 @@
 :global(textarea) {
     border-radius: 0;
     border: 0;
+}
+form.deaktiviert {
+    opacity: .5;
+    > * {
+        pointer-events: none;
+    }
 }
 form > aside {
     padding: 0px 0;
