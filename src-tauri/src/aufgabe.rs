@@ -104,22 +104,22 @@ pub async fn aufgabe_aendern(app: AppHandle, aufgabe: Aufgabe) -> Result<Aufgabe
 }
 
 #[tauri::command]
-pub async fn aufgabe_hinfuegen(app: AppHandle, beschreibung: &str) -> Result<Aufgabe, String> {
+pub async fn aufgabe_hinfuegen(app: AppHandle, aufgabe: Aufgabe) -> Result<Aufgabe, String> {
 
-    println!("aufgabe_hinfuegen: {}", &beschreibung);
+    println!("aufgabe_hinfuegen: {}", &aufgabe.beschreibung.clone());
 
     let data = app.state::<Mutex<AppData>>();
     let db = data.lock().unwrap().pool.clone().unwrap();
 
-    let gruppe = process_beschreibung(&beschreibung);
+    let gruppe = process_beschreibung(&aufgabe.beschreibung);
 	let result;
     if let Some(gruppe_value) = gruppe {
         let query = include_str!("../queries/aufgabe_hinfuegen_mit_gruppe.sql");
         result = sqlx::query(query)
             .bind(&gruppe_value)
-            .bind(beschreibung)
-            // .bind(wochentag)
-            // .bind(prioritaet)
+            .bind(aufgabe.beschreibung)
+            .bind(aufgabe.wochentag)
+            .bind(aufgabe.prioritaet)
             // .bind(chrono::Utc::now().to_rfc3339()) // erstellt an
             .execute(&db)
             .await;
@@ -127,7 +127,9 @@ pub async fn aufgabe_hinfuegen(app: AppHandle, beschreibung: &str) -> Result<Auf
     } else {
         let query = include_str!("../queries/aufgabe_hinfuegen.sql");
         result = sqlx::query(query)
-            .bind(beschreibung)
+            .bind(aufgabe.beschreibung)
+            .bind(aufgabe.wochentag)
+            .bind(aufgabe.prioritaet)
             .execute(&db)
             .await;
     }

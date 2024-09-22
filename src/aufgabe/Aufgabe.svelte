@@ -10,7 +10,9 @@
     import Erledigen from './Erledigen.svelte';
     import Notiz from './Notiz.svelte';
 
-  
+    import { Aussehen, Darstellung } from '../routes/store.js';
+    import { Value } from 'sass';
+
     let formData = {};
     let wochentagOptions = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
     let prioritaetOptions = [0, 1, 2, 3, 4];
@@ -23,9 +25,20 @@
         });
     });
 
-    function handleChange(event) {
+    function handleOption(event) {
         const { name, value } = event.target;
+        let intValue = parseInt(value, 10);
+        updateStore[{ [name]: intValue }]
+    }
+    function handleChange(event) {
+        
+        const { name, value } = event.target;
+        console.log(`changing ${name} to ${value}`);
+        console.log(typeof(value))
+        formData[name] = value;
         updateStore({ [name]: value });
+        console.log($Aufgabe)
+        console.log(formData)
     }
 
     let fokus = 'normal';
@@ -37,7 +50,7 @@
 
     async function hinfuegen() {
         console.log("hinfuegen", formData);
-        neueAufgabe = await invoke('aufgabe_hinfuegen', { beschreibung: formData.beschreibung });
+        neueAufgabe = await invoke('aufgabe_hinfuegen', { aufgabe: formData });
         addAufgabe(neueAufgabe);
         Aufgabe.reset();
     }
@@ -89,19 +102,17 @@
                 {#if fokus === 'normal'}
                     <div>
                         <label for="wochentag">Wochentag</label>
-                        <select name="wochentag" on:change={handleChange} bind:value={formData.wochentag} placeholder="Wochentag">
-                            <option value="" disabled selected>Wochentag</option>
-                            {#each wochentagOptions as wochentag}
-                                <option value={wochentag}>{wochentag}</option>
+                        <select name="wochentag" on:change={handleOption} bind:value={formData.wochentag} placeholder="Wochentag">
+                            {#each $Aussehen.optionen.wochentagen as wochentag}
+                                <option value={wochentag.id}>{wochentag.name}</option>
                             {/each}
                         </select>
                     </div>
                     <div>
                         <label for="prioritaet">Prioritaet</label>
-                        <select name="prioritaet" on:change={handleChange} bind:value={formData.prioritaet} placeholder="Priorität">
-                            <option value="" disabled selected>Priorität</option>
-                            {#each prioritaetOptions as prioritaet}
-                                <option value={prioritaet}>{prioritaet}</option>
+                        <select name="prioritaet" on:change={handleOption} bind:value={formData.prioritaet} placeholder="Priorität">
+                            {#each $Aussehen.optionen.prioritaeten as prioritaet}
+                                <option value={prioritaet.id}>{prioritaet.name}</option>
                             {/each}
                         </select>
                     </div>
@@ -128,9 +139,9 @@
         <ResetAufgabe />
         <div class="tabs">
             <div class={`tab ${fokus === 'normal' ? 'active' : ''}`} on:click={() => setFokus('normal')}>Wesentliche</div>
-            <div class={`tab ${fokus === 'aktionen' ? 'active' : ''}`} on:click={() => setFokus('aktionen')}>Aktionen</div>
             <div class={`tab ${fokus === 'link' ? 'active' : ''}`} on:click={() => setFokus('link')}>Link</div>
             <div class={`tab ${fokus === 'notiz' ? 'active' : ''}`} on:click={() => setFokus('notiz')}>Notiz</div>
+            <div class={`tab ${fokus === 'aktionen' ? 'active' : ''}`} on:click={() => setFokus('aktionen')}>Aktionen</div>
         </div>
         {#if $Aufgabe.id}
             <button on:click={aendern}>Ändern</button>
