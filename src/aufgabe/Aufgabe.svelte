@@ -10,7 +10,8 @@
     import Notiz from './Notiz.svelte';
 
     import { Aussehen, Ausstattung } from '../routes/store.js';
-    import { Value } from 'sass';
+
+    import { PlusSquare, ArrowCounterClockwise, Note, LinkSimple, PencilSimpleLine } from "phosphor-svelte";
 
     export let deaktiviert;
 
@@ -134,12 +135,16 @@
                             {/each}
                         </select>
                     </div>
-                    <div>
-                        (?Notiz)
-                    </div>
-                    <div>
-                        (?Link)
-                    </div>
+                    {#if formData.notiz}
+                        <div>
+                            <a class="icon"><Note /></a>
+                        </div>
+                    {/if}
+                    {#if formData.link}
+                        <div>
+                            <a class="icon"><LinkSimple /></a>
+                        </div>
+                    {/if}
                 {:else if fokus === 'link'}
                     <input type="text" name="link" on:input={handleChange} bind:value={formData.link} placeholder="Link" />
                 {:else if fokus === 'aktionen'}
@@ -154,7 +159,7 @@
         {/if}
     </div>
     <div class="tabs-container">
-        <button on:click={resetFormular}>Reset</button>
+        <button class="icon" on:click={resetFormular}><ArrowCounterClockwise /></button>
         <div class="tabs">
             <div class={`tab ${fokus === 'normal' ? 'active' : ''}`} on:click={() => setFokus('normal')}>Wesentliche</div>
             <div class={`tab ${fokus === 'link' ? 'active' : ''}`} on:click={() => setFokus('link')}>Link</div>
@@ -162,14 +167,22 @@
             <div class={`tab ${fokus === 'aktionen' ? 'active' : ''}`} on:click={() => setFokus('aktionen')}>Aktionen</div>
         </div>
         {#if $Aufgabe.id}
-            <button on:click={aendern}>Ändern</button>
+            <button class="icon" on:click={aendern}><PencilSimpleLine /></button>
         {:else}
-            <button on:click={hinfuegen}>Neu</button>
+            <button class="icon" on:click={hinfuegen}><PlusSquare /></button>
         {/if}
     </div>
 </form>
 
 <style lang="scss">
+button.icon {
+    padding: 0px;
+}
+:global(.icon > svg) {
+    height: 1.2rem;
+    width: 1.2rem;
+    padding: .2rem .3rem .1rem .3rem;
+}
 :global(textarea) {
     border-radius: 0;
     border: 0;
@@ -274,7 +287,8 @@ fieldset#extra {
 }
 .tab {
     font-size: .9rem;
-    padding: .15rem .5rem 0 .5rem;
+    padding: .15rem .5rem .15rem .5rem;
+    height: fit-content;
     margin-bottom: .2rem;
     border: 1px solid #ccc;
     border-top: none;

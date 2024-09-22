@@ -2,6 +2,8 @@
     import { invoke } from "@tauri-apps/api/core";
     import { Aufgabe, AufgabeIstErledigt, updateStore } from './store.js';
 
+    import { CheckSquareOffset } from "phosphor-svelte";
+
     async function erledigen() {
         console.log($AufgabeIstErledigt);
         if ($AufgabeIstErledigt === 'vernachlaessigt') {
@@ -31,7 +33,7 @@
 
 <input type="text" name="kommentar" bind:value={$Aufgabe.kommentar} placeholder="Kommentar" />
 
-<button on:click={erledigen}>Erledigen</button>
+<button class="button" on:click={erledigen}><CheckSquareOffset /></button>
 
 <style lang="scss">
 .radio-container {
