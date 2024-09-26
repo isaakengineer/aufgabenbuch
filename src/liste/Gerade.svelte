@@ -4,13 +4,18 @@
 	import { liste } from "./store.js";
 	import { Aufgabe } from "../aufgabe/store.js";
 
+	import {
+		CaretDoubleDown,
+		CaretDoubleUp,
+	} from "phosphor-svelte";
+
 	let aufgaben = $liste;
 
-	console.log(aufgaben)
+	let restVerbergen = true;
 
 	function wochentagunabhaengig(aufgaben) {
 		return aufgaben.filter(
-			aufgabe => aufgabe.wochentag === 0
+			(aufgabe) => aufgabe.wochentag === 0,
 		);
 	}
 
@@ -18,7 +23,14 @@
 		const currentDate = new Date();
 		const currentWeekday = currentDate.getDay();
 		return aufgaben.filter(
-			aufgabe => aufgabe.wochentag === currentWeekday
+			(aufgabe) => aufgabe.wochentag === currentWeekday,
+		);
+	}
+	function andereTagen(aufgaben) {
+		const currentDate = new Date();
+		const currentWeekday = currentDate.getDay();
+		return aufgaben.filter(
+			(aufgabe) => ( aufgabe.wochentag != currentWeekday && aufgabe.wochentag != 0 ),
 		);
 	}
 
@@ -73,22 +85,6 @@
 
 {#if $liste.length > 0}
 	<div class="liste">
-		<header>Wochentagunabhängig</header>
-		{#each wochentagunabhaengig($liste) as aufgabe}
-			<div
-				class="aufgabe"
-				class:erledigt={istErledigt(aufgabe)}
-				on:click={() => aufgabeGewaelt(aufgabe)}
-			>
-				<div class="satz">
-					<div class="id">{aufgabe.id}</div>
-					<div class="kommentar">{aufgabe.kommentar}</div>
-					<div class="beschreibung">{aufgabe.beschreibung}</div>
-				</div>
-			</div>
-		{/each}
-	</div>
-	<div class="liste">
 		<header>Heute</header>
 		{#each heute($liste) as aufgabe}
 			<div
@@ -104,12 +100,54 @@
 			</div>
 		{/each}
 	</div>
+	<div class="liste">
+		<header>Wochentagunabhängig</header>
+		{#each wochentagunabhaengig($liste) as aufgabe}
+			<div
+				class="aufgabe"
+				class:erledigt={istErledigt(aufgabe)}
+				on:click={() => aufgabeGewaelt(aufgabe)}
+			>
+				<div class="satz">
+					<div class="id">{aufgabe.id}</div>
+					<div class="kommentar">{aufgabe.kommentar}</div>
+					<div class="beschreibung">{aufgabe.beschreibung}</div>
+				</div>
+			</div>
+		{/each}
+	</div>
+	<div class="liste" class:liste-verbergen={restVerbergen}>
+		<header class="komplex">
+			<div class="titel">Andere Tagen</div>
+			<a
+				class="ausweiten"
+				on:click={() => (restVerbergen = !restVerbergen)}
+			>
+				{#if restVerbergen}<CaretDoubleDown
+						weight="duotone"
+					/>{:else}<CaretDoubleUp weight="duotone" />{/if}
+			</a>
+		</header>
+		{#each andereTagen($liste) as aufgabe}
+			<div
+				class="aufgabe"
+				class:erledigt={istErledigt(aufgabe)}
+				on:click={() => aufgabeGewaelt(aufgabe)}
+			>
+				<div class="satz">
+					<div class="id">{aufgabe.id}</div>
+					<div class="kommentar">{aufgabe.kommentar}</div>
+					<div class="beschreibung">{aufgabe.beschreibung}</div>
+				</div>
+			</div>
+		{/each}
+	</div>
 {:else}
 	<section class="message">
-		<p>Es gibt noch keine erledigte Aufgaben auf Ihre Liste.</p>
 		<p>
-			Vielleicht versuchen Sie ein Paar Aufgaben auf Ihre Liste
-			mal als erledigt zu markieren!
+			Stellen Sie die Priorität ihre Aufgaben an <code
+				>jetzt</code
+			>, um sie hier zu sehen.
 		</p>
 	</section>
 {/if}
@@ -120,9 +158,25 @@
 		flex-direction: column;
 		gap: 0.5rem;
 		> header {
-			padding: .5rem 1rem;
+			background-color: #dedede;
+			padding: 0.5rem 1rem;
 			text-align: end;
 			text-decoration: underline;
+		}
+		> header.komplex {
+			display: flex;
+			flex-direction: row-reverse;
+			justify-content: space-between;
+			> .ausweiten {
+				text-decoration: none;
+				cursor: pointer;
+				display: inline-block;
+			}
+		}
+		&.liste-verbergen {
+			.aufgabe {
+				display: none;
+			}
 		}
 	}
 	.aufgabe {
