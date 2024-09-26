@@ -9,7 +9,8 @@ use tauri_plugin_dialog::{DialogExt, MessageDialogKind};
 
 mod aufgabe;
 use aufgabe::{
-    aufgabe_aendern, aufgabe_erledigen, aufgabe_hinfuegen, list_alle, list_erledigt, list_jetzige,
+    aufgabe_aendern, aufgabe_erledigen, aufgabe_hinfuegen, gruppen_alle, list_alle, list_erledigt,
+    list_jetzige,
 };
 
 mod liste;
@@ -33,6 +34,7 @@ pub async fn run() {
             list_alle,
             list_jetzige,
             list_erledigt,
+            gruppen_alle,
         ])
         .setup(|app| {
             // #[cfg(debug_assertions)] // only include this code on debug builds

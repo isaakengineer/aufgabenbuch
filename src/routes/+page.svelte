@@ -6,10 +6,12 @@
 	import Liste from "../liste/Liste.svelte";
 	import Buch from "../liste/Buch.svelte";
 	import Gerade from "../liste/Gerade.svelte";
-	import { liste } from "../liste/store.js";
+	import { liste, gruppen } from "../liste/store.js";
 
 	import File from "../file/File.svelte";
 	import { Aussehen, Ausstattung } from "./store.js";
+
+	import { Tag } from "phosphor-svelte";
 
 	let aufgabenList = $liste;
 
@@ -38,6 +40,7 @@
 		$Ausstattung.haupt = "liste";
 		console.log($Ausstattung.identitaet);
 		$liste = await invoke("list_alle");
+		$gruppen = await invoke("gruppen_alle");
 	});
 
 	async function greet() {
@@ -58,6 +61,9 @@
 				console.log("liste aktualizieren");
 				$Ausstattung.haupt = "liste";
 				$liste = await invoke("list_alle");
+				console.log("fetch gruppen");
+				$gruppen = await invoke("gruppen_alle");
+				console.log($gruppen);
 				break;
 			case "buch":
 				$Ausstattung.haupt = "buch";
@@ -74,6 +80,20 @@
 			<div class="name">{$Ausstattung.identitaet.name}</div>
 			{#if $Ausstattung.haupt === "liste"}
 				<div class="titel">Aufgaben Liste</div>
+				<div class="action">
+					<a
+						class="ausweiten aktion"
+						on:click={() =>
+							($Ausstattung.gruppenZeigen =
+								!$Ausstattung.gruppenZeigen)}
+					>
+						{#if $Ausstattung.gruppenZeigen}
+							<Tag weight="fill" size="1.5em" />
+						{:else}
+							<Tag weight="duotone" size="1.5em" />
+						{/if}
+					</a>
+				</div>
 			{:else if $Ausstattung.haupt === "gerade"}
 				<div class="titel">Gerade</div>
 			{/if}
@@ -107,6 +127,12 @@
 </div>
 
 <style lang="scss">
+	:global(a.aktion) {
+		cursor: pointer;
+	}
+	:global(a.aktion > svg) {
+		padding: 0.4rem;
+	}
 	:global(.debug) {
 		color: #333;
 		background-color: #bcd8db;

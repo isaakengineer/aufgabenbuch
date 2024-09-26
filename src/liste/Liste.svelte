@@ -1,9 +1,12 @@
 <script>
-	import { liste } from "./store.js";
+	import { liste, gruppen } from "./store.js";
 	import { Aufgabe } from "../aufgabe/store.js";
 	import { format } from "date-fns";
+	import { Ausstattung } from "../routes/store.js";
 
 	let aufgaben = $liste;
+	let filtern = false;
+	let gruppe = "";
 
 	// Add a new Aufgabe to the liste
 	function addAufgabe(aufgabe) {
@@ -33,45 +36,70 @@
 		);
 	};
 
+	const filterNachGruppe = (liste, g) => {
+		return liste.filter((a) => a.gruppe === g);
+	};
+
 	const datumLeserlich = (datumString) => {
 		return format(new Date(datumString), "yyyy-MM-dd");
 	};
 </script>
 
 {#if $liste.length > 0}
-	<div class="liste">
-		{#each $liste as aufgabe}
-			<div
-				class="aufgabe"
-				class:erledigt={istErledigt(aufgabe)}
-				on:click={() => aufgabeGewaelt(aufgabe)}
-			>
-				<div class="satz">
-					<div class="id">{aufgabe.id}</div>
-					<div class="beschreibung">{aufgabe.beschreibung}</div>
-					{#if istErledigt(aufgabe)}
-						<div class="kommentar">{aufgabe.kommentar}</div>
-					{/if}
-				</div>
-
-				<!-- {#if import.meta.env.DEV}
-            <div class="dev debug">
-              <div>Gruppe: {aufgabe.gruppe}</div>
-              <div>Notiz: {aufgabe.notiz}</div>
-              <div>Link: <a href={aufgabe.link} target="_blank">{aufgabe.link}</a></div>
-              <div>Wochentag: {aufgabe.wochentag}</div>
-              <div>Priorität: {aufgabe.prioritaet}</div>
-              <div>Position: {aufgabe.position !== null ? aufgabe.position : 'N/A'}</div>
-              <div>Verschoben: {aufgabe.verschoben ? aufgabe.verschoben : 'N/A'}</div>
-              <div>Getan: {aufgabe.getan ? aufgabe.getan : 'N/A'}</div>
-              <div>Vernachlässigt: {aufgabe.vernachlaessigt ? aufgabe.vernachlaessigt : 'N/A'}</div>
-              <div>Kommentar: {aufgabe.kommentar}</div>
-              <div>Erstellt am: {aufgabe.erstellt_an ? aufgabe.erstellt_an : 'N/A'}</div>
-              <div>Geändert am: {aufgabe.geaendert_an ? aufgabe.geaendert_an : 'N/A'}</div>
-            </div>
-          {/if} -->
+	<div class="buch">
+		{#if $Ausstattung.gruppenZeigen}
+			<div class="gruppen">
+				{#each $gruppen as g}
+					<a
+						on:click={() => {
+							gruppe = g;
+							filtern = true;
+						}}>{g}</a
+					>
+				{/each}
 			</div>
-		{/each}
+		{/if}
+		{#if filtern && $Ausstattung.gruppenZeigen}
+			<div class="liste">
+				{#each filterNachGruppe($liste, gruppe) as aufgabe}
+					<div
+						class="aufgabe"
+						class:erledigt={istErledigt(aufgabe)}
+						on:click={() => aufgabeGewaelt(aufgabe)}
+					>
+						<div class="satz">
+							<div class="id">{aufgabe.id}</div>
+							<div class="beschreibung">
+								{aufgabe.beschreibung}
+							</div>
+							{#if istErledigt(aufgabe)}
+								<div class="kommentar">{aufgabe.kommentar}</div>
+							{/if}
+						</div>
+					</div>
+				{/each}
+			</div>
+		{:else}
+			<div class="liste">
+				{#each $liste as aufgabe}
+					<div
+						class="aufgabe"
+						class:erledigt={istErledigt(aufgabe)}
+						on:click={() => aufgabeGewaelt(aufgabe)}
+					>
+						<div class="satz">
+							<div class="id">{aufgabe.id}</div>
+							<div class="beschreibung">
+								{aufgabe.beschreibung}
+							</div>
+							{#if istErledigt(aufgabe)}
+								<div class="kommentar">{aufgabe.kommentar}</div>
+							{/if}
+						</div>
+					</div>
+				{/each}
+			</div>
+		{/if}
 	</div>
 {:else}
 	<section class="message">
@@ -85,6 +113,22 @@
 {/if}
 
 <style lang="scss">
+	.buch {
+		display: flex;
+		flex-direction: row-reverse;
+		> .liste {
+			flex: 1;
+		}
+		> .gruppen {
+			width: 5rem;
+			display: flex;
+			flex-direction: column;
+			> a {
+				display: block;
+				padding: 0.5rem;
+			}
+		}
+	}
 	.liste {
 		display: flex;
 		flex-direction: column;

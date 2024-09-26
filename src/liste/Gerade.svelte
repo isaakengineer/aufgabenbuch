@@ -30,7 +30,9 @@
 		const currentDate = new Date();
 		const currentWeekday = currentDate.getDay();
 		return aufgaben.filter(
-			(aufgabe) => ( aufgabe.wochentag != currentWeekday && aufgabe.wochentag != 0 ),
+			(aufgabe) =>
+				aufgabe.wochentag != currentWeekday &&
+				aufgabe.wochentag != 0,
 		);
 	}
 
@@ -119,14 +121,16 @@
 	<div class="liste" class:liste-verbergen={restVerbergen}>
 		<header class="komplex">
 			<div class="titel">Andere Tagen</div>
-			<a
-				class="ausweiten"
-				on:click={() => (restVerbergen = !restVerbergen)}
-			>
-				{#if restVerbergen}<CaretDoubleDown
-						weight="duotone"
-					/>{:else}<CaretDoubleUp weight="duotone" />{/if}
-			</a>
+			{#if andereTagen($liste).length > 0}
+				<a
+					class="ausweiten"
+					on:click={() => (restVerbergen = !restVerbergen)}
+				>
+					{#if restVerbergen}<CaretDoubleDown
+							weight="duotone"
+						/>{:else}<CaretDoubleUp weight="duotone" />{/if}
+				</a>
+			{/if}
 		</header>
 		{#each andereTagen($liste) as aufgabe}
 			<div

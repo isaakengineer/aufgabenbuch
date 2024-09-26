@@ -27,6 +27,7 @@ const Ausstattung = writable({
 		endung: "",
 	},
 	haupt: "nichts",
+	gruppenZeigen: false,
 });
 const Aussehen = readable({
 	optionen: {
