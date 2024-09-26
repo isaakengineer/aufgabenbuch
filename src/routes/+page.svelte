@@ -20,12 +20,22 @@
 	let list = {};
 	let file = {};
 
-	const haupt = ["liste", "suche", "buch", "kalendar", "gruppen", "Inbox"];
+	const haupt = [
+		"liste",
+		"suche",
+		"buch",
+		"jetzt",
+		// "gruppen", // Fähigkeit von TaskLog, ob es sinn macht oder nicht ??
+		"eingangskorb",
+		// "schliessen", // Extra Fähigkeit, vielleicht nicht nötig
+	];
 
 	// let aufgabenList = [];
 
 	listen("file-gewaehlt", async (event) => {
+		$Ausstattung.identitaet = event.payload;
 		$Ausstattung.haupt = "liste";
+		console.log($Ausstattung.identitaet);
 		$liste = await invoke("list_alle");
 	});
 
@@ -53,7 +63,18 @@
 </script>
 
 <div class="app">
-	<header></header>
+	<header>
+		{#if $Ausstattung.haupt !== "nichts"}
+			<div class="name">{$Ausstattung.identitaet.name}</div>
+			{#if $Ausstattung.haupt === "liste"}
+				<div class="titel">Aufgaben Liste</div>
+			{/if}
+		{/if}
+		<div
+			data-tauri-drag-region
+			class="titlebar windowdragger"
+		></div>
+	</header>
 	<main>
 		{#if $Ausstattung.haupt === "nichts"}
 			<File />
@@ -64,12 +85,12 @@
 		{/if}
 	</main>
 	<aside>
-		<Aufgabe deaktiviert={($Ausstattung.haupt === "nichts")} />
+		<Aufgabe deaktiviert={$Ausstattung.haupt === "nichts"} />
 	</aside>
 	<footer>
 		<nav class="kontrollen">
 			{#each haupt as item}
-				<a href="#" on:click={() => (controlle(item))}>{item}</a>
+				<a href="#" on:click={() => controlle(item)}>{item}</a>
 			{/each}
 		</nav>
 	</footer>
@@ -131,7 +152,6 @@
 		}
 		> header {
 			grid-area: header;
-			background-color: #24c8db;
 		}
 		> footer {
 			grid-area: footer;
@@ -144,6 +164,24 @@
 		}
 	}
 
+	.app > header {
+		background-color: #fff;
+		display: flex;
+		> .windowdragger {
+			flex: 1;
+			cursor: move;
+		}
+		> .name {
+			padding: 0.6rem 1rem;
+			font-size: 1.1rem;
+			font-family: "LatoWebBold";
+			text-transform: capitalize;
+		}
+		> .titel {
+			padding: 0.6rem 1rem;
+			color: #333;
+		}
+	}
 	.app > main > .container {
 		background-color: gray;
 	}

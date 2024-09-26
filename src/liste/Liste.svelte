@@ -17,7 +17,9 @@
 
 	// Update an existing Aufgabe in the liste
 	function updateAufgabe(index, aufgabe) {
-		liste.update((n) => n.map((item, i) => (i === index ? aufgabe : item)));
+		liste.update((n) =>
+			n.map((item, i) => (i === index ? aufgabe : item)),
+		);
 	}
 	async function aufgabeGewaelt(aufgabe) {
 		$Aufgabe = aufgabe;
@@ -32,13 +34,12 @@
 	};
 
 	const datumLeserlich = (datumString) => {
-		return format( new Date(datumString), "yyyy-MM-dd");
-	}
+		return format(new Date(datumString), "yyyy-MM-dd");
+	};
 </script>
 
 {#if $liste.length > 0}
 	<div class="liste">
-		<header>Aufgaben liste</header>
 		{#each $liste as aufgabe}
 			<div
 				class="aufgabe"
@@ -52,7 +53,7 @@
 						<div class="kommentar">{aufgabe.kommentar}</div>
 					{/if}
 				</div>
-				
+
 				<!-- {#if import.meta.env.DEV}
             <div class="dev debug">
               <div>Gruppe: {aufgabe.gruppe}</div>
@@ -77,7 +78,8 @@
 		<p>Gerade gibt es keine Aufgaben auf Ihre Liste.</p>
 		<p>
 			Vielleicht versuchen Sie ein Paar Aufgaben auf Ihre Liste
-			hinzufügen, indem Sie die daunten gedrückte Formulare nutzen.
+			hinzufügen, indem Sie die daunten gedrückte Formulare
+			nutzen.
 		</p>
 	</section>
 {/if}
@@ -86,18 +88,18 @@
 	.liste {
 		display: flex;
 		flex-direction: column;
-		gap: .5rem;
+		gap: 0.5rem;
 	}
 	.aufgabe {
-		opacity: .7;
+		opacity: 0.7;
 		&:hover {
-			opacity: .9;
+			opacity: 0.9;
 		}
-		margin: .2rem;
+		margin: 0.2rem;
 		display: flex;
 
 		> .satz {
-			padding: 0 .6rem;
+			padding: 0 0.6rem;
 			> div {
 				display: inline;
 				padding: 0.2rem;
@@ -109,8 +111,7 @@
 				color: rgb(6, 6, 100);
 			}
 		}
-		
-		
+
 		// display: flex;
 		// flex-wrap: wrap;
 		// gap: .5rem;
