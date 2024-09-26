@@ -12,12 +12,12 @@ const wochentagen = [
 ];
 
 const prioritaeten = [
-	{ id: 0, name: "eingangskorb" },
-	{ id: 1, name: "bnous" },
-	{ id: 2, name: "irgendwann" },
-	{ id: 3, name: "später" },
-	{ id: 4, name: "nächste" },
 	{ id: 5, name: "jetzt" },
+	{ id: 4, name: "nächste" },
+	{ id: 3, name: "später" },
+	{ id: 2, name: "irgendwann" },
+	{ id: 1, name: "bnous" },
+	{ id: 0, name: "eingangskorb" },
 ];
 
 const Ausstattung = writable({

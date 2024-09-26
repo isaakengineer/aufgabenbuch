@@ -1,15 +1,20 @@
-use tauri::{AppHandle, Emitter, Listener, Builder, Manager};
-use tauri_plugin_dialog::{DialogExt, MessageDialogKind};
-use std::sync::Mutex;
-use sqlx::{sqlite::{SqliteConnection, SqlitePoolOptions}, Pool, Sqlite, FromRow};
+use sqlx::{
+    sqlite::{SqliteConnection, SqlitePoolOptions},
+    FromRow, Pool, Sqlite,
+};
 use std::path::PathBuf;
+use std::sync::Mutex;
+use tauri::{AppHandle, Builder, Emitter, Listener, Manager};
+use tauri_plugin_dialog::{DialogExt, MessageDialogKind};
 
 mod aufgabe;
-use aufgabe::{aufgabe_hinfuegen, aufgabe_aendern, list_alle, aufgabe_erledigen, list_erledigt};
+use aufgabe::{
+    aufgabe_aendern, aufgabe_erledigen, aufgabe_hinfuegen, list_alle, list_erledigt, list_jetzige,
+};
 
 mod liste;
-use liste::{AppData, file_waehlen, datenbank_erstellen, file_erstellen, dateipfad_eingegeben};
- 
+use liste::{dateipfad_eingegeben, datenbank_erstellen, file_erstellen, file_waehlen, AppData};
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 #[tokio::main]
 pub async fn run() {
@@ -18,21 +23,18 @@ pub async fn run() {
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_shell::init())
         .invoke_handler(tauri::generate_handler![
-
             file_erstellen,
             file_waehlen,
             datenbank_erstellen,
             dateipfad_eingegeben,
-
             aufgabe_hinfuegen,
             aufgabe_aendern,
             aufgabe_erledigen,
-
             list_alle,
+            list_jetzige,
             list_erledigt,
         ])
         .setup(|app| {
-
             // #[cfg(debug_assertions)] // only include this code on debug builds
             // {
             //   let window = app.get_webview_window("main").unwrap();

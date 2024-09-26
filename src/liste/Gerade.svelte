@@ -6,6 +6,22 @@
 
 	let aufgaben = $liste;
 
+	console.log(aufgaben)
+
+	function wochentagunabhaengig(aufgaben) {
+		return aufgaben.filter(
+			aufgabe => aufgabe.wochentag === 0
+		);
+	}
+
+	function heute(aufgaben) {
+		const currentDate = new Date();
+		const currentWeekday = currentDate.getDay();
+		return aufgaben.filter(
+			aufgabe => aufgabe.wochentag === currentWeekday
+		);
+	}
+
 	// Add a new Aufgabe to the liste
 	function addAufgabe(aufgabe) {
 		liste.update((n) => [...n, aufgabe]);
@@ -57,8 +73,8 @@
 
 {#if $liste.length > 0}
 	<div class="liste">
-		<header>Aufgaben liste</header>
-		{#each $liste as aufgabe}
+		<header>Wochentagunabhängig</header>
+		{#each wochentagunabhaengig($liste) as aufgabe}
 			<div
 				class="aufgabe"
 				class:erledigt={istErledigt(aufgabe)}
@@ -66,32 +82,25 @@
 			>
 				<div class="satz">
 					<div class="id">{aufgabe.id}</div>
-					<div class="datum">
-						{getHumanReadable(aufgabe).date}
-					</div>
-					<div class="status">
-						{getHumanReadable(aufgabe).status}
-					</div>
 					<div class="kommentar">{aufgabe.kommentar}</div>
 					<div class="beschreibung">{aufgabe.beschreibung}</div>
 				</div>
-
-				<!-- {#if import.meta.env.DEV}
-            <div class="dev debug">
-              <div>Gruppe: {aufgabe.gruppe}</div>
-              <div>Notiz: {aufgabe.notiz}</div>
-              <div>Link: <a href={aufgabe.link} target="_blank">{aufgabe.link}</a></div>
-              <div>Wochentag: {aufgabe.wochentag}</div>
-              <div>Priorität: {aufgabe.prioritaet}</div>
-              <div>Position: {aufgabe.position !== null ? aufgabe.position : 'N/A'}</div>
-              <div>Verschoben: {aufgabe.verschoben ? aufgabe.verschoben : 'N/A'}</div>
-              <div>Getan: {aufgabe.getan ? aufgabe.getan : 'N/A'}</div>
-              <div>Vernachlässigt: {aufgabe.vernachlaessigt ? aufgabe.vernachlaessigt : 'N/A'}</div>
-              <div>Kommentar: {aufgabe.kommentar}</div>
-              <div>Erstellt am: {aufgabe.erstellt_an ? aufgabe.erstellt_an : 'N/A'}</div>
-              <div>Geändert am: {aufgabe.geaendert_an ? aufgabe.geaendert_an : 'N/A'}</div>
-            </div>
-          {/if} -->
+			</div>
+		{/each}
+	</div>
+	<div class="liste">
+		<header>Heute</header>
+		{#each heute($liste) as aufgabe}
+			<div
+				class="aufgabe"
+				class:erledigt={istErledigt(aufgabe)}
+				on:click={() => aufgabeGewaelt(aufgabe)}
+			>
+				<div class="satz">
+					<div class="id">{aufgabe.id}</div>
+					<div class="kommentar">{aufgabe.kommentar}</div>
+					<div class="beschreibung">{aufgabe.beschreibung}</div>
+				</div>
 			</div>
 		{/each}
 	</div>
@@ -110,6 +119,11 @@
 		display: flex;
 		flex-direction: column;
 		gap: 0.5rem;
+		> header {
+			padding: .5rem 1rem;
+			text-align: end;
+			text-decoration: underline;
+		}
 	}
 	.aufgabe {
 		opacity: 0.7;

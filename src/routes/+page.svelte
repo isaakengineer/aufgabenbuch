@@ -5,6 +5,7 @@
 	import Aufgabe from "../aufgabe/Aufgabe.svelte";
 	import Liste from "../liste/Liste.svelte";
 	import Buch from "../liste/Buch.svelte";
+	import Gerade from "../liste/Gerade.svelte";
 	import { liste } from "../liste/store.js";
 
 	import File from "../file/File.svelte";
@@ -24,7 +25,7 @@
 		"liste",
 		"suche",
 		"buch",
-		"jetzt",
+		"gerade",
 		// "gruppen", // Fähigkeit von TaskLog, ob es sinn macht oder nicht ??
 		"eingangskorb",
 		// "schliessen", // Extra Fähigkeit, vielleicht nicht nötig
@@ -48,6 +49,11 @@
 	async function controlle(item) {
 		console.log(item);
 		switch (item) {
+			case "gerade":
+				console.log("auf GERADE wechseln");
+				$Ausstattung.haupt = "gerade";
+				$liste = await invoke("list_jetzige");
+				break;
 			case "liste":
 				console.log("liste aktualizieren");
 				$Ausstattung.haupt = "liste";
@@ -68,6 +74,8 @@
 			<div class="name">{$Ausstattung.identitaet.name}</div>
 			{#if $Ausstattung.haupt === "liste"}
 				<div class="titel">Aufgaben Liste</div>
+			{:else if $Ausstattung.haupt === "gerade"}
+				<div class="titel">Gerade</div>
 			{/if}
 		{/if}
 		<div
@@ -80,6 +88,8 @@
 			<File />
 		{:else if $Ausstattung.haupt === "liste"}
 			<Liste />
+		{:else if $Ausstattung.haupt === "gerade"}
+			<Gerade />
 		{:else if $Ausstattung.haupt === "buch"}
 			<Buch />
 		{/if}
