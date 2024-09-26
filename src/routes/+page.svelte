@@ -127,6 +127,9 @@
 </div>
 
 <style lang="scss">
+	.ausweiten {
+		display: block;
+	}
 	:global(a.aktion) {
 		cursor: pointer;
 	}

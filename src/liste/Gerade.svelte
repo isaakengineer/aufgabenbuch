@@ -92,6 +92,7 @@
 			<div
 				class="aufgabe"
 				class:erledigt={istErledigt(aufgabe)}
+				class:gewaehlt={ ($Aufgabe.id === aufgabe.id)}
 				on:click={() => aufgabeGewaelt(aufgabe)}
 			>
 				<div class="satz">
@@ -108,6 +109,7 @@
 			<div
 				class="aufgabe"
 				class:erledigt={istErledigt(aufgabe)}
+				class:gewaehlt={ ($Aufgabe.id === aufgabe.id)}
 				on:click={() => aufgabeGewaelt(aufgabe)}
 			>
 				<div class="satz">
@@ -136,6 +138,7 @@
 			<div
 				class="aufgabe"
 				class:erledigt={istErledigt(aufgabe)}
+				class:gewaehlt={ ($Aufgabe.id === aufgabe.id)}
 				on:click={() => aufgabeGewaelt(aufgabe)}
 			>
 				<div class="satz">
@@ -187,6 +190,9 @@
 		opacity: 0.7;
 		&:hover {
 			opacity: 0.9;
+		}
+		&.gewaehlt {
+			opacity: 1;
 		}
 		margin: 0.2rem;
 		display: flex;

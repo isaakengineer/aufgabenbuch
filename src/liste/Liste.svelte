@@ -4,9 +4,11 @@
 	import { format } from "date-fns";
 	import { Ausstattung } from "../routes/store.js";
 
+	import { Empty } from "phosphor-svelte";
+
 	let aufgaben = $liste;
 	let filtern = false;
-	let gruppe = "";
+	let gruppe = false;
 
 	// Add a new Aufgabe to the liste
 	function addAufgabe(aufgabe) {
@@ -37,7 +39,11 @@
 	};
 
 	const filterNachGruppe = (liste, g) => {
-		return liste.filter((a) => a.gruppe === g);
+		console.log(liste)
+		return liste.filter((a) => {
+			if (gruppe)	return (a.gruppe === g)
+			else return (a.gruppe === null)
+		})
 	};
 
 	const datumLeserlich = (datumString) => {
@@ -50,12 +56,16 @@
 		{#if $Ausstattung.gruppenZeigen}
 			<div class="gruppen">
 				{#each $gruppen as g}
-					<a
-						on:click={() => {
+					<a class="gruppe" class:gewaehlt={g === gruppe} on:click={() => {
 							gruppe = g;
 							filtern = true;
-						}}>{g}</a
-					>
+						}}>
+							{#if g === ""}
+								<Empty />
+							{:else}
+								{g}
+							{/if}
+						</a>
 				{/each}
 			</div>
 		{/if}
@@ -65,6 +75,7 @@
 					<div
 						class="aufgabe"
 						class:erledigt={istErledigt(aufgabe)}
+						class:gewaehlt={ ($Aufgabe.id === aufgabe.id) }
 						on:click={() => aufgabeGewaelt(aufgabe)}
 					>
 						<div class="satz">
@@ -85,6 +96,7 @@
 					<div
 						class="aufgabe"
 						class:erledigt={istErledigt(aufgabe)}
+						class:gewaehlt={ ($Aufgabe.id === aufgabe.id)}
 						on:click={() => aufgabeGewaelt(aufgabe)}
 					>
 						<div class="satz">
@@ -117,15 +129,31 @@
 		display: flex;
 		flex-direction: row-reverse;
 		> .liste {
+			padding: .5rem 0;
 			flex: 1;
 		}
 		> .gruppen {
+			padding: .5rem 0;
 			width: 5rem;
 			display: flex;
 			flex-direction: column;
+			gap: .5rem;
 			> a {
 				display: block;
 				padding: 0.5rem;
+			}
+		}
+	}
+	.gruppen {
+		> .gruppe {
+			background-color: #eee;
+			cursor: pointer;
+			&:hover {
+				background-color: #ccc;
+			}
+			&.gewaehlt {
+				background-color: #333;
+				color: #eee;
 			}
 		}
 	}
@@ -138,6 +166,9 @@
 		opacity: 0.7;
 		&:hover {
 			opacity: 0.9;
+		}
+		&.gewaehlt {
+			opacity: 1;
 		}
 		margin: 0.2rem;
 		display: flex;

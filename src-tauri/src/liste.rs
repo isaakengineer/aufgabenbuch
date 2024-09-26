@@ -42,7 +42,7 @@ fn datenbankpfad_fuellen(app: AppHandle, pfad: String) {
 		charakter.name = Some(file_name.to_string());
 		charakter.endung = Some(extension.to_string());
 	} else {
-		println!("Could not extract file name and extension.");
+		println!("Could not extract file name and extension");
 	}
 }
 fn datenbankpfad_leeren(app: AppHandle) {
