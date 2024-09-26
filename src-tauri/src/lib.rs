@@ -8,7 +8,7 @@ mod aufgabe;
 use aufgabe::{aufgabe_hinfuegen, aufgabe_aendern, list_alle, aufgabe_erledigen, list_erledigt};
 
 mod liste;
-use liste::{AppData, file_waehlen, datenbank_erstellen, file_erstellen};
+use liste::{AppData, file_waehlen, datenbank_erstellen, file_erstellen, dateipfad_eingegeben};
  
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 #[tokio::main]
@@ -22,6 +22,7 @@ pub async fn run() {
             file_erstellen,
             file_waehlen,
             datenbank_erstellen,
+            dateipfad_eingegeben,
 
             aufgabe_hinfuegen,
             aufgabe_aendern,
