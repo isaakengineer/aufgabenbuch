@@ -13,8 +13,17 @@ use serde::{Deserialize, Serialize};
 use crate::liste::AppData;
 
 #[derive(Serialize, Deserialize, Clone, Debug, FromRow)]
+pub struct InputAufgabe {
+  pub beschreibung: String,
+  pub notiz: Option<String>,
+  pub link: Option<String>,
+  pub wochentag: u8,
+  pub prioritaet: u8,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, FromRow)]
 pub struct Aufgabe {
-    pub id: Option<i32>,        // integer (disabled)
+    pub id: i32,        // integer (disabled)
     pub gruppe: Option<String>, // string (disabled)
     pub beschreibung: String,   // string (textarea)
     pub notiz: Option<String>,  // text (textarea)
@@ -43,7 +52,7 @@ fn process_beschreibung(beschreibung: &str) -> Option<String> {
 }
 
 #[tauri::command]
-pub async fn aufgabe_erledigen(app: AppHandle, aufgabe: Aufgabe) -> Result<(), String> {
+pub async fn aufgabe_erledigen(app: AppHandle, aufgabe: Aufgabe) -> Result<Aufgabe, String> {
     println!("Erledige Aufgabe: {:?}", aufgabe);
 
     let data = app.state::<Mutex<AppData>>();
@@ -61,9 +70,44 @@ pub async fn aufgabe_erledigen(app: AppHandle, aufgabe: Aufgabe) -> Result<(), S
         .await
         .map_err(|e| format!("could not update Aufgabe {}", e))?;
 
-    Ok(())
+  let aufgabe_neue = letzte_aenderung(db, &aufgabe.id).await;
+	match aufgabe_neue {
+	 	Ok(a) => Ok(a),
+	 	Err(e) => Err(format!("Etwas schief gelaufen: {:?}", e))
+	}
+}
+#[tauri::command]
+pub async fn aufgabe_wieder_aktivieren(app: AppHandle, id: i32) -> Result<Aufgabe, String> {
+	println!("Erledige Aufgabe: {:?}", &id);
+
+	let data = app.state::<Mutex<AppData>>();
+	let db = data.lock().unwrap().pool.clone().unwrap();
+
+	let query = include_str!("../queries/aufgabe_wieder_aktivieren.sql");
+	sqlx::query(query)
+	  .bind(id)
+	  .execute(&db)
+	  .await
+	  .map_err(|e| format!("could not update Aufgabe {}", e))?;
+
+	let aufgabe_neue = letzte_aenderung(db, &id).await;
+	match aufgabe_neue {
+	 	Ok(a) => Ok(a),
+	 	Err(e) => Err(format!("Etwas schief gelaufen: {:?}", e))
+	}
 }
 
+pub async fn letzte_aenderung( // falsche Name, sollte letzte neue Aufgabe sein!
+    db: Pool<Sqlite>,
+    id: &i32,
+) -> Result<Aufgabe, String> {
+    let aufgabe = sqlx::query_as::<_, Aufgabe>("SELECT * FROM liste WHERE id = ?1")
+        .bind(id)
+        .fetch_one(&db)
+        .await
+        .map_err(|e| format!("Failed to get todo {}", e))?;
+    Ok(aufgabe)
+}
 pub async fn letzte_aktualisierung( // falsche Name, sollte letzte neue Aufgabe sein!
     db: Pool<Sqlite>,
     res: SqliteQueryResult,
@@ -113,7 +157,7 @@ pub async fn aufgabe_aendern(app: AppHandle, aufgabe: Aufgabe) -> Result<Aufgabe
 }
 
 #[tauri::command]
-pub async fn aufgabe_hinfuegen(app: AppHandle, aufgabe: Aufgabe) -> Result<Aufgabe, String> {
+pub async fn aufgabe_hinfuegen(app: AppHandle, aufgabe: InputAufgabe) -> Result<Aufgabe, String> {
     println!("aufgabe_hinfuegen: {}", &aufgabe.beschreibung.clone());
 
     let data = app.state::<Mutex<AppData>>();
@@ -128,6 +172,8 @@ pub async fn aufgabe_hinfuegen(app: AppHandle, aufgabe: Aufgabe) -> Result<Aufga
             .bind(aufgabe.beschreibung)
             .bind(aufgabe.wochentag)
             .bind(aufgabe.prioritaet)
+            .bind(aufgabe.link)
+            .bind(aufgabe.notiz)
             // .bind(chrono::Utc::now().to_rfc3339()) // erstellt an
             .execute(&db)
             .await;
@@ -137,6 +183,8 @@ pub async fn aufgabe_hinfuegen(app: AppHandle, aufgabe: Aufgabe) -> Result<Aufga
             .bind(aufgabe.beschreibung)
             .bind(aufgabe.wochentag)
             .bind(aufgabe.prioritaet)
+            .bind(aufgabe.link)
+            .bind(aufgabe.notiz)
             .execute(&db)
             .await;
     }

@@ -1,31 +1,35 @@
 <script>
     import { invoke } from "@tauri-apps/api/core";
     import { Aufgabe, AufgabeIstErledigt, updateStore } from './store.js';
+	import { liste, addAufgabe, aufgabeAendern } from '../liste/store.js';
 
     import { CheckSquareOffset } from "phosphor-svelte";
 
     async function erledigen() {
-        console.log($AufgabeIstErledigt);
-        if ($AufgabeIstErledigt === 'vernachlaessigt') {
-            $Aufgabe.vernachlaessigt = new Date().toISOString();
-            $Aufgabe.getan = null;
-            $Aufgabe.verschoben = null;
-        } else if ($AufgabeIstErledigt === 'getan') {
-            $Aufgabe.getan = new Date().toISOString();
-            $Aufgabe.vernachlaessigt = null;
-            $Aufgabe.verschoben = null;
-        } else if ($AufgabeIstErledigt === 'verschoben') {
-            $Aufgabe.verschoben = new Date().toISOString();
-            $Aufgabe.getan = null;
-            $Aufgabe.vernachlaessigt = null;
-        }
-        await invoke("aufgabe_erledigen", { aufgabe: $Aufgabe });
+    	console.log("aufgabe erledigen!")
+      console.log($AufgabeIstErledigt);
+      if ($AufgabeIstErledigt === 'vernachlaessigt') {
+          $Aufgabe.vernachlaessigt = new Date().toISOString();
+          $Aufgabe.getan = null;
+          $Aufgabe.verschoben = null;
+      } else if ($AufgabeIstErledigt === 'getan') {
+          $Aufgabe.getan = new Date().toISOString();
+          $Aufgabe.vernachlaessigt = null;
+          $Aufgabe.verschoben = null;
+      } else if ($AufgabeIstErledigt === 'verschoben') {
+          $Aufgabe.verschoben = new Date().toISOString();
+          $Aufgabe.getan = null;
+          $Aufgabe.vernachlaessigt = null;
+      }
+      let neueAufgabe = await invoke("aufgabe_erledigen", { aufgabe: $Aufgabe });
+      $Aufgabe = neueAufgabe;
+      aufgabeAendern($Aufgabe.id, neueAufgabe);
     }
 </script>
 
 <div class="radio-container">
 {#each ['verschoben', 'getan', 'vernachlaessigt'] as status}
-    
+
     <input type="radio" id={status} name="status" value={status} bind:group={$AufgabeIstErledigt} />
     <label for={status}>{status.charAt(0).toUpperCase() + status.slice(1)}</label>
 {/each}

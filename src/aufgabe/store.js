@@ -10,7 +10,7 @@ function createAufgabe() {
         wochentag: 0,               // integer (drop down 0-7)
         prioritaet: 0,              // integer (drop down 0-4)
         position: null,             // integer (disabled)
-        
+
         verschoben: null,           // date (checkbox)
         getan: null,                // date (checkbox)
         vernachlaessigt: null,      // date (checkbox)
@@ -54,7 +54,9 @@ export const AufgabeIstErledigt = derived(Aufgabe, $Aufgabe => {
     } else if ($Aufgabe.verschoben !== null) {
         return 'verschoben';
     }
+    return false;
 });
+
 AufgabeIstErledigt.set = (value) => {
     Aufgabe.update(current => ({ ...current, verschoben: null, getan: null, vernachlaessigt: null }));
     if (value === 'vernachlaessigt') {

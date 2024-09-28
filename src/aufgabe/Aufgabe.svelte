@@ -1,5 +1,5 @@
 <script>
-	import { Aufgabe, updateStore } from './store.js';
+	import { Aufgabe, updateStore, AufgabeIstErledigt } from './store.js';
 	import { liste, addAufgabe, aufgabeAendern } from '../liste/store.js';
 	import { onMount } from 'svelte';
 	import { invoke } from "@tauri-apps/api/core";
@@ -58,6 +58,20 @@
 	const resetFormular = () => {
 		Aufgabe.reset();
 		rueckmeldung = false;
+	}
+
+	async function wiederAktivieren () {
+		console.log("aufgabe wieder aktivieren", formData.id)
+		if ( formData.beschreibung.length == 0 ) {
+			rueckmeldung = "Beschreibung darf nicht leer sein!";
+		} else {
+			let aufgabe = $Aufgabe;
+			neueAufgabe = await invoke('aufgabe_wieder_aktivieren', { id: formData.id});
+			aufgabeAendern(formData.id, neueAufgabe)
+			$Aufgabe = neueAufgabe;
+			rueckmeldung = false;
+			// TODO: etwas mit listen ändern!
+		}
 	}
 
 	async function hinfuegen() {
@@ -144,6 +158,11 @@
 
 		  <fieldset id="extra">
 			  {#if fokus === 'normal'}
+					{#if $AufgabeIstErledigt}
+						<div>
+							<button on:click={wiederAktivieren}>Wieder Aktivieren</button>
+						</div>
+					{/if}
 					<div class="dropdown">
 					  <label for="prioritaet">Prioritaet</label>
 					  <select name="prioritaet" on:change={handleOption} bind:value={formData.prioritaet} placeholder="Priorität">

@@ -9,7 +9,9 @@ use tauri_plugin_dialog::{DialogExt, MessageDialogKind};
 
 mod aufgabe;
 use aufgabe::{
-    aufgabe_aendern, aufgabe_erledigen, aufgabe_hinfuegen, gruppen_alle, list_alle, list_erledigt,
+    aufgabe_aendern,
+    aufgabe_erledigen, aufgabe_wieder_aktivieren,
+    aufgabe_hinfuegen, gruppen_alle, list_alle, list_erledigt,
     list_jetzige,
 };
 
@@ -26,11 +28,16 @@ pub async fn run() {
         .invoke_handler(tauri::generate_handler![
             file_erstellen,
             file_waehlen,
+
             datenbank_erstellen,
             dateipfad_eingegeben,
+
             aufgabe_hinfuegen,
             aufgabe_aendern,
+
             aufgabe_erledigen,
+            aufgabe_wieder_aktivieren,
+
             list_alle,
             list_jetzige,
             list_erledigt,
