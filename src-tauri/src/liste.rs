@@ -227,6 +227,7 @@ async fn datenbank_aktivieren_oder_herstellen(
 	if is_empty {
 		// Perform migrations if the database is empty
 		sqlx::migrate!("./migrations").run(&pool).await.unwrap();
+		pool_fuellen(app.clone(), pool);
 	} else {
 		println!("Datenbank ist nicht leer!");
 		let migration_name = "20240919152942_erstelle_aufgaben_tabelle";
