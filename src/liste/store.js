@@ -7,4 +7,8 @@ function addAufgabe(newAufgabe) {
 	liste.update((currentList) => [...currentList, newAufgabe]);
 }
 
-export { liste, addAufgabe, gruppen };
+function aufgabeAendern(index, aufgabe) {
+	liste.update((n) => n.map((item) => (item.id === index ? aufgabe : item)),);
+}
+
+export { liste, addAufgabe, gruppen, aufgabeAendern };

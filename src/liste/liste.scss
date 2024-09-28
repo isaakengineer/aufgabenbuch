@@ -1,0 +1,8 @@
+.buch {
+	display: flex;
+	flex-direction: row-reverse;
+	> .liste {
+		padding: .5rem 0;
+		flex: 1;
+	}
+}

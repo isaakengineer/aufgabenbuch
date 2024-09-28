@@ -1,6 +1,7 @@
 <script>
 	import { invoke } from "@tauri-apps/api/core";
 	import { emit, once, listen } from "@tauri-apps/api/event";
+	import { getCurrentWindow } from '@tauri-apps/api/window';
 
 	import Aufgabe from "../aufgabe/Aufgabe.svelte";
 	import Liste from "../liste/Liste.svelte";
@@ -11,7 +12,7 @@
 	import File from "../file/File.svelte";
 	import { Aussehen, Ausstattung } from "./store.js";
 
-	import { Tag } from "phosphor-svelte";
+	import { Tag, XCircle } from "phosphor-svelte";
 
 	let aufgabenList = $liste;
 
@@ -22,6 +23,8 @@
 	};
 	let list = {};
 	let file = {};
+
+	let elementalCloseButtonWeight = "duotone";
 
 	const haupt = [
 		"liste",
@@ -34,6 +37,8 @@
 	];
 
 	// let aufgabenList = [];
+
+	const appWindow = getCurrentWindow();
 
 	listen("file-gewaehlt", async (event) => {
 		$Ausstattung.identitaet = event.payload;
@@ -102,6 +107,14 @@
 			data-tauri-drag-region
 			class="titlebar windowdragger"
 		></div>
+	  <div>
+			<button class="elemental titlebar-button" id="titlebar-close"
+				on:mouseover={() => elementalCloseButtonWeight = "fill"}
+				on:mouseleave={() => elementalCloseButtonWeight = "duotone"}
+				on:click={() => appWindow.close()}>
+				<XCircle size="1.5em" bind:weight={elementalCloseButtonWeight} />
+			</button>
+	  </div>
 	</header>
 	<main>
 		{#if $Ausstattung.haupt === "nichts"}
@@ -127,10 +140,15 @@
 </div>
 
 <style lang="scss">
+#titlebar-close {
+	color: indianred;
+}
 	.ausweiten {
-		display: block;
+		/* display: block; */
 	}
 	:global(a.aktion) {
+		display: flex;
+		align-content: center;
 		cursor: pointer;
 	}
 	:global(a.aktion > svg) {
@@ -178,6 +196,8 @@
 		}
 	}
 	.app {
+		box-sizing: border-box;
+		padding: 1px;
 		display: grid;
 		grid-template: "header" "." "main" "." "aside" "." "footer";
 		grid-template-rows: 2.8rem 1px 5fr 1px 1fr 1px 2.8rem;
@@ -206,6 +226,19 @@
 	.app > header {
 		background-color: #fff;
 		display: flex;
+		> div {
+			align-content: center;
+			button.elemental {
+				border: none;
+				box-shadow: none;
+				margin: .2rem;
+				align-content: center;
+				display: flex;
+				&:hover {
+					box-shadow: none;
+				}
+			}
+		}
 		> .windowdragger {
 			flex: 1;
 			cursor: move;

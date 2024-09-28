@@ -64,7 +64,7 @@ pub async fn aufgabe_erledigen(app: AppHandle, aufgabe: Aufgabe) -> Result<(), S
     Ok(())
 }
 
-pub async fn letzte_aktualisierung(
+pub async fn letzte_aktualisierung( // falsche Name, sollte letzte neue Aufgabe sein!
     db: Pool<Sqlite>,
     res: SqliteQueryResult,
 ) -> Result<Aufgabe, String> {
@@ -99,8 +99,12 @@ pub async fn aufgabe_aendern(app: AppHandle, aufgabe: Aufgabe) -> Result<Aufgabe
 
     match result {
         Ok(res) => {
-            let aufgabe = letzte_aktualisierung(db, res).await?;
-            return Ok(aufgabe);
+        	let aufgabe_geaendert = sqlx::query_as::<_, Aufgabe>("SELECT * FROM liste WHERE id = ?1")
+            .bind(aufgabe.id)
+            .fetch_one(&db)
+            .await
+            .map_err(|e| format!("Könnte die Aufgabe mit ID {:?} nicht finden, weil {}", aufgabe.id, e))?;
+            return Ok(aufgabe_geaendert);
         }
         Err(e) => {
             return Err(format!("Error saving todo: {}", e));

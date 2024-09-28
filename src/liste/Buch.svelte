@@ -55,58 +55,60 @@
 	};
 </script>
 
-{#if $liste.length > 0}
-	<div class="liste">
-		<header>Aufgaben liste</header>
-		{#each $liste as aufgabe}
-			<div
-				class="aufgabe"
-				class:erledigt={istErledigt(aufgabe)}
-				class:gewaehlt={ ($Aufgabe.id === aufgabe.id)}
-				on:click={() => aufgabeGewaelt(aufgabe)}
-			>
-				<div class="satz">
-					<div class="id">{aufgabe.id}</div>
-					<div class="datum">
-						{getHumanReadable(aufgabe).date}
+<div class="buch">
+	{#if $liste.length > 0}
+		<div class="liste">
+			{#each $liste as aufgabe}
+				<div
+					class="aufgabe"
+					class:erledigt={istErledigt(aufgabe)}
+					class:gewaehlt={ ($Aufgabe.id === aufgabe.id)}
+					on:click={() => aufgabeGewaelt(aufgabe)}
+				>
+					<div class="satz">
+						<div class="id">{aufgabe.id}</div>
+						<div class="datum">
+							{getHumanReadable(aufgabe).date}
+						</div>
+						<div class="status">
+							{getHumanReadable(aufgabe).status}
+						</div>
+						<div class="kommentar">{aufgabe.kommentar}</div>
+						<div class="beschreibung">{aufgabe.beschreibung}</div>
 					</div>
-					<div class="status">
-						{getHumanReadable(aufgabe).status}
-					</div>
-					<div class="kommentar">{aufgabe.kommentar}</div>
-					<div class="beschreibung">{aufgabe.beschreibung}</div>
-				</div>
 
-				<!-- {#if import.meta.env.DEV}
-            <div class="dev debug">
-              <div>Gruppe: {aufgabe.gruppe}</div>
-              <div>Notiz: {aufgabe.notiz}</div>
-              <div>Link: <a href={aufgabe.link} target="_blank">{aufgabe.link}</a></div>
-              <div>Wochentag: {aufgabe.wochentag}</div>
-              <div>Priorität: {aufgabe.prioritaet}</div>
-              <div>Position: {aufgabe.position !== null ? aufgabe.position : 'N/A'}</div>
-              <div>Verschoben: {aufgabe.verschoben ? aufgabe.verschoben : 'N/A'}</div>
-              <div>Getan: {aufgabe.getan ? aufgabe.getan : 'N/A'}</div>
-              <div>Vernachlässigt: {aufgabe.vernachlaessigt ? aufgabe.vernachlaessigt : 'N/A'}</div>
-              <div>Kommentar: {aufgabe.kommentar}</div>
-              <div>Erstellt am: {aufgabe.erstellt_an ? aufgabe.erstellt_an : 'N/A'}</div>
-              <div>Geändert am: {aufgabe.geaendert_an ? aufgabe.geaendert_an : 'N/A'}</div>
-            </div>
-          {/if} -->
-			</div>
-		{/each}
-	</div>
-{:else}
-	<section class="message">
-		<p>Es gibt noch keine erledigte Aufgaben auf Ihre Liste.</p>
-		<p>
-			Vielleicht versuchen Sie ein Paar Aufgaben auf Ihre Liste
-			mal als erledigt zu markieren!
-		</p>
-	</section>
-{/if}
+					<!-- {#if import.meta.env.DEV}
+	            <div class="dev debug">
+	              <div>Gruppe: {aufgabe.gruppe}</div>
+	              <div>Notiz: {aufgabe.notiz}</div>
+	              <div>Link: <a href={aufgabe.link} target="_blank">{aufgabe.link}</a></div>
+	              <div>Wochentag: {aufgabe.wochentag}</div>
+	              <div>Priorität: {aufgabe.prioritaet}</div>
+	              <div>Position: {aufgabe.position !== null ? aufgabe.position : 'N/A'}</div>
+	              <div>Verschoben: {aufgabe.verschoben ? aufgabe.verschoben : 'N/A'}</div>
+	              <div>Getan: {aufgabe.getan ? aufgabe.getan : 'N/A'}</div>
+	              <div>Vernachlässigt: {aufgabe.vernachlaessigt ? aufgabe.vernachlaessigt : 'N/A'}</div>
+	              <div>Kommentar: {aufgabe.kommentar}</div>
+	              <div>Erstellt am: {aufgabe.erstellt_an ? aufgabe.erstellt_an : 'N/A'}</div>
+	              <div>Geändert am: {aufgabe.geaendert_an ? aufgabe.geaendert_an : 'N/A'}</div>
+	            </div>
+	          {/if} -->
+				</div>
+			{/each}
+		</div>
+	{:else}
+		<section class="message">
+			<p>Es gibt noch keine erledigte Aufgaben auf Ihre Liste.</p>
+			<p>
+				Vielleicht versuchen Sie ein Paar Aufgaben auf Ihre Liste
+				mal als erledigt zu markieren!
+			</p>
+		</section>
+	{/if}
+</div>
 
 <style lang="scss">
+	@import "./liste.scss";
 	.liste {
 		display: flex;
 		flex-direction: column;

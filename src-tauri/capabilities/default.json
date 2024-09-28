@@ -12,6 +12,6 @@
     "dialog:allow-open",
     "dialog:allow-ask",
     "dialog:allow-message",
-    "core:window:default", "core:window:allow-start-dragging"
+    "core:window:default", "core:window:allow-start-dragging", "core:window:allow-close"
   ]
 }

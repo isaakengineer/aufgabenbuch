@@ -12,7 +12,8 @@
   "app": {
     "windows": [
       {
-        "title": "aufgabenbuch",
+      	"decorations": false,
+        "title": "Aufgabenbuch",
         "width": 640,
         "height": 820
       }

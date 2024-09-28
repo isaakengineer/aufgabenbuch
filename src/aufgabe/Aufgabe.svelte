@@ -1,6 +1,6 @@
 <script>
 	import { Aufgabe, updateStore } from './store.js';
-	import { liste, addAufgabe } from '../liste/store.js';
+	import { liste, addAufgabe, aufgabeAendern } from '../liste/store.js';
 	import { onMount } from 'svelte';
 	import { invoke } from "@tauri-apps/api/core";
 
@@ -77,6 +77,7 @@
 			let aufgabe = $Aufgabe;
 			neueAufgabe = await invoke('aufgabe_aendern', { aufgabe: aufgabe });
 			rueckmeldung = false;
+			aufgabeAendern(formData.id, neueAufgabe)
 		}
 		// TODO: ersetze die alte Aufgabe mit der neuen Aufgabe
 	}

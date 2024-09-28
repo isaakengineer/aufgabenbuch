@@ -23,7 +23,7 @@
 	// Update an existing Aufgabe in the liste
 	function updateAufgabe(index, aufgabe) {
 		liste.update((n) =>
-			n.map((item, i) => (i === index ? aufgabe : item)),
+			n.map((item) => (item.id === index ? aufgabe : item)),
 		);
 	}
 	async function aufgabeGewaelt(aufgabe) {
@@ -92,7 +92,7 @@
 			</div>
 		{:else}
 			<div class="liste">
-				{#each $liste as aufgabe}
+				{#each $liste as aufgabe (aufgabe.id)}
 					<div
 						class="aufgabe"
 						class:erledigt={istErledigt(aufgabe)}
