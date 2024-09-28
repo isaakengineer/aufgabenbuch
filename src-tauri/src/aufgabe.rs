@@ -13,6 +13,12 @@ use serde::{Deserialize, Serialize};
 use crate::liste::AppData;
 
 #[derive(Serialize, Deserialize, Clone, Debug, FromRow)]
+pub struct EinfacheListe {
+	pub name: Option<String>,
+	pub count: i32,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, FromRow)]
 pub struct InputAufgabe {
   pub beschreibung: String,
   pub notiz: Option<String>,
@@ -256,12 +262,12 @@ pub async fn list_erledigt(app: AppHandle) -> Result<Vec<Aufgabe>, String> {
 }
 
 #[tauri::command]
-pub async fn gruppen_alle(app: AppHandle) -> Result<Vec<String>, String> {
+pub async fn gruppen_alle(app: AppHandle) -> Result<Vec<EinfacheListe>, String> {
     let data = app.state::<Mutex<AppData>>();
     let db = data.lock().unwrap().pool.clone().unwrap();
 
     let query = include_str!("../queries/gruppen_list.sql");
-    let liste: Vec<String> = sqlx::query_scalar::<_, String>(query)
+    let liste: Vec<EinfacheListe> = sqlx::query_as::<_, EinfacheListe>(query)
         .fetch_all(&db)
         .await
         .map(|rows| rows.into_iter().collect())

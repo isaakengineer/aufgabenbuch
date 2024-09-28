@@ -56,14 +56,14 @@
 		{#if $Ausstattung.gruppenZeigen}
 			<div class="gruppen">
 				{#each $gruppen as g}
-					<a class="gruppe" class:gewaehlt={g === gruppe} on:click={() => {
-							gruppe = g;
+					<a class="gruppe" class:gewaehlt={g.name === gruppe} on:click={() => {
+							gruppe = g.name;
 							filtern = true;
 						}}>
-							{#if g === ""}
+							{#if g.name === null}
 								<Empty />
 							{:else}
-								{g}
+								{g.name}
 							{/if}
 						</a>
 				{/each}

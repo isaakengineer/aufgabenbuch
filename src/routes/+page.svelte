@@ -77,6 +77,15 @@
 				break;
 		}
 	}
+
+	const gruppenZeigenToggle = async function() {
+		switch ($Ausstattung.gruppenZeigen) {
+			case false:
+				$gruppen = await invoke("gruppen_alle");
+			case true:
+				$Ausstattung.gruppenZeigen = !$Ausstattung.gruppenZeigen
+		}
+	}
 </script>
 
 <div class="app">
@@ -88,10 +97,7 @@
 				<div class="action">
 					<a
 						class="ausweiten aktion"
-						on:click={() =>
-							($Ausstattung.gruppenZeigen =
-								!$Ausstattung.gruppenZeigen)}
-					>
+						on:click={gruppenZeigenToggle} >
 						{#if $Ausstattung.gruppenZeigen}
 							<Tag weight="fill" size="1.5em" />
 						{:else}
