@@ -1,50 +1,54 @@
 <script>
-    import { event } from "@tauri-apps/api";
-    import { invoke } from "@tauri-apps/api/core";
-    let file;
+	import { event } from "@tauri-apps/api";
+	import { invoke } from "@tauri-apps/api/core";
+	import { listen } from "@tauri-apps/api/event";
 
-    import { listen } from '@tauri-apps/api/event'
+	let file;
+	let pfad = null;
 
-    listen('tauri://drag-enter', async (event) => {
-        console.log("fire event", event)
-        file = await invoke("dateipfad_eingegeben", {
-            pfad: event.payload.paths[0]
-        })
-    })
-    // listen('tauri://drag-over', event => {
-    //     console.log(event)
-    // })
-    // listen('tauri://drag-leave', event => {
-    //     console.log(event)
-    // })
-    // listen("tauri://drag-drop", async (event) => {
-    //     console.log(event)
-    //     file = await invoke("dateipfad_eingegeben", {
-    //         pfad: event.payload.paths[0]
-    //     })
-    // })
+	// Ein Funktionen-Paar, weil ansonsten Tauri kann nicht durch Browser die Pfad von "drag-drop event" lesen.
+  listen('tauri://drag-enter', async (event) => {
+    console.log("drag enter event", event);
+    pfad = event.payload.paths[0];
+  });
+  listen('tauri://drag-leave', event => {
+  	console.log("dragged file left!")
+    pfad = null;
+  });
+  listen('tauri://drag-drop', (event) => {
+  console.log("tauri drop event!")
+  	console.log(event);
+  })
 
-    async function file_waehlen() {
-        file = await invoke("file_waehlen");
+ 	window.addEventListener("drop",function(e){
+	  e = e || event;
+	  e.preventDefault();
+	},false); //preventing drag and drop nonesense!
+
+	async function file_waehlen() {
+	    file = await invoke("file_waehlen");
+	}
+	const fileErstellen = async () => {
+	    file = await invoke("file_erstellen");
+	    console.log(file);
+	}
+
+	const pfadLesen = async (event) => {
+  	if (pfad) {
+	  	file = await invoke("dateipfad_eingegeben", {
+				pfad: pfad // hier die Pfad wird durch von Tauri festgelegten Data erfüllt
+		  });
+   	} else {
+    	console.log("something went wrong during drop!", event);
     }
-    const fileErstellen = async () => {
-        file = await invoke("file_erstellen");
-        console.log(file);
-    }
+  }
 
-    const dropped = async (event) => {
-        // event.preventDefault();
-        const files = event.dataTransfer.files;
-        if (files.length > 0) {
-            const filePath = files[0].path;
-            console.log("Dropped file path:", filePath);
-            // You can now use the file path as needed
-        }
-    }
-    const allowDrop = (event) => {
-        // event.preventDefault();
-    }
-
+	const allowDrop = (event) => { // nur zum Testen
+		// console.log("something!")
+	}
+	function dragoverHandler(ev) {
+	  ev.preventDefault();
+	}
 </script>
 
 <div class="wilkomen-seite">
@@ -55,9 +59,9 @@
         <button on:click={file_waehlen}>File wählen</button>
         <button on:click={fileErstellen}>File schaffen</button>
     </section>
-    <section class="box" on:drop={dropped} on:dragover={allowDrop}>
+    <div class="box dropzone" on:drop={pfadLesen} on:dragover={allowDrop} on:dragover={dragoverHandler} >
         <p>Ziehen Sie ihre Aufgabenbuch-Datenbank hier hinein!</p>
-    </section>
+    </div>
 </div>
 
 
