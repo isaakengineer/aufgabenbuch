@@ -103,6 +103,27 @@ pub async fn aufgabe_wieder_aktivieren(app: AppHandle, id: i32) -> Result<Aufgab
 	}
 }
 
+#[tauri::command]
+pub async fn aufgabe_priorisieren(app: AppHandle, id: i32, prioritaet: i32) -> Result<Aufgabe, String> {
+
+	let data = app.state::<Mutex<AppData>>();
+	let db = data.lock().unwrap().pool.clone().unwrap();
+
+	let query = include_str!("../queries/aufgabe_priorisieren.sql");
+	sqlx::query(query)
+		.bind(prioritaet)
+	  .bind(id)
+	  .execute(&db)
+	  .await
+	  .map_err(|e| format!("could not update Aufgabe {}", e))?;
+
+	let aufgabe_neue = letzte_aenderung(db, &id).await;
+	match aufgabe_neue {
+	 	Ok(a) => Ok(a),
+	 	Err(e) => Err(format!("Etwas schief gelaufen: {:?}", e))
+	}
+}
+
 pub async fn letzte_aenderung( // falsche Name, sollte letzte neue Aufgabe sein!
     db: Pool<Sqlite>,
     id: &i32,

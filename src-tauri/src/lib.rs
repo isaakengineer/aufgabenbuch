@@ -12,6 +12,7 @@ use aufgabe::{
 	aufgabe_aendern,
 	aufgabe_erledigen, aufgabe_wieder_aktivieren,
 	aufgabe_hinfuegen,
+	aufgabe_priorisieren,
 	gruppen_alle, list_alle, list_erledigt,
 	prioritaetenliste, list_jetzige,
 };
@@ -38,6 +39,8 @@ pub async fn run() {
 
 	    aufgabe_erledigen,
 	    aufgabe_wieder_aktivieren,
+
+			aufgabe_priorisieren,
 
 	    list_alle,
 	    list_jetzige,
