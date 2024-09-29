@@ -21,7 +21,8 @@
 
 	function heute(aufgaben) {
 		const currentDate = new Date();
-		const currentWeekday = currentDate.getDay();
+		const currentWeekday = (currentDate.getDay() + 6) % 7 + 1; // damit Montag der Tag mit 1 ist usw.
+		console.log(currentWeekday)
 		return aufgaben.filter(
 			(aufgabe) => aufgabe.wochentag === currentWeekday,
 		);

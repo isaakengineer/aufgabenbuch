@@ -1,5 +1,5 @@
 <script>
-	import { format } from "date-fns"; // Assuming date-fns is the internal library for date formatting
+	import { format, compareDesc } from "date-fns"; // Assuming date-fns is the internal library for date formatting
 
 	import { liste } from "./store.js";
 	import { Aufgabe } from "../aufgabe/store.js";
@@ -36,29 +36,37 @@
 	const formatDate = (date) => {
 		return format(new Date(date), "yyyy-MM-dd"); // Format the date as 'day.month.year'
 	};
-	const getHumanReadable = (a) => {
+	const erlediegungsStatus = (a) => {
 		let readable = {
-			date: "No date available",
+			date: null,
 			status: "No status available",
 		};
 		if (a.getan !== null) {
 			readable.status = "Getan";
-			readable.date = formatDate(a.getan);
+			readable.date = a.getan;
 		} else if (a.vernachlaessigt !== null) {
 			readable.status = "Vernachlaessigt";
-			readable.date = formatDate(a.vernachlaessigt);
+			readable.date = a.vernachlaessigt;
 		} else if (a.verschoben !== null) {
 			readable.status = "Verschoben";
-			readable.date = formatDate(a.verschoben);
+			readable.date = a.verschoben;
 		}
 		return readable;
 	};
+	const nachDatumSortieren = (liste) => {
+		let neueListe = liste.sort((a,b) => {
+			let a_datum = erlediegungsStatus(a).date;
+			let b_datum = erlediegungsStatus(b).date;
+			return compareDesc(a_datum, b_datum );
+		})
+		return neueListe;
+	}
 </script>
 
 <div class="buch">
 	{#if $liste.length > 0}
 		<div class="liste">
-			{#each $liste as aufgabe}
+			{#each nachDatumSortieren($liste) as aufgabe}
 				<div
 					class="aufgabe"
 					class:erledigt={istErledigt(aufgabe)}
@@ -68,10 +76,10 @@
 					<div class="satz">
 						<div class="id">{aufgabe.id}</div>
 						<div class="datum">
-							{getHumanReadable(aufgabe).date}
+							{formatDate(erlediegungsStatus(aufgabe).date)}
 						</div>
 						<div class="status">
-							{getHumanReadable(aufgabe).status}
+							{erlediegungsStatus(aufgabe).status}
 						</div>
 						<div class="kommentar">{aufgabe.kommentar}</div>
 						<div class="beschreibung">{aufgabe.beschreibung}</div>
