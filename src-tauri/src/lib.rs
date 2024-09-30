@@ -15,6 +15,7 @@ use aufgabe::{
 	aufgabe_priorisieren,
 	gruppen_alle, list_alle, list_erledigt,
 	prioritaetenliste, list_jetzige,
+	aufgaben_positionieren,
 };
 
 mod liste;
@@ -41,6 +42,8 @@ pub async fn run() {
 	    aufgabe_wieder_aktivieren,
 
 			aufgabe_priorisieren,
+
+			aufgaben_positionieren,
 
 	    list_alle,
 	    list_jetzige,

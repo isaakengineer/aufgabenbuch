@@ -34,14 +34,14 @@ pub struct Aufgabe {
     pub beschreibung: String,   // string (textarea)
     pub notiz: Option<String>,  // text (textarea)
     pub link: Option<String>,   // text (input)
-    pub wochentag: u8,          // integer (drop down 0-7)
-    pub prioritaet: u8,         // integer (drop down 0-4)
+    pub wochentag: Option<u8>,          // integer (drop down 0-7)
+    pub prioritaet: Option<u8>,         // integer (drop down 0-4)
     pub position: Option<u32>,  // integer (disabled, wrapped in Option for nullable)
 
     pub verschoben: Option<DateTime<chrono::Utc>>, // date (checkbox)
     pub getan: Option<DateTime<chrono::Utc>>,      // date (checkbox)
     pub vernachlaessigt: Option<DateTime<chrono::Utc>>, // date (checkbox)
-    pub kommentar: String,                         // string (input)
+    pub kommentar: Option<String>,                         // string (input)
 
     pub erstellt_an: Option<DateTime<chrono::Utc>>, // date (disabled)
     pub geaendert_an: Option<DateTime<chrono::Utc>>, // date (disabled)
@@ -122,6 +122,29 @@ pub async fn aufgabe_priorisieren(app: AppHandle, id: i32, prioritaet: i32) -> R
 	 	Ok(a) => Ok(a),
 	 	Err(e) => Err(format!("Etwas schief gelaufen: {:?}", e))
 	}
+}
+
+#[tauri::command]
+pub async fn aufgaben_positionieren(app: AppHandle, aufgaben: Vec<Aufgabe>) -> Result<String, String> {
+
+	let data = app.state::<Mutex<AppData>>();
+	let db = data.lock().unwrap().pool.clone().unwrap();
+	for aufgabe in aufgaben.iter() {
+		let query = include_str!("../queries/aufgabe_positionieren.sql");
+		sqlx::query(query)
+			.bind(aufgabe.position)
+		  .bind(aufgabe.id)
+		  .execute(&db)
+		  .await
+		  .map_err(|e| format!("could not update Aufgabe {}", e))?;
+	}
+	Ok(format!("Positionierung erfolgreich!"))
+
+	// let aufgabe_neue = letzte_aenderung(db, &id).await;
+	// match aufgabe_neue {
+	//  	Ok(a) => Ok(a),
+	//  	Err(e) => Err(format!("Etwas schief gelaufen: {:?}", e))
+	// }
 }
 
 pub async fn letzte_aenderung( // falsche Name, sollte letzte neue Aufgabe sein!

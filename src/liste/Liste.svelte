@@ -6,6 +6,22 @@
 
 	import { Empty } from "phosphor-svelte";
 
+	import { dndzone } from 'svelte-dnd-action';
+	import { flip } from 'svelte/animate';
+
+	const flipDurationMs = 100;
+
+	let items =[];
+
+		liste.subscribe((value) => {
+				items = value;
+			});
+
+	function handleSort(e) {
+		console.log(e.detail.items);
+		 items = e.detail.items;
+	}
+
 	let aufgaben = $liste;
 	let filtern = false;
 	let gruppe = false;
@@ -91,13 +107,14 @@
 				{/each}
 			</div>
 		{:else}
-			<div class="liste">
-				{#each $liste as aufgabe (aufgabe.id)}
+			<div class="liste" use:dndzone={{items, flipDurationMs}} on:consider={handleSort} on:finalize={handleSort}>
+				{#each items as aufgabe (aufgabe.id)}
 					<div
 						class="aufgabe"
 						class:erledigt={istErledigt(aufgabe)}
 						class:gewaehlt={ ($Aufgabe.id === aufgabe.id)}
 						on:click={() => aufgabeGewaelt(aufgabe)}
+						animate:flip={{duration: flipDurationMs}}
 					>
 						<div class="satz">
 							<div class="id">{aufgabe.id}</div>

@@ -1,13 +1,16 @@
 <script>
+	import { invoke } from "@tauri-apps/api/core";
 	import { format } from "date-fns"; // Assuming date-fns is the internal library for date formatting
 
-	import { liste } from "./store.js";
+	import { liste, aufgabeAendern } from "./store.js";
 	import { Aufgabe } from "../aufgabe/store.js";
 
 	import {
 		CaretDoubleDown,
 		CaretDoubleUp,
 	} from "phosphor-svelte";
+
+
 
 	let aufgaben = $liste;
 
@@ -84,6 +87,36 @@
 		}
 		return readable;
 	};
+
+	import { dndzone } from 'svelte-dnd-action';
+	import { flip } from 'svelte/animate';
+
+	const flipDurationMs = 100;
+	let items = [];
+	liste.subscribe((l) => {
+		items = wochentagunabhaengig($liste);
+		items = items.sort((a, b) => a.position - b.position );
+	});
+	function handleDndConsider(e) {
+		// console.log(e.detail.items);
+		items = e.detail.items;
+	}
+	async function handleDndFinalize(e) {
+		console.log(e.detail.items);
+		items = e.detail.items;
+		let itemsHalb = items.map((i, index) => ({id: i.id, beschreibung: i.beschreibung, position: index }));
+		try {
+			const res = await invoke('aufgaben_positionieren', { aufgaben: itemsHalb });
+
+			itemsHalb.forEach((a) => {
+				let alteAufgabe = $liste.find((aa) => (aa.id === a.id));
+				alteAufgabe.position = a.position;
+				aufgabeAendern(a.id, alteAufgabe)
+			});
+		} catch(e) {
+			console.error("Await failed:", e)
+		}
+	}
 </script>
 
 {#if $liste.length > 0}
@@ -106,20 +139,22 @@
 	</div>
 	<div class="liste">
 		<header>Wochentagunabhängig</header>
-		{#each wochentagunabhaengig($liste) as aufgabe}
+		<div use:dndzone={{items, flipDurationMs}} on:consider={handleDndConsider} on:finalize={handleDndFinalize}>
+		{#each items as aufgabe (aufgabe.id)}
 			<div
 				class="aufgabe"
 				class:erledigt={istErledigt(aufgabe)}
 				class:gewaehlt={ ($Aufgabe.id === aufgabe.id)}
 				on:click={() => aufgabeGewaelt(aufgabe)}
+				animate:flip={{duration: flipDurationMs}}
 			>
 				<div class="satz">
 					<div class="id">{aufgabe.id}</div>
-					<div class="kommentar">{aufgabe.kommentar}</div>
 					<div class="beschreibung">{aufgabe.beschreibung}</div>
 				</div>
 			</div>
 		{/each}
+		</div>
 	</div>
 	<div class="liste" class:liste-verbergen={restVerbergen}>
 		<header class="komplex">

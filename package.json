@@ -20,6 +20,7 @@
     "date-fns": "^4.1.0",
     "phosphor-svelte": "^2.0.1",
     "sass": "^1.79.1",
+    "svelte-dnd-action": "^0.9.51",
     "svelte-preprocess": "^6.0.2"
   },
   "devDependencies": {
