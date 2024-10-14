@@ -226,8 +226,10 @@
 	// background-color: #222;
 }
 :global(button.icon) {
-	padding: .1rem !important;
+	padding: .05rem !important;
 	overflow: hidden;
+	text-align: center;
+	display: flex;
 }
 :global(.icon > svg) {
 	height: 1.2rem;
@@ -252,16 +254,6 @@ form > aside {
 	}
 }
 form {
-	> .aktionen {
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		padding: 1rem 1rem 1rem 0px;
-	}
-}
-form {
-	display: grid;
-	grid-template-columns: 3rem 1fr 3rem;
 	height: 100%;
 	padding: 0;
 	background-color: #fff;
@@ -329,7 +321,34 @@ fieldset#extra {
 		border: 1px solid black;
 	}
 }
-
+form {
+	display: grid;
+	grid-template-columns: 1fr 2.3rem 3rem;
+	grid-template-areas: "content tabs aktionen";
+	gap: 0px;
+	// background-color: blue;
+	> .content {
+		grid-area: content;
+		margin: 0px;
+		border-radius: 0;
+		border-right: none;
+		box-sizing: border-box;
+		// background-color: yellow;
+	}
+	> .tabs-container {
+		grid-area: tabs;
+		padding: 0px;
+		margin: 0px;
+		// background-color: red;
+	}
+	> .aktionen {
+		grid-area: aktionen;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		padding: .5rem;
+	}
+}
 .tabs-container {
 	display: flex;
 	flex-direction: column;
@@ -339,32 +358,47 @@ fieldset#extra {
 	:global(> button) {
 		margin: .3rem .4rem;
 	}
+	
 }
 .tabs {
-	// margin: 1rem 0 1rem .5rem;
-	padding: 1rem 0px 1rem 1rem;
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
-  margin-bottom: .1rem;
-  gap: .1rem;
-  .tab {
+	// padding: 1rem 0px 1rem 1rem;
+	// display: flex;
+	// flex-direction: column;
+  	// margin-bottom: .1rem;
+  	// gap: .1rem;
+  	// padding-right: 1rem;
+  	margin-left: -3px;
+  	margin-right: auto;
+  	width: fit-content;
+  	height: 100%;
+  	display: flex;
+  	flex-direction: column;
+  	.tab {
+  		margin: 0px;
+  		margin-right: auto;
+  		padding: .05rem;
+  		width: 2rem;
+  		min-height: 2rem;
+  		flex-grow: 1;
+  		text-align: center;
+  		justify-content: center;
+  		align-items: center;
+  		display: flex;
+  		cursor: pointer;
 		font-size: .9rem;
-		padding: .15rem .5rem .15rem .5rem;
-		height: fit-content;
+		
+		// height: fit-content;
 		margin-left: .2rem;
 		border: 1px solid #ccc;
-		border-right: none;
+		
 		background: lightgray;
-		border-radius: .2rem 0 0 .2rem;
-  }
-}
-
-
-.tab.active {
-	background: #eee;
-	font-weight: bold;
-	border-color: #ccc;
+		// border-radius: .2rem 0 0 .2rem;
+		&.active {
+			background: #eee;
+			border-color: #ccc;
+			border-left: none;
+		}
+	}
 }
 
 .content {
@@ -384,9 +418,6 @@ fieldset#extra {
   margin-left: 0;
   background: #eee;
 }
-
-
-
 .dropdown {
 	> label {
 		display: block;

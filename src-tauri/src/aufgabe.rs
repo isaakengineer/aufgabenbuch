@@ -10,7 +10,7 @@ use tauri_plugin_dialog::{DialogExt, MessageDialogKind};
 use chrono::{DateTime, NaiveDate};
 use serde::{Deserialize, Serialize};
 
-use crate::liste::AppData;
+use crate::liste::AppIdentitaet;
 
 #[derive(Serialize, Deserialize, Clone, Debug, FromRow)]
 pub struct EinfacheListe {
@@ -61,7 +61,7 @@ fn process_beschreibung(beschreibung: &str) -> Option<String> {
 pub async fn aufgabe_erledigen(app: AppHandle, aufgabe: Aufgabe) -> Result<Aufgabe, String> {
     println!("Erledige Aufgabe: {:?}", aufgabe);
 
-    let data = app.state::<Mutex<AppData>>();
+    let data = app.state::<Mutex<AppIdentitaet>>();
     let db = data.lock().unwrap().pool.clone().unwrap();
 
     let query = include_str!("../queries/aufgabe_erledigen.sql");
@@ -86,7 +86,7 @@ pub async fn aufgabe_erledigen(app: AppHandle, aufgabe: Aufgabe) -> Result<Aufga
 pub async fn aufgabe_wieder_aktivieren(app: AppHandle, id: i32) -> Result<Aufgabe, String> {
 	println!("Erledige Aufgabe: {:?}", &id);
 
-	let data = app.state::<Mutex<AppData>>();
+	let data = app.state::<Mutex<AppIdentitaet>>();
 	let db = data.lock().unwrap().pool.clone().unwrap();
 
 	let query = include_str!("../queries/aufgabe_wieder_aktivieren.sql");
@@ -106,7 +106,7 @@ pub async fn aufgabe_wieder_aktivieren(app: AppHandle, id: i32) -> Result<Aufgab
 #[tauri::command]
 pub async fn aufgabe_priorisieren(app: AppHandle, id: i32, prioritaet: i32) -> Result<Aufgabe, String> {
 
-	let data = app.state::<Mutex<AppData>>();
+	let data = app.state::<Mutex<AppIdentitaet>>();
 	let db = data.lock().unwrap().pool.clone().unwrap();
 
 	let query = include_str!("../queries/aufgabe_priorisieren.sql");
@@ -127,7 +127,7 @@ pub async fn aufgabe_priorisieren(app: AppHandle, id: i32, prioritaet: i32) -> R
 #[tauri::command]
 pub async fn aufgaben_positionieren(app: AppHandle, aufgaben: Vec<Aufgabe>) -> Result<String, String> {
 
-	let data = app.state::<Mutex<AppData>>();
+	let data = app.state::<Mutex<AppIdentitaet>>();
 	let db = data.lock().unwrap().pool.clone().unwrap();
 	for aufgabe in aufgaben.iter() {
 		let query = include_str!("../queries/aufgabe_positionieren.sql");
@@ -173,7 +173,7 @@ pub async fn letzte_aktualisierung( // falsche Name, sollte letzte neue Aufgabe 
 
 #[tauri::command]
 pub async fn aufgabe_aendern(app: AppHandle, aufgabe: Aufgabe) -> Result<Aufgabe, String> {
-    let data = app.state::<Mutex<AppData>>();
+    let data = app.state::<Mutex<AppIdentitaet>>();
     let db = data.lock().unwrap().pool.clone().unwrap();
 
     let gruppe = process_beschreibung(&aufgabe.beschreibung);
@@ -210,7 +210,7 @@ pub async fn aufgabe_aendern(app: AppHandle, aufgabe: Aufgabe) -> Result<Aufgabe
 pub async fn aufgabe_hinfuegen(app: AppHandle, aufgabe: InputAufgabe) -> Result<Aufgabe, String> {
     println!("aufgabe_hinfuegen: {}", &aufgabe.beschreibung.clone());
 
-    let data = app.state::<Mutex<AppData>>();
+    let data = app.state::<Mutex<AppIdentitaet>>();
     let db = data.lock().unwrap().pool.clone().unwrap();
 
     let gruppe = process_beschreibung(&aufgabe.beschreibung);
@@ -256,7 +256,7 @@ fn debug_liste(liste: Vec<Aufgabe>) {
 }
 #[tauri::command]
 pub async fn list_alle(app: AppHandle) -> Result<Vec<Aufgabe>, String> {
-    let data = app.state::<Mutex<AppData>>();
+    let data = app.state::<Mutex<AppIdentitaet>>();
     let db = data.lock().unwrap().pool.clone().unwrap();
 
     let query = include_str!("../queries/list_alle.sql");
@@ -273,7 +273,7 @@ pub async fn list_alle(app: AppHandle) -> Result<Vec<Aufgabe>, String> {
 
 #[tauri::command]
 pub async fn list_jetzige(app: AppHandle) -> Result<Vec<Aufgabe>, String> {
-    let data = app.state::<Mutex<AppData>>();
+    let data = app.state::<Mutex<AppIdentitaet>>();
     let db = data.lock().unwrap().pool.clone().unwrap();
 
     let query = include_str!("../queries/list_jetzige.sql");
@@ -291,7 +291,7 @@ pub async fn list_jetzige(app: AppHandle) -> Result<Vec<Aufgabe>, String> {
 
 #[tauri::command]
 pub async fn prioritaetenliste(app: AppHandle, prioritaet: i32) -> Result<Vec<Aufgabe>, String> {
-    let data = app.state::<Mutex<AppData>>();
+    let data = app.state::<Mutex<AppIdentitaet>>();
     let db = data.lock().unwrap().pool.clone().unwrap();
 
     let query = include_str!("../queries/prioritaetenliste.sql");
@@ -309,7 +309,7 @@ pub async fn prioritaetenliste(app: AppHandle, prioritaet: i32) -> Result<Vec<Au
 
 #[tauri::command]
 pub async fn list_erledigt(app: AppHandle) -> Result<Vec<Aufgabe>, String> {
-    let data = app.state::<Mutex<AppData>>();
+    let data = app.state::<Mutex<AppIdentitaet>>();
     let db = data.lock().unwrap().pool.clone().unwrap();
 
     let liste: Vec<Aufgabe> = sqlx::query_as::<_, Aufgabe>("SELECT * FROM liste WHERE vernachlaessigt IS NOT NULL OR getan IS NOT NULL OR verschoben IS NOT NULL")
@@ -325,7 +325,7 @@ pub async fn list_erledigt(app: AppHandle) -> Result<Vec<Aufgabe>, String> {
 
 #[tauri::command]
 pub async fn gruppen_alle(app: AppHandle) -> Result<Vec<EinfacheListe>, String> {
-    let data = app.state::<Mutex<AppData>>();
+    let data = app.state::<Mutex<AppIdentitaet>>();
     let db = data.lock().unwrap().pool.clone().unwrap();
 
     let query = include_str!("../queries/gruppen_list.sql");

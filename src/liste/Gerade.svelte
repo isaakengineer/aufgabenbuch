@@ -8,7 +8,8 @@
 	import {
 		CaretDoubleDown,
 		CaretDoubleUp,
-	} from "phosphor-svelte";
+	} from "phosphor-svelte";	
+	import Circle from 'phosphor-svelte/lib/Circle';
 
 
 
@@ -130,8 +131,11 @@
 				on:click={() => aufgabeGewaelt(aufgabe)}
 			>
 				<div class="satz">
+					<div class="extra">
+						{#if aufgabe.notiz}<div class="notiz"><Circle weight="fill" size=".8em" /></div>{/if}
+						{#if aufgabe.link}<div class="link"><Circle weight="fill" size=".8em"/></div>{/if}
+					</div>
 					<div class="id">{aufgabe.id}</div>
-					<div class="kommentar">{aufgabe.kommentar}</div>
 					<div class="beschreibung">{aufgabe.beschreibung}</div>
 				</div>
 			</div>
@@ -150,6 +154,10 @@
 			>
 				<div class="satz">
 					<div class="id">{aufgabe.id}</div>
+					<div class="extra">
+						{#if aufgabe.notiz}<div class="notiz"><Circle weight="fill" size=".8em" /></div>{/if}
+						{#if aufgabe.link}<div class="link"><Circle weight="fill" size=".8em"/></div>{/if}
+					</div>
 					<div class="beschreibung">{aufgabe.beschreibung}</div>
 				</div>
 			</div>
@@ -179,7 +187,10 @@
 			>
 				<div class="satz">
 					<div class="id">{aufgabe.id}</div>
-					<div class="kommentar">{aufgabe.kommentar}</div>
+					<div class="extra">
+						{#if aufgabe.notiz}<div class="notiz"><Circle weight="fill" size=".8em" /></div>{/if}
+						{#if aufgabe.link}<div class="link"><Circle weight="fill" size=".8em"/></div>{/if}
+					</div>
 					<div class="beschreibung">{aufgabe.beschreibung}</div>
 				</div>
 			</div>
@@ -248,6 +259,25 @@
 			}
 			> .kommentar {
 				color: rgb(6, 6, 100);
+			}
+			> .extra {
+				display: inline-block;
+				flex-direction: column;
+				height: 1.4rem;
+				> div {
+					display: inline;
+					margin: 0px;
+					padding: .2em;
+					width: .7em;
+					height: .7em;
+					overflow: hidden;
+				}
+				> .notiz {
+					color: #014421;
+				}
+				> .link {
+					color: blue;
+				}
 			}
 		}
 

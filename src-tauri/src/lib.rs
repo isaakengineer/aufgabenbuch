@@ -19,7 +19,9 @@ use aufgabe::{
 };
 
 mod liste;
-use liste::{dateipfad_eingegeben, datenbank_erstellen, file_erstellen, file_waehlen, AppData};
+use liste::{dateipfad_eingegeben,
+	// datenbank_erstellen,
+	file_erstellen, file_waehlen, AppIdentitaet};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 #[tokio::main]
@@ -32,7 +34,7 @@ pub async fn run() {
 	    file_erstellen,
 	    file_waehlen,
 
-	    datenbank_erstellen,
+	    // datenbank_erstellen,
 	    dateipfad_eingegeben,
 
 	    aufgabe_hinfuegen,
@@ -59,7 +61,7 @@ pub async fn run() {
 	    //   window.close_devtools();
 	    // }
 
-	    app.manage(Mutex::new(AppData::default()));
+	    app.manage(Mutex::new(AppIdentitaet::default()));
 	    Ok(())
 		})
 		.run(tauri::generate_context!())

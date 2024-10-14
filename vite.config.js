@@ -24,7 +24,10 @@ export default defineConfig(async () => ({
           port: 1421,
         }
       : undefined,
-    watch: {
+    watch: { 
+      // Isaak Engineer: deno kann mit `watch` nicht gut arbeiten, siehe: https://github.com/denoland/deno/issues/17757
+		useFsEvents: false,
+    	usePolling: true,
       // 3. tell vite to ignore watching `src-tauri`
       ignored: ["**/src-tauri/**"],
     },

@@ -22,7 +22,7 @@ const prioritaeten = [
 
 const Ausstattung = writable({
 	identitaet: {
-		db_path: "",
+		dateipfad: "",
 		name: "",
 		endung: "",
 	},

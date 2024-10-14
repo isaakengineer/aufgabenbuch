@@ -30,7 +30,7 @@
 	const haupt = [
 		"liste",
 		"gerade",
-		"suche",
+		// "suche", // TODO
 		// "gruppen", // Fähigkeit von TaskLog, ob es sinn macht oder nicht ??
 		"eingangskorb",
 		"buch",
