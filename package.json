@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "build": "vite build",
+    "forge": "vite build",
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch",
@@ -18,9 +18,13 @@
     "@tauri-apps/plugin-fs": "^2.0.0-rc",
     "@tauri-apps/plugin-shell": ">=2.0.0-rc.0",
     "date-fns": "^4.1.0",
+    "i18next": "^23.16.5",
+    "i18next-browser-languagedetector": "^8.0.0",
+    "i18next-http-backend": "^2.6.2",
     "phosphor-svelte": "^2.0.1",
     "sass": "^1.79.1",
     "svelte-dnd-action": "^0.9.51",
+    "svelte-i18next": "^2.2.2",
     "svelte-preprocess": "^6.0.2"
   },
   "devDependencies": {
