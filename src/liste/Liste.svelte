@@ -155,10 +155,15 @@
 {/if}
 
 <style lang="scss">
+	@import './aufgabe.scss';
+	@import './liste.scss';
 	.buch {
+		max-height: 100%;
+		overflow: hidden;
 		display: flex;
 		flex-direction: row-reverse;
 		> .liste {
+			overflow-y: auto;
 			padding: .5rem 0;
 			flex: 1;
 		}
@@ -175,6 +180,7 @@
 		}
 	}
 	.gruppen {
+		overflow-y: auto;
 		> .gruppe {
 			background-color: #eee;
 			cursor: pointer;
@@ -185,80 +191,6 @@
 				background-color: #333;
 				color: #eee;
 			}
-		}
-	}
-	.liste {
-		display: flex;
-		flex-direction: column;
-		gap: 0.5rem;
-	}
-	.aufgabe {
-		opacity: 0.7;
-		&:hover {
-			opacity: 0.9;
-		}
-		&.gewaehlt {
-			opacity: 1;
-		}
-		margin: 0.2rem;
-		display: flex;
-		
-		> .satz {
-			padding: 0 0.6rem;
-			> div {
-				display: inline;
-				padding: 0.2rem;
-			}
-			> .id {
-				color: blue;
-			}
-			> .kommentar {
-				color: rgb(6, 6, 100);
-			}
-			> .extra {
-				display: inline-block;
-				flex-direction: column;
-				height: 1.4rem;
-				> div {
-					display: inline;
-					margin: 0px;
-					padding: .2em;
-					width: .7em;
-					height: .7em;
-					overflow: hidden;
-				}
-				> .notiz {
-					color: #014421;
-				}
-				> .link {
-					color: blue;
-				}
-			}
-		}
-
-		// display: flex;
-		// flex-wrap: wrap;
-		// gap: .5rem;
-		> .beschreibung {
-			flex: 1;
-		}
-		&.erledigt {
-			.beschreibung {
-				text-decoration: line-through;
-			}
-		}
-		> .dev {
-			flex: 1;
-			display: flex;
-			font-size: 0.9em;
-			flex-wrap: wrap;
-		}
-		// box-shadow: 0px 0px 1px black;
-		// padding: .4rem;
-		// background-color: #ddd;
-		&:hover {
-			// background-color: #eee;
-			cursor: pointer;
 		}
 	}
 </style>

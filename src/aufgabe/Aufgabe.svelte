@@ -15,7 +15,8 @@
 		PlusSquare, ArrowCounterClockwise,
 		Note, LinkSimple, PencilSimpleLine,
 		Command, NotePencil, LinkSimpleHorizontalBreak,
-		House, Copy, Browser
+		House, Copy, Browser,
+		Empty
 	} from "phosphor-svelte";
 
 	export let deaktiviert;
@@ -108,119 +109,133 @@
 <form class:deaktiviert={deaktiviert}>
 	<div class="tabs-container">
 	<div class="tabs">
+		<!-- <div class={`tab ${formData.id ? 'active' : ''}`}> -->
+		<div class="tab">
+			{#if formData.hasOwnProperty('id') && formData.id }
+				{ formData.id }
+			{:else}
+				<Empty />
+			{/if}
+		</div>
 		<div class={`tab ${fokus === 'normal' ? 'active' : ''}`} on:click={() => setFokus('normal')}>
 			<House />
 		</div>
-		<div class={`tab ${fokus === 'link' ? 'active' : ''}`} on:click={() => setFokus('link')}>
+		<!-- <div class={`tab ${fokus === 'link' ? 'active' : ''}`} on:click={() => setFokus('link')}>
 			<LinkSimpleHorizontalBreak />
-		</div>
+		</div> -->
 		<div class={`tab ${fokus === 'notiz' ? 'active' : ''}`} on:click={() => setFokus('notiz')}>
 			<NotePencil />
 		</div>
-		<div class={`tab ${fokus === 'aktionen' ? 'active' : ''}`} on:click={() => setFokus('aktionen')}>
+		<!--<div class={`tab ${fokus === 'aktionen' ? 'active' : ''}`} on:click={() => setFokus('aktionen')}>
 			<Command />
-		</div>
+		</div>-->
 	</div>
-  </div>
-  <div class="content">
+	</div>
+	<div class="content">
 	{#if rueckmeldung}
 		<aside>
 		<p>{ rueckmeldung }</p>
-	  </aside>
+		</aside>
 	{/if}
-	  <!-- {#if import.meta.env.DEV}
-		  <fieldset id="dev">
-			  <div>
-				  <input type="text" name="gruppe" value={formData.gruppe} disabled placeholder="Gruppe" />
-			  </div>
-			  <div>
-				  <input type="number" name="id" value={formData.id} disabled placeholder="id" size="5"/>
-			  </div>
-			  <div>
-				  <input type="number" name="position" value={formData.position} disabled placeholder="Position" />
-			  </div>
-			  <label>
-				  Erstellt am:
-				  <input type="date" name="erstellt_an" value={formData.erstellt_an ? datumLeserlich(formData.erstellt_an) : ''} disabled />
-			  </label>
+		<!-- {#if import.meta.env.DEV}
+			<fieldset id="dev">
+				<div>
+					<input type="text" name="gruppe" value={formData.gruppe} disabled placeholder="Gruppe" />
+				</div>
+				<div>
+					<input type="number" name="id" value={formData.id} disabled placeholder="id" size="5"/>
+				</div>
+				<div>
+					<input type="number" name="position" value={formData.position} disabled placeholder="Position" />
+				</div>
+				<label>
+					Erstellt am:
+					<input type="date" name="erstellt_an" value={formData.erstellt_an ? datumLeserlich(formData.erstellt_an) : ''} disabled />
+				</label>
 
-			  <label>
-				  Geändert am:
-				  <input type="date" name="geaendert_an" value={formData.geaendert_an ? datumLeserlich(formData.geaendert_an) : ''} disabled />
-			  </label>
-		  </fieldset>
-	  {/if} -->
-	  {#if fokus != 'notiz'}
+				<label>
+					Geändert am:
+					<input type="date" name="geaendert_an" value={formData.geaendert_an ? datumLeserlich(formData.geaendert_an) : ''} disabled />
+				</label>
+			</fieldset>
+		{/if} -->
+		{#if fokus != 'notiz'}
 
 				<fieldset id="satz">
-			  <textarea name="beschreibung" on:input={handleChange} bind:value={formData.beschreibung} placeholder="Beschreibung"></textarea>
-		  </fieldset>
+				<textarea name="beschreibung" on:input={handleChange} bind:value={formData.beschreibung} placeholder="Beschreibung"></textarea>
+			</fieldset>
 
-		  <fieldset id="extra">
-			  {#if fokus === 'normal'}
-					{#if $AufgabeIstErledigt}
-						<div>
-							<button on:click={wiederAktivieren}>Wieder Aktivieren</button>
-						</div>
-					{/if}
+			<fieldset id="extra">
+				<div class="seiten">
+					<div class="radio-container senkrecht">
+						{#each $Aussehen.optionen.prioritaeten as prioritaet}
+							<input type="radio" id={'prioritaet'+prioritaet.id} name="status" value={prioritaet.id} bind:group={formData.prioritaet} />
+							<label for={'prioritaet'+prioritaet.id}>
+								<div class="label">{prioritaet.name}</div>
+							</label>
+						{/each}
+					</div>
+					<!-- <select name="prioritaet" on:change={handleOption} bind:value={formData.prioritaet} placeholder="Priorität">
+						{#each $Aussehen.optionen.prioritaeten as prioritaet}
+							<option value={prioritaet.id}>{prioritaet.name}</option>
+						{/each}
+					</select> -->
+				</div>
+				{#if $AufgabeIstErledigt}
+					<div>
+						<button on:click={wiederAktivieren}>Wieder Aktivieren</button>
+					</div>
+				{/if}
+				<div class="dropdown">
+					<label for="wochentag">Wochentag</label>
+					<select name="wochentag" on:change={handleOption} bind:value={formData.wochentag} placeholder="Wochentag">
+						{#each $Aussehen.optionen.wochentagen as wochentag}
+							<option value={wochentag.id}>{wochentag.name}</option>
+						{/each}
+					</select>
+				</div>
+				<!-- !!TODO!! -->
+				<!-- {#if formData.notiz}
 					<div class="dropdown">
-					  <label for="prioritaet">Prioritaet</label>
-					  <select name="prioritaet" on:change={handleOption} bind:value={formData.prioritaet} placeholder="Priorität">
-						  {#each $Aussehen.optionen.prioritaeten as prioritaet}
-							  <option value={prioritaet.id}>{prioritaet.name}</option>
-						  {/each}
-					  </select>
-				  </div>
-				  <div class="dropdown">
-					  <label for="wochentag">Wochentag</label>
-					  <select name="wochentag" on:change={handleOption} bind:value={formData.wochentag} placeholder="Wochentag">
-						  {#each $Aussehen.optionen.wochentagen as wochentag}
-							  <option value={wochentag.id}>{wochentag.name}</option>
-						  {/each}
-					  </select>
-				  </div>
+						<label><Note /> Note</label>
+						<button><Copy /></button>
+					</div>
+				{/if}
+				{#if formData.link}
+					<div class="dropdown">
+						<label><LinkSimple /> Link</label>
+						<button><Copy /></button>
+						<button><Browser /></button>
+					</div>
+				{/if} -->
+			</fieldset>
+		{:else}
+			<fieldset id="notiz">
+				<Notiz />
+				<!-- <button class="close" on:click={() => fokus = 'normal'}>X</button> -->
+			</fieldset>
+			<fieldset id="link">
+				<input type="text" name="link" on:input={handleChange} bind:value={formData.link} placeholder="Link" />
+			</fieldset>
+		{/if}
+	</div>
+	<div class="aktionen">
 
-				  {#if formData.notiz}
-					  <div class="dropdown">
-						  <label><Note /> Note</label>
-							<button><Copy /></button>
-					  </div>
-				  {/if}
-				  {#if formData.link}
-						<div class="dropdown">
-							<label><LinkSimple /> Link</label>
-						  <button><Copy /></button>
-							<button><Browser /></button>
-					  </div>
-				  {/if}
-				{:else if fokus === "link"}
-					<!-- <fieldset id="link"> -->
-						<input type="text" name="link" on:input={handleChange} bind:value={formData.link} placeholder="Link" />
-					<!-- </fieldset> -->
-			  {:else if fokus === 'aktionen'}
-				  <Erledigen />
-			  {/if}
-		  </fieldset>
-		  {:else}
-		  <fieldset id="notiz">
-			  <Notiz />
-			  <button class="close" on:click={() => fokus = 'normal'}>X</button>
-		  </fieldset>
-	  {/if}
-  </div>
-  <div class="aktionen">
+		{#if $Aufgabe.id}
+			<button class="icon" on:click={aendern}><PencilSimpleLine /></button>
+		{:else}
+			<button class="icon" on:click={hinfuegen}><PlusSquare /></button>
+		{/if}
 
-  	{#if $Aufgabe.id}
-		  <button class="icon" on:click={aendern}><PencilSimpleLine /></button>
-	  {:else}
-		  <button class="icon" on:click={hinfuegen}><PlusSquare /></button>
-	  {/if}
-
-  	<button class="icon" on:click={resetFormular}><ArrowCounterClockwise /></button>
-  </div>
+		<button class="icon" on:click={resetFormular}><ArrowCounterClockwise /></button>
+	</div>
+	{#if $Aufgabe.id}
+		<Erledigen />
+	{/if}
 </form>
 
 <style lang="scss">
+	@import './radios.scss';
 :global(button) {
 	padding: .2rem .4rem !important;
 	// background-color: #222;
@@ -294,16 +309,16 @@ button.close {
 	right: 0;
 }
 fieldset#notiz {
-  padding: 0;
-  position: relative;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  > :global(textarea) {
-	  flex: 1;
-	  // height: 100%;
-	  padding: .5rem;
-  }
+	padding: 0;
+	position: relative;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	> :global(textarea) {
+		flex: 1;
+		// height: 100%;
+		padding: .5rem;
+	}
 }
 fieldset#extra {
 	display: flex;
@@ -324,7 +339,9 @@ fieldset#extra {
 form {
 	display: grid;
 	grid-template-columns: 1fr 2.3rem 3rem;
-	grid-template-areas: "content tabs aktionen";
+	grid-template-areas:
+		"content tabs aktionen"
+		"erledigen erledigen erledigen";
 	gap: 0px;
 	// background-color: blue;
 	> .content {
@@ -348,6 +365,9 @@ form {
 		justify-content: space-between;
 		padding: .5rem;
 	}
+	:global(.erledigen) {
+		grid-area: erledigen;
+	}
 }
 .tabs-container {
 	display: flex;
@@ -358,39 +378,39 @@ form {
 	:global(> button) {
 		margin: .3rem .4rem;
 	}
-	
+
 }
 .tabs {
 	// padding: 1rem 0px 1rem 1rem;
 	// display: flex;
 	// flex-direction: column;
-  	// margin-bottom: .1rem;
-  	// gap: .1rem;
-  	// padding-right: 1rem;
-  	margin-left: -3px;
-  	margin-right: auto;
-  	width: fit-content;
-  	height: 100%;
-  	display: flex;
-  	flex-direction: column;
-  	.tab {
-  		margin: 0px;
-  		margin-right: auto;
-  		padding: .05rem;
-  		width: 2rem;
-  		min-height: 2rem;
-  		flex-grow: 1;
-  		text-align: center;
-  		justify-content: center;
-  		align-items: center;
-  		display: flex;
-  		cursor: pointer;
+		// margin-bottom: .1rem;
+		// gap: .1rem;
+		// padding-right: 1rem;
+		margin-left: -3px;
+		margin-right: auto;
+		width: fit-content;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		.tab {
+			margin: 0px;
+			margin-right: auto;
+			padding: .05rem;
+			width: 2rem;
+			min-height: 2rem;
+			flex-grow: 1;
+			text-align: center;
+			justify-content: center;
+			align-items: center;
+			display: flex;
+			cursor: pointer;
 		font-size: .9rem;
-		
+
 		// height: fit-content;
 		margin-left: .2rem;
 		border: 1px solid #ccc;
-		
+
 		background: lightgray;
 		// border-radius: .2rem 0 0 .2rem;
 		&.active {
@@ -411,12 +431,12 @@ form {
 	}
 }
 .content {
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
-  margin: .4rem;
-  margin-left: 0;
-  background: #eee;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	box-sizing: border-box;
+	margin: .4rem;
+	margin-left: 0;
+	background: #eee;
 }
 .dropdown {
 	> label {

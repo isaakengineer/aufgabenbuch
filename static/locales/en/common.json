@@ -1,0 +1,20 @@
+{
+	"name": "Aufgabenbuch",
+	"sprache-ändern": "Change Language",
+	"liste": "list",
+	"gerade": "now",
+	"eingangskorb": "inbox",
+	"buch": "log",
+	"datei": {
+		"erstellen": "create a file",
+		"wählen": "select a file"
+	},
+	"willkommen": {
+		"kurz": "Welcome to $t(name)",
+		"dropzone": "You could also drag-drop a database file here!",
+		"status": "Still no databases for your tasks are available.",
+		"ratschlag": "To be able to use $t(name) you would need to provide a file to store the database to; use the options below:"
+	},
+  "Hello": "Hello",
+  "World": "World"
+}

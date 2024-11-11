@@ -1,8 +1,27 @@
-.buch {
+
+.liste {
 	display: flex;
-	flex-direction: row-reverse;
-	> .liste {
-		padding: .5rem 0;
-		flex: 1;
+	flex-direction: column;
+	gap: 0.5rem;
+	> header {
+		background-color: #dedede;
+		padding: 0.5rem 1rem;
+		text-align: end;
+		text-decoration: underline;
+	}
+	> header.komplex {
+		display: flex;
+		flex-direction: row-reverse;
+		justify-content: space-between;
+		> .ausweiten {
+			text-decoration: none;
+			cursor: pointer;
+			display: inline-block;
+		}
+	}
+	&.liste-verbergen {
+		.aufgabe {
+			display: none;
+		}
 	}
 }

@@ -1,4 +1,7 @@
 <script>
+	import i18n from '$lib/i18n';
+	import { isLoading } from 'svelte-i18next';
+
 	import { invoke } from "@tauri-apps/api/core";
 	import { emit, once, listen } from "@tauri-apps/api/event";
 	import { getCurrentWindow } from '@tauri-apps/api/window';
@@ -94,64 +97,66 @@
 	}
 </script>
 
-<div class="app">
-	<header>
-		{#if $Ausstattung.haupt !== "nichts"}
-			<div class="name">{$Ausstattung.identitaet.name}</div>
-			{#if $Ausstattung.haupt === "liste"}
-				<div class="titel">Aufgaben Liste</div>
-				<div class="action">
-					<a
-						class="ausweiten aktion"
-						on:click={gruppenZeigenToggle} >
-						{#if $Ausstattung.gruppenZeigen}
-							<Tag weight="fill" size="1.5em" />
-						{:else}
-							<Tag weight="duotone" size="1.5em" />
-						{/if}
-					</a>
-				</div>
-			{:else if $Ausstattung.haupt === "gerade"}
-				<div class="titel">Gerade</div>
+{#if $isLoading}
+	<p>loading...</p>
+{:else}
+	<div class="app">
+		<header>
+			{#if $Ausstattung.haupt !== "nichts"}
+				<div class="name">{$Ausstattung.identitaet.name}</div>
+				{#if $Ausstattung.haupt === "liste"}
+					<div class="titel">Aufgaben Liste</div>
+					<div class="action">
+						<a
+							class="ausweiten aktion"
+							on:click={gruppenZeigenToggle} >
+							{#if $Ausstattung.gruppenZeigen}
+								<Tag weight="fill" size="1.5em" />
+							{:else}
+								<Tag weight="duotone" size="1.5em" />
+							{/if}
+						</a>
+					</div>
+				{:else if $Ausstattung.haupt === "gerade"}
+					<div class="titel">{ $i18n.t('gerade') }</div>
+				{/if}
 			{/if}
-		{/if}
-		<div
-			data-tauri-drag-region
-			class="titlebar windowdragger"
-		></div>
-	  <div>
-			<button class="elemental titlebar-button" id="titlebar-close"
-				on:mouseover={() => elementalCloseButtonWeight = "fill"}
-				on:mouseleave={() => elementalCloseButtonWeight = "duotone"}
-				on:click={() => appWindow.close()}>
-				<XCircle size="1.5em" bind:weight={elementalCloseButtonWeight} />
-			</button>
-	  </div>
-	</header>
-	<main>
-		{#if $Ausstattung.haupt === "nichts"}
-			<File />
-		{:else if $Ausstattung.haupt === "liste"}
-			<Liste />
-		{:else if $Ausstattung.haupt === "gerade"}
-			<Gerade />
-		{:else if $Ausstattung.haupt === "buch"}
-			<Buch />
-		{:else if $Ausstattung.haupt === "eingangskorb"}
-			<Eingangskorb />
-		{/if}
-	</main>
-	<aside>
-		<Aufgabe deaktiviert={$Ausstattung.haupt === "nichts"} />
-	</aside>
-	<footer>
-		<nav class="kontrollen">
-			{#each haupt as item}
-				<a href="#" on:click={() => controlle(item)}>{item}</a>
-			{/each}
-		</nav>
-	</footer>
-</div>
+			<div data-tauri-drag-region class="titlebar windowdragger">
+			</div>
+		  <div>
+				<button class="elemental titlebar-button" id="titlebar-close"
+					on:mouseover={() => elementalCloseButtonWeight = "fill"}
+					on:mouseleave={() => elementalCloseButtonWeight = "duotone"}
+					on:click={() => appWindow.close()}>
+					<XCircle size="1.5em" bind:weight={elementalCloseButtonWeight} />
+				</button>
+		  </div>
+		</header>
+		<main>
+			{#if $Ausstattung.haupt === "nichts"}
+				<File />
+			{:else if $Ausstattung.haupt === "liste"}
+				<Liste />
+			{:else if $Ausstattung.haupt === "gerade"}
+				<Gerade />
+			{:else if $Ausstattung.haupt === "buch"}
+				<Buch />
+			{:else if $Ausstattung.haupt === "eingangskorb"}
+				<Eingangskorb />
+			{/if}
+		</main>
+		<aside>
+			<Aufgabe deaktiviert={$Ausstattung.haupt === "nichts"} />
+		</aside>
+		<footer>
+			<nav class="kontrollen">
+				{#each haupt as item}
+					<a href="#" on:click={() => controlle(item)}>{ $i18n.t(item) }</a>
+				{/each}
+			</nav>
+		</footer>
+	</div>
+{/if}
 
 <style lang="scss">
 #titlebar-close {

@@ -1,0 +1,21 @@
+{
+	"name": "Aufgabenbuch",
+	"aufgabe": "Aufgabe",
+	"aufgaben": "Aufgaben",
+	"sprache-ändern": "Sprache Ändern",
+	"liste": "Liste",
+	"gerade": "gerade",
+	"eingangskorb": "Eingangskorb",
+	"buch": "Buch",
+	"datei": {
+		"erstellen": "Datei erstellen",
+		"wählen": "Datei wählen"
+	},
+	"willkommen": {
+		"kurz": "Wilkommen auf $t(name)",
+		"dropzone": "Ziehen Sie ihre Aufgabenbuch-Datenbank hier hinein!",
+		"status": "Noch kein Datenbank für ihre Aufgaben ist vorhanden.",
+		"ratschlag": "Um die Lage zu verbessern, bitte entweder wählen sie eine breits existierende Datenbank oder ein Ort ein neues Datenbank zu erstellen."
+	},
+	"World": "Welt"
+}
