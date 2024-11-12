@@ -20,5 +20,7 @@ i18next
 			loadPath: "/locales/{{lng}}/{{ns}}.json",
 		},
 	});
+
 const i18n = createI18nStore(i18next);
+
 export default i18n;

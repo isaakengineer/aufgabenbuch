@@ -52,12 +52,6 @@
 		$gruppen = await invoke("gruppen_alle");
 	});
 
-	async function greet() {
-		// Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-		greetMsg = await invoke("greet", { name });
-		// invoke("greet", { name });
-	}
-
 	async function controlle(item) {
 		console.log(item);
 		switch (item) {

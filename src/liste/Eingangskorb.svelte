@@ -10,7 +10,7 @@
 
 	import { CircleDashed, Circle,
 		CaretLineRight,CaretLineLeft
- 	} from "phosphor-svelte";
+	} from "phosphor-svelte";
 
 
 	let prioritäten = $Aussehen.optionen.prioritaeten;

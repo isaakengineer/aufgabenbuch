@@ -1,6 +1,6 @@
 [package]
 name = "aufgabenbuch"
-version = "0.4.0"
+version = "0.6.0"
 description = "To-Do Liste für ein gestalterisches Leben"
 authors = ["Isaak Engineer"]
 edition = "2021"

@@ -1,6 +1,6 @@
 use sqlx::{
-    sqlite::{SqliteConnection, SqlitePoolOptions},
-    FromRow, Pool, Sqlite,
+		sqlite::{SqliteConnection, SqlitePoolOptions},
+		FromRow, Pool, Sqlite,
 };
 use std::path::PathBuf;
 use std::sync::Mutex;
@@ -27,42 +27,41 @@ use liste::{dateipfad_eingegeben,
 #[tokio::main]
 pub async fn run() {
 	tauri::Builder::default()
-	  .plugin(tauri_plugin_dialog::init())
-	  .plugin(tauri_plugin_fs::init())
-	  .plugin(tauri_plugin_shell::init())
-	  .invoke_handler(tauri::generate_handler![
-	    file_erstellen,
-	    file_waehlen,
+		.plugin(tauri_plugin_dialog::init())
+		.plugin(tauri_plugin_fs::init())
+		.plugin(tauri_plugin_shell::init())
+		.invoke_handler(tauri::generate_handler![
+			file_erstellen,
+			file_waehlen,
 
-	    // datenbank_erstellen,
-	    dateipfad_eingegeben,
+			// datenbank_erstellen,
+			dateipfad_eingegeben,
 
-	    aufgabe_hinfuegen,
-	    aufgabe_aendern,
+			aufgabe_hinfuegen,
+			aufgabe_aendern,
 
-	    aufgabe_erledigen,
-	    aufgabe_wieder_aktivieren,
+			aufgabe_erledigen,
+			aufgabe_wieder_aktivieren,
 
 			aufgabe_priorisieren,
-
 			aufgaben_positionieren,
 
-	    list_alle,
-	    list_jetzige,
-	    list_erledigt,
-	    gruppen_alle,
-	    prioritaetenliste,
+			list_alle,
+			list_jetzige,
+			list_erledigt,
+			gruppen_alle,
+			prioritaetenliste,
 		])
 		.setup(|app| {
-	    // #[cfg(debug_assertions)] // only include this code on debug builds
-	    // {
-	    //   let window = app.get_webview_window("main").unwrap();
-	    //   window.open_devtools();
-	    //   window.close_devtools();
-	    // }
+			// #[cfg(debug_assertions)] // only include this code on debug builds
+			// {
+			//	 let window = app.get_webview_window("main").unwrap();
+			//	 window.open_devtools();
+			//	 window.close_devtools();
+			// }
 
-	    app.manage(Mutex::new(AppIdentitaet::default()));
-	    Ok(())
+			app.manage(Mutex::new(AppIdentitaet::default()));
+			Ok(())
 		})
 		.run(tauri::generate_context!())
 		.expect("error while running tauri application");
