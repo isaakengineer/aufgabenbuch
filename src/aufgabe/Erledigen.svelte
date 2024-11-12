@@ -31,7 +31,7 @@
 <div class="erledigen">
 	<div class="box">
 		<div class="radio-container">
-			{#each ['verschoben', 'getan', 'vernachlaessigt'] as status }
+			{#each ['getan', 'vernachlaessigt', 'verschoben'] as status }
 				<input type="radio"
 					id={status}
 					name="status"
