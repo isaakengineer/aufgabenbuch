@@ -2,6 +2,7 @@
 	"name": "Aufgabenbuch",
 	"aufgabe": {
 		"name": "Aufgabe",
+		"id": "id",
 		"beschreibung": "Beschreibung",
 		"notiz": "Notiz",
 		"link": "Link",

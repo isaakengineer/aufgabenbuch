@@ -3,6 +3,7 @@
 	"sprache-ändern": "Change Language",
 	"aufgabe": {
 		"name": "task",
+		"id": "id",
 		"beschreibung": "description",
 		"notiz": "note",
 		"link": "link",
