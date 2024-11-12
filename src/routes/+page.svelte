@@ -105,7 +105,7 @@
 			{#if $Ausstattung.haupt !== "nichts"}
 				<div class="name">{$Ausstattung.identitaet.name}</div>
 				{#if $Ausstattung.haupt === "liste"}
-					<div class="titel">Aufgaben Liste</div>
+					<div class="titel">{ $i18n.t('abbild.liste.name') }</div>
 					<div class="action">
 						<a
 							class="ausweiten aktion"

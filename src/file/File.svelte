@@ -56,7 +56,7 @@
 
 <div class="wilkomen-seite">
 	<section class="message">
-		<h1>{ $i18n.t('willkommen.kurz') }</h1>
+		<h1>{ $i18n.t('abbild.willkommen.kurz') }</h1>
 	</section>
 	<section class="message">
 		<button on:click={() => $i18n.changeLanguage($i18n.language === "de" ? "en" : "de")}>
@@ -64,13 +64,13 @@
 		</button>
 	</section>
 	<section class="message">
-		<p>{ $i18n.t('willkommen.status') }</p>
-		<p>{ $i18n.t('willkommen.ratschlag') }</p>
+		<p>{ $i18n.t('abbild.willkommen.status') }</p>
+		<p>{ $i18n.t('abbild.willkommen.ratschlag') }</p>
 		<button on:click={file_waehlen}>{ $i18n.t('datei.wählen') }</button>
 		<button on:click={fileErstellen}>{ $i18n.t('datei.erstellen') }</button>
 	</section>
 	<div class="box dropzone" on:drop={pfadLesen} on:dragover={allowDrop} on:dragover={dragoverHandler} >
-		<p>{ $i18n.t('willkommen.dropzone') }</p>
+		<p>{ $i18n.t('abbild.willkommen.dropzone') }</p>
 	</div>
 </div>
 

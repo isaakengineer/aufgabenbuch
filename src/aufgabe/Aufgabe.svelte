@@ -233,6 +233,9 @@
 
 <style lang="scss">
 	@import './radios.scss';
+	textarea {
+		resize: none;
+	}
 :global(button) {
 	padding: .2rem .4rem !important;
 	// background-color: #222;

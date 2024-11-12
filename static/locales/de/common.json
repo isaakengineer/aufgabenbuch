@@ -45,11 +45,22 @@
 		"erstellen": "Datei erstellen",
 		"wählen": "Datei wählen"
 	},
-	"willkommen": {
-		"kurz": "Wilkommen auf $t(name)",
-		"dropzone": "Ziehen Sie ihre Aufgabenbuch-Datenbank hier hinein!",
-		"status": "Noch kein Datenbank für ihre Aufgaben ist vorhanden.",
-		"ratschlag": "Um die Lage zu verbessern, bitte entweder wählen sie eine breits existierende Datenbank oder ein Ort ein neues Datenbank zu erstellen."
+	"abbild": {
+		"willkommen": {
+			"kurz": "Wilkommen auf $t(name)",
+			"dropzone": "Ziehen Sie ihre Aufgabenbuch-Datenbank hier hinein!",
+			"status": "Noch kein Datenbank für ihre Aufgaben ist vorhanden.",
+			"ratschlag": "Um die Lage zu verbessern, bitte entweder wählen sie eine breits existierende Datenbank oder ein Ort ein neues Datenbank zu erstellen."
+		},
+		"liste": {
+			"name": "Aufgaben Liste",
+			"leer": "Gerade gibt es keine Aufgaben auf Ihre Liste.",
+			"leer-empfehlung": "Vielleicht versuchen Sie ein Paar Aufgaben auf Ihre Liste hinzufügen, indem Sie die daunten gedrückte Formulare nutzen."
+		},
+		"buch": {
+			"leer": "Es gibt noch keine erledigte Aufgaben auf Ihre Liste.",
+			"leer-empfehlung": "Vielleicht versuchen Sie ein Paar Aufgaben auf Ihre Liste mal als erledigt zu markieren!"
+		}
 	},
 	"World": "Welt"
 }

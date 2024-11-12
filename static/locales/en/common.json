@@ -44,11 +44,22 @@
 		"erstellen": "create a file",
 		"wählen": "select a file"
 	},
-	"willkommen": {
-		"kurz": "Welcome to $t(name)",
-		"dropzone": "You could also drag-drop a database file here!",
-		"status": "Still no databases for your tasks are available.",
-		"ratschlag": "To be able to use $t(name) you would need to provide a file to store the database to; use the options below:"
+	"abbild": {
+		"willkommen": {
+			"kurz": "Welcome to $t(name)",
+			"dropzone": "You could also drag-drop a database file here!",
+			"status": "Still no databases for your tasks are available.",
+			"ratschlag": "To be able to use $t(name) you would need to provide a file to store the database to; use the options below:"
+		},
+		"liste": {
+			"name": "To-do list",
+			"leer": "Gerade gibt es keine Aufgaben auf Ihre Liste.",
+			"leer-empfehlung": "Vielleicht versuchen Sie ein Paar Aufgaben auf Ihre Liste hinzufügen, indem Sie die daunten gedrückte Formulare nutzen."
+		},
+		"buch": {
+			"leer": "There are no completed tasks in your to-do.",
+			"leer-empfehlung": "Maybe you could try to view some of the tasks and mark them as completetd!"
+		}
 	},
   "Hello": "Hello",
   "World": "World"

@@ -12,7 +12,7 @@
 	> .satz {
 		padding: 0 0.6rem;
 		> div {
-			display: inline;
+			display: inline-block;
 			padding: 0.2rem;
 		}
 		> .id {
@@ -20,6 +20,25 @@
 		}
 		> .kommentar {
 			color: rgb(6, 6, 100);
+		}
+		> div > .erledigt {
+			border-radius: .5rem;
+
+			display: flex;
+
+			font-size: .8rem;
+			font-weight: 600;
+
+			background-color: darkslateblue;
+			color: white;
+			> .datum, >.status {
+				padding: .25rem .5rem;
+			}
+			> .wand {
+				width: 2px;
+				height: 2rem;
+				background-color: white;
+			}
 		}
 		> .extra {
 			display: inline-block;
