@@ -7,6 +7,7 @@
 		"link": "Link",
 		"kommentar": "Kommentar",
 		"wochentag": "Wochentag",
+		"priorität": "Priorität",
 		"erledigt": {
 			"name": "erledigt",
 			"rückgängig": "wieder aktivieren"
@@ -56,6 +57,12 @@
 			"name": "Aufgaben Liste",
 			"leer": "Gerade gibt es keine Aufgaben auf Ihre Liste.",
 			"leer-empfehlung": "Vielleicht versuchen Sie ein Paar Aufgaben auf Ihre Liste hinzufügen, indem Sie die daunten gedrückte Formulare nutzen."
+		},
+		"gerade": {
+			"header-heute": "Heute",
+			"header-unabhängig": "Wochentagsunabhängig",
+			"header-rest": "andere Tagen",
+			"leer-empfehlung": "Stellen Sie die Priorität ihre Aufgaben an <code>$t(priorität-optionen.1)</code>, um sie hier zu sehen."
 		},
 		"buch": {
 			"leer": "Es gibt noch keine erledigte Aufgaben auf Ihre Liste.",

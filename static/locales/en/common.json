@@ -56,6 +56,12 @@
 			"leer": "Gerade gibt es keine Aufgaben auf Ihre Liste.",
 			"leer-empfehlung": "Vielleicht versuchen Sie ein Paar Aufgaben auf Ihre Liste hinzufügen, indem Sie die daunten gedrückte Formulare nutzen."
 		},
+		"gerade": {
+			"header-heute": "Today",
+			"header-unabhängig": "Weekday-independent",
+			"header-rest": "other days",
+			"leer-empfehlung": "Set the priority of your tasks to <code>$t(priorität-optionen.1)</code>, to see them here."
+		},
 		"buch": {
 			"leer": "There are no completed tasks in your to-do.",
 			"leer-empfehlung": "Maybe you could try to view some of the tasks and mark them as completetd!"
