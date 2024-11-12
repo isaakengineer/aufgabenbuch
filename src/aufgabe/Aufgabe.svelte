@@ -12,13 +12,18 @@
 
 	import { Aussehen, Ausstattung } from '../routes/store.js';
 
-	import {
-		PlusSquare, ArrowCounterClockwise,
-		Note, LinkSimple, PencilSimpleLine,
-		Command, NotePencil, LinkSimpleHorizontalBreak,
-		House, Copy, Browser,
-		Empty
-	} from "phosphor-svelte";
+	import PlusSquare from 'phosphor-svelte/lib/PlusSquare';
+	import ArrowCounterClockwise from 'phosphor-svelte/lib/ArrowCounterClockwise';
+	import Note from 'phosphor-svelte/lib/Note';
+	import LinkSimple from 'phosphor-svelte/lib/LinkSimple';
+	import PencilSimpleLine from 'phosphor-svelte/lib/PencilSimpleLine';
+	import Command from 'phosphor-svelte/lib/Command';
+	import NotePencil from 'phosphor-svelte/lib/NotePencil';
+	import LinkSimpleHorizontalBreak from 'phosphor-svelte/lib/LinkSimpleHorizontalBreak';
+	import House from 'phosphor-svelte/lib/House';
+	import Copy from 'phosphor-svelte/lib/Copy';
+	import Browser from 'phosphor-svelte/lib/Browser';
+	import Empty from 'phosphor-svelte/lib/Empty';
 
 	export let deaktiviert;
 

@@ -4,7 +4,7 @@
 	import { Aufgabe, AufgabeIstErledigt, updateStore } from './store.js';
 	import { liste, addAufgabe, aufgabeAendern } from '../liste/store.js';
 
-	import { CheckSquareOffset } from "phosphor-svelte";
+	import CheckSquareOffset from 'phosphor-svelte/lib/CheckSquareOffset';
 
 	async function erledigen() {
 		console.log("aufgabe erledigen!")

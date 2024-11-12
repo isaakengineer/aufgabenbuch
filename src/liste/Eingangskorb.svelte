@@ -8,9 +8,10 @@
 	import { Aussehen, Ausstattung } from "../routes/store.js";
 	import Priorisieren from "./Priorisieren.svelte";
 
-	import { CircleDashed, Circle,
-		CaretLineRight,CaretLineLeft
-	} from "phosphor-svelte";
+	import Circle from 'phosphor-svelte/lib/Circle';
+	import CircleDashed from 'phosphor-svelte/lib/CircleDashed';
+	import CaretLineRight from 'phosphor-svelte/lib/CaretLineRight';
+	import CaretLineLeft from 'phosphor-svelte/lib/CaretLineLeft';
 
 
 	let prioritäten = $Aussehen.optionen.prioritaeten;

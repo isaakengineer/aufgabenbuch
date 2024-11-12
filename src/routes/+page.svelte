@@ -16,7 +16,8 @@
 	import File from "../file/File.svelte";
 	import { Aussehen, Ausstattung } from "./store.js";
 
-	import { Tag, XCircle } from "phosphor-svelte";
+	import Tag from "phosphor-svelte/lib/Tag";
+	import XCircle from "phosphor-svelte/lib/XCircle";
 
 	let aufgabenList = $liste;
 

@@ -4,6 +4,7 @@
 	import { Aufgabe } from "../aufgabe/store.js";
 
 	import Circle from 'phosphor-svelte/lib/Circle';
+
 	import { aufgabeErlediegungsStatus } from './store.js';
 
 	export let aufgabe;

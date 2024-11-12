@@ -9,11 +9,8 @@
 	import { Aufgabe } from "../aufgabe/store.js";
 	import AufgabeBox from './AufgabeBox.svelte';
 
-	import {
-		CaretDoubleDown,
-		CaretDoubleUp,
-	} from "phosphor-svelte";
-	import Circle from 'phosphor-svelte/lib/Circle';
+	import CaretDoubleDown from 'phosphor-svelte/lib/CaretDoubleDown';
+	import CaretDoubleUp from 'phosphor-svelte/lib/CaretDoubleUp';
 
 	let aufgaben = $liste;
 
