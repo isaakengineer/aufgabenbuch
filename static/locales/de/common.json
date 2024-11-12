@@ -3,6 +3,7 @@
 	"aufgabe": {
 		"name": "Aufgabe",
 		"beschreibung": "Beschreibung",
+		"notiz": "Notiz",
 		"link": "Link",
 		"kommentar": "Kommentar",
 		"wochentag": "Wochentag",

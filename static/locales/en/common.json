@@ -4,6 +4,7 @@
 	"aufgabe": {
 		"name": "task",
 		"beschreibung": "description",
+		"notiz": "note",
 		"link": "link",
 		"kommentar": "comment",
 		"wochentag": "day of the week",

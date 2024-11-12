@@ -22,37 +22,14 @@
 
 	export let deaktiviert;
 
-	let formData = {};
 	let wochentagOptions = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
 	let prioritaetOptions = [0, 1, 2, 3, 4];
 	let neueAufgabe = {};
 	let neueAufgabeId = null;
 	let rueckmeldung = false;
 
-	onMount(() => {
-		Aufgabe.subscribe(value => {
-			formData = value;
-		});
-	});
-
-	function handleOption(event) {
-		const { name, value } = event.target;
-		let intValue = parseInt(value, 10);
-		updateStore[{ [name]: intValue }]
-	}
-	function handleChange(event) {
-
-		const { name, value } = event.target;
-		console.log(`changing ${name} to ${value}`);
-		console.log(typeof(value))
-		formData[name] = value;
-		updateStore({ [name]: value });
-		console.log($Aufgabe)
-		console.log(formData)
-	}
-
 	let fokus = 'normal';
-	if (formData.id === undefined || formData.id === null) {
+	if ($Aufgabe.id === undefined || $Aufgabe.id === null) {
 		fokus = 'normal';
 	} else {
 		fokus = 'aktionen';
@@ -63,13 +40,12 @@
 	}
 
 	async function wiederAktivieren () {
-		console.log("aufgabe wieder aktivieren", formData.id)
-		if ( formData.beschreibung.length == 0 ) {
+		if ( $Aufgabe.beschreibung.length == 0 ) {
 			rueckmeldung = "Beschreibung darf nicht leer sein!";
 		} else {
 			let aufgabe = $Aufgabe;
-			neueAufgabe = await invoke('aufgabe_wieder_aktivieren', { id: formData.id});
-			aufgabeAendern(formData.id, neueAufgabe)
+			neueAufgabe = await invoke('aufgabe_wieder_aktivieren', { id: $Aufgabe.id });
+			aufgabeAendern($Aufgabe.id, neueAufgabe)
 			$Aufgabe = neueAufgabe;
 			rueckmeldung = false;
 			// TODO: etwas mit listen ändern!
@@ -77,23 +53,22 @@
 	}
 
 	async function hinfuegen() {
-		if ( formData.beschreibung.length == 0 ) {
+		if ( $Aufgabe.beschreibung.length == 0 ) {
 			rueckmeldung = "Beschreibung darf nicht leer sein!";
 		} else {
-			console.log("hinfuegen", formData);
-			neueAufgabe = await invoke('aufgabe_hinfuegen', { aufgabe: formData });
+			neueAufgabe = await invoke('aufgabe_hinfuegen', { aufgabe: $Aufgabe });
 			addAufgabe(neueAufgabe);
 			resetFormular();
 		}
 	}
 	const aendern = async function() {
-		if ( formData.beschreibung.length == 0 ) {
+		if ( $Aufgabe.beschreibung.length == 0 ) {
 			rueckmeldung = "Beschreibung darf nicht leer sein!";
 		} else {
 			let aufgabe = $Aufgabe;
 			neueAufgabe = await invoke('aufgabe_aendern', { aufgabe: aufgabe });
 			rueckmeldung = false;
-			aufgabeAendern(formData.id, neueAufgabe)
+			aufgabeAendern($Aufgabe.id, neueAufgabe)
 		}
 		// TODO: ersetze die alte Aufgabe mit der neuen Aufgabe
 	}
@@ -110,10 +85,10 @@
 <form class:deaktiviert={deaktiviert}>
 	<div class="tabs-container">
 	<div class="tabs">
-		<!-- <div class={`tab ${formData.id ? 'active' : ''}`}> -->
+		<!-- <div class={`tab ${$Aufgabe.id ? 'active' : ''}`}> -->
 		<div class="tab">
-			{#if formData.hasOwnProperty('id') && formData.id }
-				{ formData.id }
+			{#if $Aufgabe.hasOwnProperty('id') && $Aufgabe.id }
+				{ $Aufgabe.id }
 			{:else}
 				<Empty />
 			{/if}
@@ -141,36 +116,44 @@
 		<!-- {#if import.meta.env.DEV}
 			<fieldset id="dev">
 				<div>
-					<input type="text" name="gruppe" value={formData.gruppe} disabled placeholder="Gruppe" />
+					<input type="text" name="gruppe" value={$Aufgabe.gruppe} disabled placeholder="Gruppe" />
 				</div>
 				<div>
-					<input type="number" name="id" value={formData.id} disabled placeholder="id" size="5"/>
+					<input type="number" name="id" value={$Aufgabe.id} disabled placeholder="id" size="5"/>
 				</div>
 				<div>
-					<input type="number" name="position" value={formData.position} disabled placeholder="Position" />
+					<input type="number" name="position" value={$Aufgabe.position} disabled placeholder="Position" />
 				</div>
 				<label>
 					Erstellt am:
-					<input type="date" name="erstellt_an" value={formData.erstellt_an ? datumLeserlich(formData.erstellt_an) : ''} disabled />
+					<input type="date" name="erstellt_an" value={$Aufgabe.erstellt_an ? datumLeserlich($Aufgabe.erstellt_an) : ''} disabled />
 				</label>
 
 				<label>
 					Geändert am:
-					<input type="date" name="geaendert_an" value={formData.geaendert_an ? datumLeserlich(formData.geaendert_an) : ''} disabled />
+					<input type="date" name="geaendert_an" value={$Aufgabe.geaendert_an ? datumLeserlich($Aufgabe.geaendert_an) : ''} disabled />
 				</label>
 			</fieldset>
 		{/if} -->
 		{#if fokus != 'notiz'}
 
 				<fieldset id="satz">
-				<textarea name="beschreibung" on:input={handleChange} bind:value={formData.beschreibung} placeholder={$i18n.t('aufgabe.beschreibung')}></textarea>
+				<textarea
+					name="beschreibung"
+					bind:value={$Aufgabe.beschreibung}
+					placeholder={$i18n.t('aufgabe.beschreibung')}></textarea>
 			</fieldset>
 
 			<fieldset id="extra">
 				<div class="seiten">
 					<div class="radio-container senkrecht">
 						{#each $Aussehen.optionen.prioritaeten as prioritaet}
-							<input type="radio" id={'prioritaet'+prioritaet.id} name="status" value={prioritaet.id} bind:group={formData.prioritaet} />
+							<input
+								type="radio"
+								id={'prioritaet'+prioritaet.id}
+								name="status"
+								value={prioritaet.id}
+								bind:group={$Aufgabe.prioritaet} />
 							<label for={'prioritaet'+prioritaet.id}>
 								<div class="label">
 									{ $i18n.t('priorität-optionen.' +prioritaet.id) }
@@ -178,7 +161,7 @@
 							</label>
 						{/each}
 					</div>
-					<!-- <select name="prioritaet" on:change={handleOption} bind:value={formData.prioritaet} placeholder="Priorität">
+					<!-- <select name="prioritaet" on:change={handleOption} bind:value={$Aufgabe.prioritaet} placeholder="Priorität">
 						{#each $Aussehen.optionen.prioritaeten as prioritaet}
 							<option value={prioritaet.id}>{prioritaet.name}</option>
 						{/each}
@@ -195,7 +178,9 @@
 					<label for="wochentag">
 						{ $i18n.t('aufgabe.wochentag') }
 					</label>
-					<select name="wochentag" on:change={handleOption} bind:value={formData.wochentag} placeholder={$i18n.t('aufgabe.wochentag')}>
+					<select name="wochentag"
+						bind:value={$Aufgabe.wochentag}
+						placeholder={$i18n.t('aufgabe.wochentag')}>
 						{#each $Aussehen.optionen.wochentagen as wochentag}
 							<option value={wochentag.id}>
 								{ $i18n.t('wochentag-optionen.' + wochentag.id.toString()) }
@@ -204,13 +189,13 @@
 					</select>
 				</div>
 				<!-- !!TODO!! -->
-				<!-- {#if formData.notiz}
+				<!-- {#if $Aufgabe.notiz}
 					<div class="dropdown">
 						<label><Note /> Note</label>
 						<button><Copy /></button>
 					</div>
 				{/if}
-				{#if formData.link}
+				{#if $Aufgabe.link}
 					<div class="dropdown">
 						<label><LinkSimple /> Link</label>
 						<button><Copy /></button>
@@ -224,7 +209,10 @@
 				<!-- <button class="close" on:click={() => fokus = 'normal'}>X</button> -->
 			</fieldset>
 			<fieldset id="link">
-				<input type="text" name="link" on:input={handleChange} bind:value={formData.link} placeholder={$i18n.t('aufgabenbuch.link')} />
+				<input type="text"
+					name="link"
+					bind:value={$Aufgabe.link}
+					placeholder={$i18n.t('aufgabe.link')} />
 			</fieldset>
 		{/if}
 	</div>
