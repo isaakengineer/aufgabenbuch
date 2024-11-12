@@ -4,6 +4,7 @@
 
 	import { liste, aufgabeAendern } from "./store.js";
 	import { Aufgabe } from "../aufgabe/store.js";
+	import AufgabeBox from './AufgabeBox.svelte';
 
 	import {
 		CaretDoubleDown,
@@ -124,42 +125,15 @@
 	<div class="liste">
 		<header>Heute</header>
 		{#each heute($liste) as aufgabe}
-			<div
-				class="aufgabe"
-				class:erledigt={istErledigt(aufgabe)}
-				class:gewaehlt={ ($Aufgabe.id === aufgabe.id)}
-				on:click={() => aufgabeGewaelt(aufgabe)}
-			>
-				<div class="satz">
-					<div class="extra">
-						{#if aufgabe.notiz}<div class="notiz"><Circle weight="fill" size=".8em" /></div>{/if}
-						{#if aufgabe.link}<div class="link"><Circle weight="fill" size=".8em"/></div>{/if}
-					</div>
-					<div class="id">{aufgabe.id}</div>
-					<div class="beschreibung">{aufgabe.beschreibung}</div>
-				</div>
-			</div>
+			<AufgabeBox aufgabe={aufgabe}/>
 		{/each}
 	</div>
 	<div class="liste">
 		<header>Wochentagunabhängig</header>
 		<div use:dndzone={{items, flipDurationMs}} on:consider={handleDndConsider} on:finalize={handleDndFinalize}>
 		{#each items as aufgabe (aufgabe.id)}
-			<div
-				class="aufgabe"
-				class:erledigt={istErledigt(aufgabe)}
-				class:gewaehlt={ ($Aufgabe.id === aufgabe.id)}
-				on:click={() => aufgabeGewaelt(aufgabe)}
-				animate:flip={{duration: flipDurationMs}}
-			>
-				<div class="satz">
-					<div class="id">{aufgabe.id}</div>
-					<div class="extra">
-						{#if aufgabe.notiz}<div class="notiz"><Circle weight="fill" size=".8em" /></div>{/if}
-						{#if aufgabe.link}<div class="link"><Circle weight="fill" size=".8em"/></div>{/if}
-					</div>
-					<div class="beschreibung">{aufgabe.beschreibung}</div>
-				</div>
+			<div animate:flip={{duration: flipDurationMs}}>
+				<AufgabeBox aufgabe={aufgabe}/>
 			</div>
 		{/each}
 		</div>
