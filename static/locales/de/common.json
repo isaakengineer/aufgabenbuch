@@ -2,9 +2,19 @@
 	"name": "Aufgabenbuch",
 	"aufgabe": {
 		"name": "Aufgabe",
-		"beschreibung": "beschreibung",
-		"link": "link",
-		"wochentag": "wochentag"
+		"beschreibung": "Beschreibung",
+		"link": "Link",
+		"kommentar": "Kommentar",
+		"wochentag": "Wochentag",
+		"erledigt": {
+			"name": "erledigt",
+			"rückgängig": "wieder aktivieren"
+		},
+		"erledigt-optionen": {
+			"getan": "getan",
+			"verschoben": "verschoben",
+			"vernachlaessigt": "vernachlässigt"
+		}
 	},
 	"priorität-optionen": {
 		"0": "eingangskorb",

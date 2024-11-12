@@ -186,7 +186,9 @@
 				</div>
 				{#if $AufgabeIstErledigt}
 					<div>
-						<button on:click={wiederAktivieren}>Wieder Aktivieren</button>
+						<button on:click={wiederAktivieren}>
+							{ $i18n.t('aufgabe.erledigt.rückgängig')}
+						</button>
 					</div>
 				{/if}
 				<div class="dropdown">

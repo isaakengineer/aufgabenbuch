@@ -5,7 +5,17 @@
 		"name": "task",
 		"beschreibung": "description",
 		"link": "link",
-		"wochentag": "day of the week"
+		"kommentar": "comment",
+		"wochentag": "day of the week",
+		"erledigt": {
+			"name": "completed",
+			"rückgängig": "reactivate"
+		},
+		"erledigt-optionen": {
+			"getan": "done",
+			"verschoben": "moved",
+			"vernachlaessigt": "ignored"
+		}
 	},
 	"priorität-optionen": {
 		"0": "inbox",

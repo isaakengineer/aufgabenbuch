@@ -1,4 +1,5 @@
 <script>
+	import i18n from '$lib/i18n';
 	import { invoke } from "@tauri-apps/api/core";
 	import { Aufgabe, AufgabeIstErledigt, updateStore } from './store.js';
 	import { liste, addAufgabe, aufgabeAendern } from '../liste/store.js';
@@ -30,14 +31,19 @@
 <div class="erledigen">
 	<div class="box">
 		<div class="radio-container">
-			{#each ['verschoben', 'getan', 'vernachlaessigt'] as status}
-
-				<input type="radio" id={status} name="status" value={status} bind:group={$AufgabeIstErledigt} />
-				<label for={status}>{status.charAt(0).toUpperCase() + status.slice(1)}</label>
+			{#each ['verschoben', 'getan', 'vernachlaessigt'] as status }
+				<input type="radio"
+					id={status}
+					name="status"
+					value={status}
+					bind:group={$AufgabeIstErledigt} />
+				<label for={status}>
+					{$i18n.t('aufgabe.erledigt-optionen.' + status)}
+				</label>
 			{/each}
 		</div>
 
-		<input type="text" name="kommentar" bind:value={$Aufgabe.kommentar} placeholder="Kommentar" />
+		<input type="text" name="kommentar" bind:value={$Aufgabe.kommentar} placeholder={ $i18n.t('aufgabe.kommentar') } />
 	</div>
 
 	<button class="button" on:click={erledigen}><CheckSquareOffset /></button>
