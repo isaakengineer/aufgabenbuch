@@ -1,6 +1,29 @@
 {
 	"name": "Aufgabenbuch",
-	"aufgabe": "Aufgabe",
+	"aufgabe": {
+		"name": "Aufgabe",
+		"beschreibung": "beschreibung",
+		"link": "link",
+		"wochentag": "wochentag"
+	},
+	"priorität-optionen": {
+		"0": "eingangskorb",
+		"1": "jetzt",
+		"2": "nächste",
+		"3": "später",
+		"4": "irgendwann",
+		"5": "bnous"
+	},
+	"wochentag-optionen": {
+		"0": "keine",
+		"1": "Montag",
+		"2": "Dienstag",
+		"3": "Mittwoch",
+		"4": "Donnerstag",
+		"5": "Freitag",
+		"6": "Samstag",
+		"7": "Sonntag"
+	},
 	"aufgaben": "Aufgaben",
 	"sprache-ändern": "Sprache Ändern",
 	"liste": "Liste",

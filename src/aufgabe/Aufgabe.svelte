@@ -1,4 +1,5 @@
 <script>
+	import i18n from '$lib/i18n';
 	import { Aufgabe, updateStore, AufgabeIstErledigt } from './store.js';
 	import { liste, addAufgabe, aufgabeAendern } from '../liste/store.js';
 	import { onMount } from 'svelte';
@@ -162,7 +163,7 @@
 		{#if fokus != 'notiz'}
 
 				<fieldset id="satz">
-				<textarea name="beschreibung" on:input={handleChange} bind:value={formData.beschreibung} placeholder="Beschreibung"></textarea>
+				<textarea name="beschreibung" on:input={handleChange} bind:value={formData.beschreibung} placeholder={$i18n.t('aufgabe.beschreibung')}></textarea>
 			</fieldset>
 
 			<fieldset id="extra">
@@ -171,7 +172,9 @@
 						{#each $Aussehen.optionen.prioritaeten as prioritaet}
 							<input type="radio" id={'prioritaet'+prioritaet.id} name="status" value={prioritaet.id} bind:group={formData.prioritaet} />
 							<label for={'prioritaet'+prioritaet.id}>
-								<div class="label">{prioritaet.name}</div>
+								<div class="label">
+									{ $i18n.t('priorität-optionen.' +prioritaet.id) }
+								</div>
 							</label>
 						{/each}
 					</div>
@@ -187,10 +190,14 @@
 					</div>
 				{/if}
 				<div class="dropdown">
-					<label for="wochentag">Wochentag</label>
-					<select name="wochentag" on:change={handleOption} bind:value={formData.wochentag} placeholder="Wochentag">
+					<label for="wochentag">
+						{ $i18n.t('aufgabe.wochentag') }
+					</label>
+					<select name="wochentag" on:change={handleOption} bind:value={formData.wochentag} placeholder={$i18n.t('aufgabe.wochentag')}>
 						{#each $Aussehen.optionen.wochentagen as wochentag}
-							<option value={wochentag.id}>{wochentag.name}</option>
+							<option value={wochentag.id}>
+								{ $i18n.t('wochentag-optionen.' + wochentag.id.toString()) }
+							</option>
 						{/each}
 					</select>
 				</div>
@@ -215,7 +222,7 @@
 				<!-- <button class="close" on:click={() => fokus = 'normal'}>X</button> -->
 			</fieldset>
 			<fieldset id="link">
-				<input type="text" name="link" on:input={handleChange} bind:value={formData.link} placeholder="Link" />
+				<input type="text" name="link" on:input={handleChange} bind:value={formData.link} placeholder={$i18n.t('aufgabenbuch.link')} />
 			</fieldset>
 		{/if}
 	</div>

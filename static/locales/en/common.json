@@ -1,6 +1,30 @@
 {
 	"name": "Aufgabenbuch",
 	"sprache-ändern": "Change Language",
+	"aufgabe": {
+		"name": "task",
+		"beschreibung": "description",
+		"link": "link",
+		"wochentag": "day of the week"
+	},
+	"priorität-optionen": {
+		"0": "inbox",
+		"1": "now",
+		"2": "next",
+		"3": "later",
+		"4": "someday",
+		"5": "bonus"
+	},
+	"wochentag-optionen": {
+		"0": "none",
+		"1": "Monday",
+		"2": "Tuesday",
+		"3": "Wednesday",
+		"4": "Thursday",
+		"5": "Friday",
+		"6": "Saturday",
+		"7": "Sunday"
+	},
 	"liste": "list",
 	"gerade": "now",
 	"eingangskorb": "inbox",

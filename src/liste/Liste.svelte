@@ -1,4 +1,5 @@
 <script>
+	import i18n from '$lib/i18n';
 	import { liste, gruppen } from "./store.js";
 	import { Aufgabe } from "../aufgabe/store.js";
 	import { format } from "date-fns";
