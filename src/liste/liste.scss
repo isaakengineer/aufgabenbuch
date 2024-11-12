@@ -20,7 +20,7 @@
 		}
 	}
 	&.liste-verbergen {
-		.aufgabe {
+		:global(.aufgabe) {
 			display: none;
 		}
 	}

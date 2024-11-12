@@ -151,7 +151,7 @@
 							<input
 								type="radio"
 								id={'prioritaet'+prioritaet.id}
-								name="status"
+								name="prioritaet"
 								value={prioritaet.id}
 								bind:group={$Aufgabe.prioritaet} />
 							<label for={'prioritaet'+prioritaet.id}>
