@@ -43,8 +43,6 @@
 
 	// let aufgabenList = [];
 
-	const appWindow = getCurrentWindow();
-
 	listen("file-gewaehlt", async (event) => {
 		$Ausstattung.identitaet = event.payload;
 		$Ausstattung.haupt = "liste";
@@ -122,7 +120,7 @@
 				<button class="elemental titlebar-button" id="titlebar-close"
 					on:mouseover={() => elementalCloseButtonWeight = "fill"}
 					on:mouseleave={() => elementalCloseButtonWeight = "duotone"}
-					on:click={() => appWindow.close()}>
+					on:click={() => invoke('schliessen')}>
 					<XCircle size="1.5em" bind:weight={elementalCloseButtonWeight} />
 				</button>
 		  </div>

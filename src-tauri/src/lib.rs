@@ -21,7 +21,11 @@ use aufgabe::{
 mod liste;
 use liste::{dateipfad_eingegeben,
 	// datenbank_erstellen,
+	schliessen,
 	file_erstellen, file_waehlen, AppIdentitaet};
+
+use tokio::sync::oneshot;
+use tokio::runtime::Handle;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 #[tokio::main]
@@ -51,6 +55,7 @@ pub async fn run() {
 			list_erledigt,
 			gruppen_alle,
 			prioritaetenliste,
+			schliessen
 		])
 		.setup(|app| {
 			// #[cfg(debug_assertions)] // only include this code on debug builds
@@ -60,7 +65,23 @@ pub async fn run() {
 			//	 window.close_devtools();
 			// }
 
+
 			app.manage(Mutex::new(AppIdentitaet::default()));
+
+
+			// app.listen("closeRequested", |e| {
+			// 	println!("lass die Apps einfach schließen.");
+
+			//     tokio::task::block_in_place(move || {
+			//         let data = data.lock().unwrap();
+			// 		Handle::current().block_on(async move {
+			// 			close_application(data).await;
+			// 		});
+
+			//     });
+
+		 //    });
+
 			Ok(())
 		})
 		.run(tauri::generate_context!())

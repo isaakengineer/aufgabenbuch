@@ -1,6 +1,5 @@
 {
 	"name": "Aufgabenbuch",
-	"sprache-ändern": "Change Language",
 	"aufgabe": {
 		"name": "task",
 		"id": "id",
@@ -37,6 +36,7 @@
 		"6": "Saturday",
 		"7": "Sunday"
 	},
+	"sprache": "Language",
 	"liste": "list",
 	"gerade": "now",
 	"eingangskorb": "inbox",
@@ -67,7 +67,5 @@
 			"leer": "There are no completed tasks in your to-do.",
 			"leer-empfehlung": "Maybe you could try to view some of the tasks and mark them as completetd!"
 		}
-	},
-  "Hello": "Hello",
-  "World": "World"
+	}
 }

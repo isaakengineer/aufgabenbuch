@@ -335,8 +335,18 @@ pub async fn file_waehlen(app: AppHandle) -> Result<AppIdentitaet, String> { // 
 	// Ok(format!("lass uns mal sehen"))
 }
 
-
-
+#[tauri::command]
+pub async fn schliessen(app: AppHandle) {
+	let data = app.state::<Mutex<AppIdentitaet>>();
+	let db = data.lock().unwrap().pool.clone();
+	match db {
+		Some(db) => {
+			db.close().await;
+		},
+		None => {}
+	}
+	std::process::exit(0x0);
+}
 // TODO: rausnehmen falls extra
 //
 // #[tauri::command]

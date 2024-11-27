@@ -8,6 +8,14 @@
 	let file;
 	let pfad = null;
 
+	let sprachen = [
+		{ id: 'de', name: 'Deutsch'},
+		{ id: 'en', name: 'English (Int)'},
+		{ id: 'sr-Cyrl', name: 'Српски (cyrillic)'},
+		{ id: 'sr-Latn', name: 'Srpski (latin)'},
+	];
+	let sprache = $i18n.language;
+
 	// Ein Funktionen-Paar, weil ansonsten Tauri kann nicht durch Browser die Pfad von "drag-drop event" lesen.
 	listen('tauri://drag-enter', async (event) => {
 		console.log("drag enter event", event);
@@ -59,9 +67,17 @@
 		<h1>{ $i18n.t('abbild.willkommen.kurz') }</h1>
 	</section>
 	<section class="message">
-		<button on:click={() => $i18n.changeLanguage($i18n.language === "de" ? "en" : "de")}>
-			{ $i18n.t("sprache-ändern") }
-		</button>
+		<label for="sprache">{$i18n.t('sprache')}</label>
+		<select name="sprache"
+			bind:value={sprache}
+			on:change={() =>{
+				console.log('sprache ändern', sprache)
+				$i18n.changeLanguage(sprache)
+			}}>
+			{#each sprachen as sprache}
+				<option value={sprache.id}>{sprache.name}</option>
+			{/each}
+		</select>
 	</section>
 	<section class="message">
 		<p>{ $i18n.t('abbild.willkommen.status') }</p>

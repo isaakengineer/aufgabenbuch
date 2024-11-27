@@ -37,8 +37,7 @@
 		"6": "Samstag",
 		"7": "Sonntag"
 	},
-	"aufgaben": "Aufgaben",
-	"sprache-ändern": "Sprache Ändern",
+	"sprache": "Sprache",
 	"liste": "Liste",
 	"gerade": "gerade",
 	"eingangskorb": "Eingangskorb",
@@ -69,6 +68,5 @@
 			"leer": "Es gibt noch keine erledigte Aufgaben auf Ihre Liste.",
 			"leer-empfehlung": "Vielleicht versuchen Sie ein Paar Aufgaben auf Ihre Liste mal als erledigt zu markieren!"
 		}
-	},
-	"World": "Welt"
+	}
 }
