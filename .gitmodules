@@ -1,0 +1,3 @@
+[submodule "static/locales"]
+	path = static/locales
+	url = https://git.schloosser.net/aufgabenbuch/oberflaeche-texte.git

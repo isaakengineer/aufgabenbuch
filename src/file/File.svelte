@@ -10,9 +10,10 @@
 
 	let sprachen = [
 		{ id: 'de', name: 'Deutsch'},
-		{ id: 'en', name: 'English (Int)'},
 		{ id: 'sr-Cyrl', name: 'Српски (cyrillic)'},
 		{ id: 'sr-Latn', name: 'Srpski (latin)'},
+		{ id: 'fr', name: 'Français'},
+		{ id: 'en', name: 'English (Int)'},
 	];
 	let sprache = $i18n.language;
 
@@ -67,7 +68,7 @@
 		<h1>{ $i18n.t('abbild.willkommen.kurz') }</h1>
 	</section>
 	<section class="message">
-		<label for="sprache">{$i18n.t('sprache')}</label>
+		<label for="sprache">{$i18n.t('sprache-ändern')}</label>
 		<select name="sprache"
 			bind:value={sprache}
 			on:change={() =>{
