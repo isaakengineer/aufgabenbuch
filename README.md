@@ -15,8 +15,18 @@
 
 ### Durchführen auf Linux
 
+#### für Gebrauch
+
 ```
-WEBKIT_DISABLE_COMPOSITING_MODE=1 bun tauri dev
+deno install
+deno task tauri build
 ```
 
-Da es entweder ein Bug oder etwas anderes mit GTK und Tauri gibt!
+#### für Bearbeitung
+
+```
+deno install
+WEBKIT_DISABLE_COMPOSITING_MODE=1 deno task tauri dev
+```
+
+`WEBKIT_xyz` da es, entweder ein Bug, oder etwas anderes mit GTK und Tauri nicht gut zusammenspielt!
