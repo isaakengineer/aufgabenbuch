@@ -89,6 +89,20 @@
 	<div class="box dropzone" on:drop={pfadLesen} on:dragover={allowDrop} on:dragover={dragoverHandler} >
 		<p>{ $i18n.t('abbild.willkommen.dropzone') }</p>
 	</div>
+	<section class="message">
+		<p>
+			<span>{$i18n.t('gebrauchhinweise.aktualisierung')} <a href="https://aufgabenbuch.techne.schloosser.com/">{$i18n.t('gebrauchhinweise.ort')}</a></span>
+		</p>
+		<p>
+			<span><a href="https://aufgabenbuch.techne.schloosser.com/">{$i18n.t('gebrauchhinweise.webseite')}</a></span>
+			<span>|</span>
+			<span><a href="https://aufgabenbuch.techne.schloosser.com/">{$i18n.t('gebrauchhinweise.handbuch')}</a></span>
+			<span>|</span>
+			<span><a href="https://aufgabenbuch.techne.schloosser.com/">{$i18n.t('gebrauchhinweise.lizenz')}</a></span>
+			<span>|</span>
+			<span>{$i18n.t('gebrauchhinweise.herkunft')}</span>
+		</p>
+	</section>
 </div>
 
 
