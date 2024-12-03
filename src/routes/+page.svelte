@@ -91,7 +91,7 @@
 </script>
 
 {#if $isLoading}
-	<p>loading...</p>
+	<p>wird geladen...</p>
 {:else}
 	<div class="app">
 		<header>

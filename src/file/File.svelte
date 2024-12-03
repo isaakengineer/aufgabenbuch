@@ -11,7 +11,7 @@
 	let sprachen = [
 		{ id: 'de', name: 'Deutsch'},
 		{ id: 'sr-Cyrl', name: 'Српски (cyrillic)'},
-		{ id: 'sr-Latn', name: 'Srpski (latin)'},
+		{ id: 'sr', name: 'Srpski (latin)'},
 		{ id: 'fr', name: 'Français'},
 		{ id: 'en', name: 'English (Int)'},
 	];
