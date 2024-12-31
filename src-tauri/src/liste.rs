@@ -226,7 +226,7 @@ pub async fn dateipfad_eingegeben(app: AppHandle, pfad: String) -> Result<AppIde
 	}
 }
 #[tauri::command]
-pub async fn identitaet_weitergeben(app: AppHandle) -> Result<AppIdentitaet, String> {
+pub async fn identitaet_bauen(app: AppHandle) -> Result<AppIdentitaet, String> {
 	let charakter = app.state::<Mutex<AppIdentitaet>>();
 	let pfad = charakter.lock().unwrap().dateipfad.clone();
 	match pfad {

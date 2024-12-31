@@ -53,7 +53,7 @@
 	});
 	onMount(() =>{
 		console.log("identität rufen")
-		let idnt = invoke('identitaet_weitergeben')
+		let idnt = invoke('identitaet_bauen')
 		console.log(idnt)
 	})
 	async function controlle(item) {

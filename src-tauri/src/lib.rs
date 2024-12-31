@@ -22,7 +22,7 @@ use aufgabe::{
 mod liste;
 use liste::{dateipfad_eingegeben,
 	// datenbank_erstellen,
-	identitaet_weitergeben,
+	identitaet_bauen,
 	schliessen,
 	file_erstellen, file_waehlen, AppIdentitaet};
 
@@ -42,7 +42,7 @@ pub async fn run() {
 			file_waehlen,
 
 			// datenbank_erstellen,
-			identitaet_weitergeben,
+			identitaet_bauen,
 			dateipfad_eingegeben,
 
 			aufgabe_hinfuegen,
