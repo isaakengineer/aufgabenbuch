@@ -73,6 +73,8 @@ fn identitaet_ausgeben(app: AppHandle) -> AppIdentitaet {
 	charakter.clone()
 }
 
+
+
 // ÜBER DATEI PFAD
 fn dateipfad_auseinandernehmen(pfad: String) -> Option<(String, String)> { // vielleicht die checks sollten hier sein!
 	let path: PathBuf = PathBuf::from(pfad);
@@ -122,7 +124,6 @@ async fn has_migration_been_applied(pool: &Pool<Sqlite>, migration_name: &str) -
 		.bind(migration_name)
 		.fetch_one(pool)
 		.await;
-
 	match result {
 		Ok(_) => Ok(true),
 		Err(e) => {
@@ -208,7 +209,7 @@ async fn datenbank_aktivieren_oder_herstellen(app: AppHandle, path: String) -> R
 pub async fn dateipfad_eingegeben(app: AppHandle, pfad: String) -> Result<AppIdentitaet, String> {
 	// TODO: noch weitere Checks hinzufügen, falls die "pfad" manipuliert worden sein sollte!
 	// 	ähnlich wie "neue_dateipfad_pruefen" aber die erste Check soll anderes rum sein
-	// 		Messane = "this app cannot access the path provided!"
+	// 		Message = "this app cannot access the path provided!"
 	// TODO: name ändern "dateipfad_einsetzen"
 
 	let res = datenbank_aktivieren_oder_herstellen(app.clone(), pfad.clone()).await;
@@ -223,6 +224,32 @@ pub async fn dateipfad_eingegeben(app: AppHandle, pfad: String) -> Result<AppIde
 			return Err(format!("Failed to create file: {:?}", e))
 		}
 	}
+}
+#[tauri::command]
+pub async fn identitaet_weitergeben(app: AppHandle) -> Result<AppIdentitaet, String> {
+	let charakter = app.state::<Mutex<AppIdentitaet>>();
+	let pfad = charakter.lock().unwrap().dateipfad.clone();
+	match pfad {
+		Some(pfad) => {
+			println!("pfad existiert: {}", pfad);
+			let res = datenbank_aktivieren_oder_herstellen(app.clone(), pfad.clone()).await;
+			match res {
+				Ok(_) => {
+					datenbankpfad_fuellen(app.clone(), pfad.clone());
+					let identitaet = identitaet_ausgeben(app.clone());
+					app.emit("file-gewaehlt", identitaet.clone()).unwrap();
+					Ok(identitaet)
+				}
+				Err(e) => {
+					Err(format!("Failed to create file: {:?}", e))
+				}
+			}
+		},
+		None => {
+			Err(format!("kein dateipfad existierte!"))
+		}
+	}
+
 }
 
 #[tauri::command]

@@ -18,6 +18,7 @@
 
 	import Tag from "phosphor-svelte/lib/Tag";
 	import XCircle from "phosphor-svelte/lib/XCircle";
+    import { onMount } from 'svelte';
 
 	let aufgabenList = $liste;
 
@@ -50,7 +51,11 @@
 		$liste = await invoke("list_alle");
 		$gruppen = await invoke("gruppen_alle");
 	});
-
+	onMount(() =>{
+		console.log("identität rufen")
+		let idnt = invoke('identitaet_weitergeben')
+		console.log(idnt)
+	})
 	async function controlle(item) {
 		console.log(item);
 		switch (item) {

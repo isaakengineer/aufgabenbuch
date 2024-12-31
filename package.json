@@ -1,7 +1,7 @@
 {
 	"name": "aufgabenbuch",
-	"version": "0.6.1",
-	"description": "To-Do Liste für ein gestalterisches Leben",
+	"version": "0.6.2",
+	"description": "To-Do Liste für ein gestalterisches Leben; für Sophisten.",
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",

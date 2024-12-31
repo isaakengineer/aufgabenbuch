@@ -6,6 +6,7 @@ use std::path::PathBuf;
 use std::sync::Mutex;
 use tauri::{AppHandle, Builder, Emitter, Listener, Manager};
 use tauri_plugin_dialog::{DialogExt, MessageDialogKind};
+use tauri_plugin_cli::CliExt;
 
 mod aufgabe;
 use aufgabe::{
@@ -21,6 +22,7 @@ use aufgabe::{
 mod liste;
 use liste::{dateipfad_eingegeben,
 	// datenbank_erstellen,
+	identitaet_weitergeben,
 	schliessen,
 	file_erstellen, file_waehlen, AppIdentitaet};
 
@@ -31,6 +33,7 @@ use tokio::runtime::Handle;
 #[tokio::main]
 pub async fn run() {
 	tauri::Builder::default()
+		.plugin(tauri_plugin_cli::init())
 		.plugin(tauri_plugin_dialog::init())
 		.plugin(tauri_plugin_fs::init())
 		.plugin(tauri_plugin_shell::init())
@@ -39,6 +42,7 @@ pub async fn run() {
 			file_waehlen,
 
 			// datenbank_erstellen,
+			identitaet_weitergeben,
 			dateipfad_eingegeben,
 
 			aufgabe_hinfuegen,
@@ -65,22 +69,47 @@ pub async fn run() {
 			//	 window.close_devtools();
 			// }
 
-
 			app.manage(Mutex::new(AppIdentitaet::default()));
 
+			let cli_eingaben = app.cli().matches().unwrap();
+			let eingabe = cli_eingaben.args.get("pfad").unwrap().value.clone();
+			print!("{:?}", eingabe);
+			let args: Vec<_> = std::env::args().collect(); // get all arguements passed to app
+			println!("{:?}", args);
+			let mut m = format!("");
 
+			if eingabe.is_boolean() && eingabe.as_bool().unwrap() == false {
+				m = format!("kein Dateipfad beim Start eingegeben.");
+			} else {
+				let eingegebene_pfad = eingabe.as_str();
+				match eingegebene_pfad {
+					Some(pfad) => {
+						let pfad_buf = std::path::PathBuf::from(pfad);
+						if pfad_buf.is_dir() {
+							m = format!("Fehler: eingegebene Dateipfad ist ein Fach!");
+						} else {
+							let charakter = app.state::<Mutex<AppIdentitaet>>();
+							let mut charakter = charakter.lock().unwrap();
+							charakter.dateipfad = Some(pfad_buf.display().to_string().clone());
+							m = format!("Dateipfad würde eingenommen.");
+						}
+					},
+					None => {}
+				}
+			}
+			println!("{}",m);
 			// app.listen("closeRequested", |e| {
 			// 	println!("lass die Apps einfach schließen.");
 
-			//     tokio::task::block_in_place(move || {
-			//         let data = data.lock().unwrap();
+			//	 tokio::task::block_in_place(move || {
+			//		 let data = data.lock().unwrap();
 			// 		Handle::current().block_on(async move {
 			// 			close_application(data).await;
 			// 		});
 
-			//     });
+			//	 });
 
-		 //    });
+		 //	});
 
 			Ok(())
 		})
