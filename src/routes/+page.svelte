@@ -251,6 +251,7 @@
 				margin: .2rem;
 				align-content: center;
 				display: flex;
+				background-color: transparent;
 				&:hover {
 					box-shadow: none;
 				}
