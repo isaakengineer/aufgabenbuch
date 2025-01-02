@@ -4,3 +4,6 @@
 [submodule "src-tauri/icons"]
 	path = src-tauri/icons
 	url = https://git.schloosser.net/aufgabenbuch/logo.git
+[submodule "static/fonts"]
+	path = static/fonts
+	url = https://git.schloosser.net/techne/font.git
