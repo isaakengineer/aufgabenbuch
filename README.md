@@ -6,8 +6,8 @@
 
 - Webseite: [https://aufgabenbuch.techne.schloosser.com](https://aufgabenbuch.techne.schloosser.com)
 - Hauptquelle des Kodes: [https://git.schloosser.net/aufgabenbuch/aufgabenbuch](https://git.schloosser.net/aufgabenbuch/aufgabenbuch)
-- Spiegel der Hauptquelle:
-- Dokumentationen
+- Spiegel der Hauptquelle (Codeberg): [https://codeberg.org/techne/aufgabenbuch](https://codeberg.org/techne/aufgabenbuch)
+- Dokumentationen (Quellen)
     - für NutzerInnen: [https://git.schloosser.net/aufgabenbuch/dok-gebrauch](https://git.schloosser.net/aufgabenbuch/dok-gebrauch)
     - für Entwickelung: [https://git.schloosser.net/aufgabenbuch/dok-entwicklung](https://git.schloosser.net/aufgabenbuch/dok-entwicklung)
     - für Organisation: [https://git.schloosser.net/aufgabenbuch/dok-org](https://git.schloosser.net/aufgabenbuch/dok-org)
