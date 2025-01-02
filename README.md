@@ -2,6 +2,12 @@
 
 > Die "To-Do" Liste für die Sophisten!
 
+Aufgabenbuch ist eine auf SQLite basierte Anwendung für (Desktop) Linux zum Verwaltung einer oder mehrere Listen (Dateien) persönlicher Aufgaben. 
+
+## Herunterladen
+
+[https://console.schloosser.net/browser/aufgabenbuch](https://console.schloosser.net/browser/aufgabenbuch)
+
 ## Links
 
 - Webseite: [https://aufgabenbuch.techne.schloosser.com](https://aufgabenbuch.techne.schloosser.com)
