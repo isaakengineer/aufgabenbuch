@@ -4,6 +4,8 @@
 
 Aufgabenbuch ist eine auf SQLite basierte Anwendung für (Desktop) Linux zum Verwaltung einer oder mehrere Listen (Dateien) persönlicher Aufgaben.
 
+## Screenshots
+
 ## Download
 
 This application is available for download and installation on Linux desktop environment with for following distribution families:
@@ -13,7 +15,7 @@ This application is available for download and installation on Linux desktop env
 	- AMD 64
 - RPM (Redhat, Fedora, etc)
 	- ARM 64
-	- AMD 64
+	- x86_64
 
 [https://console.schloosser.net/browser/aufgabenbuch](https://console.schloosser.net/browser/aufgabenbuch)
 
