@@ -43,9 +43,9 @@ WEBKIT_DISABLE_COMPOSITING_MODE=1 deno task tauri dev
 
 ### Maturity
 
-- quality of source code: MVP 2
-- quality of documentation: NULL
-- stage of product growth: mittle (mehrartiges Textbearbeitung)
+- quality of source code: MVP 7
+- quality of documentation: durcheinander
+- stage of product growth: ausreichend
 
 ### Dedication
 
