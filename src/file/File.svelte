@@ -15,6 +15,7 @@
 		{ id: "zh", name: "中文" },
 		{ id: "pt", name: "Português" },
 		{ id: "ru", name: "русский" },
+		{ id: "hi", name: "हिंदी" },
 		{ id: "es", name: "Español" },
 		// { id: "pl", name: "Polski" },
 		// { id: "ro", name: "Română" },
