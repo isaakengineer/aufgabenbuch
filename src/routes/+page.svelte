@@ -1,16 +1,16 @@
 <script>
-	import i18n from '$lib/i18n';
-	import { isLoading } from 'svelte-i18next';
+	import i18n from "$lib/i18n";
+	import { isLoading } from "svelte-i18next";
 
 	import { invoke } from "@tauri-apps/api/core";
 	import { emit, once, listen } from "@tauri-apps/api/event";
-	import { getCurrentWindow } from '@tauri-apps/api/window';
+	import { getCurrentWindow } from "@tauri-apps/api/window";
 
 	import Aufgabe from "../aufgabe/Aufgabe.svelte";
 	import Liste from "../liste/Liste.svelte";
 	import Buch from "../liste/Buch.svelte";
 	import Gerade from "../liste/Gerade.svelte";
-	import Eingangskorb from '../liste/Eingangskorb.svelte';
+	import Eingangskorb from "../liste/Eingangskorb.svelte";
 	import { liste, gruppen } from "../liste/store.js";
 
 	import File from "../file/File.svelte";
@@ -18,7 +18,7 @@
 
 	import Tag from "phosphor-svelte/lib/Tag";
 	import XCircle from "phosphor-svelte/lib/XCircle";
-    import { onMount } from 'svelte';
+	import { onMount } from "svelte";
 
 	let aufgabenList = $liste;
 
@@ -51,17 +51,19 @@
 		$liste = await invoke("list_alle");
 		$gruppen = await invoke("gruppen_alle");
 	});
-	onMount(() =>{
-		console.log("identität rufen")
-		let idnt = invoke('identitaet_bauen')
-		console.log(idnt)
-	})
+	onMount(() => {
+		console.log("identität rufen");
+		let idnt = invoke("identitaet_bauen");
+		console.log(idnt);
+	});
 	async function controlle(item) {
 		console.log(item);
 		switch (item) {
 			case "eingangskorb":
 				$Ausstattung.haupt = "eingangskorb";
-				$liste = await invoke("prioritaetenliste", { prioritaet: $Ausstattung.gezeigtePrioritaet });
+				$liste = await invoke("prioritaetenliste", {
+					prioritaet: $Ausstattung.gezeigtePrioritaet,
+				});
 				console.log($liste);
 				break;
 			case "gerade":
@@ -85,14 +87,14 @@
 		}
 	}
 
-	const gruppenZeigenToggle = async function() {
+	const gruppenZeigenToggle = async function () {
 		switch ($Ausstattung.gruppenZeigen) {
 			case false:
 				$gruppen = await invoke("gruppen_alle");
 			case true:
-				$Ausstattung.gruppenZeigen = !$Ausstattung.gruppenZeigen
+				$Ausstattung.gruppenZeigen = !$Ausstattung.gruppenZeigen;
 		}
-	}
+	};
 </script>
 
 {#if $isLoading}
@@ -103,11 +105,12 @@
 			{#if $Ausstattung.haupt !== "nichts"}
 				<div class="name">{$Ausstattung.identitaet.name}</div>
 				{#if $Ausstattung.haupt === "liste"}
-					<div class="titel">{ $i18n.t('abbild.liste.name') }</div>
+					<div class="titel">{$i18n.t("abbild.liste.name")}</div>
 					<div class="action">
 						<a
 							class="ausweiten aktion"
-							on:click={gruppenZeigenToggle} >
+							on:click={gruppenZeigenToggle}
+						>
 							{#if $Ausstattung.gruppenZeigen}
 								<Tag weight="fill" size="1.5em" />
 							{:else}
@@ -116,19 +119,25 @@
 						</a>
 					</div>
 				{:else if $Ausstattung.haupt === "gerade"}
-					<div class="titel">{ $i18n.t('gerade') }</div>
+					<div class="titel">{$i18n.t("gerade")}</div>
 				{/if}
 			{/if}
-			<div data-tauri-drag-region class="titlebar windowdragger">
-			</div>
-		  <div>
-				<button class="elemental titlebar-button" id="titlebar-close"
-					on:mouseover={() => elementalCloseButtonWeight = "fill"}
-					on:mouseleave={() => elementalCloseButtonWeight = "duotone"}
-					on:click={() => invoke('schliessen')}>
-					<XCircle size="1.5em" bind:weight={elementalCloseButtonWeight} />
+			<div data-tauri-drag-region class="titlebar windowdragger"></div>
+			<div>
+				<button
+					class="elemental titlebar-button"
+					id="titlebar-close"
+					on:mouseover={() => (elementalCloseButtonWeight = "fill")}
+					on:mouseleave={() =>
+						(elementalCloseButtonWeight = "duotone")}
+					on:click={() => invoke("schliessen")}
+				>
+					<XCircle
+						size="1.5em"
+						bind:weight={elementalCloseButtonWeight}
+					/>
 				</button>
-		  </div>
+			</div>
 		</header>
 		<main>
 			{#if $Ausstattung.haupt === "nichts"}
@@ -149,7 +158,9 @@
 		<footer>
 			<nav class="kontrollen">
 				{#each haupt as item}
-					<a href="#" on:click={() => controlle(item)}>{ $i18n.t(item) }</a>
+					<a href="#" on:click={() => controlle(item)}
+						>{$i18n.t(item)}</a
+					>
 				{/each}
 			</nav>
 		</footer>
@@ -157,9 +168,9 @@
 {/if}
 
 <style lang="scss">
-#titlebar-close {
-	color: indianred;
-}
+	#titlebar-close {
+		color: indianred;
+	}
 	.ausweiten {
 		/* display: block; */
 	}
@@ -217,7 +228,7 @@
 		padding: 1px;
 		display: grid;
 		grid-template: "header" "." "main" "." "aside" "." "footer";
-		grid-template-rows: 2.8rem 1px 5fr 1px 1fr 1px 2.8rem;
+		grid-template-rows: 2.8rem 1px 5fr 1px min-content 1px 2.8rem;
 		flex-direction: column;
 		background-color: black;
 		height: 100vh;
@@ -248,7 +259,7 @@
 			button.elemental {
 				border: none;
 				box-shadow: none;
-				margin: .2rem;
+				margin: 0.2rem;
 				align-content: center;
 				display: flex;
 				background-color: transparent;

@@ -1,6 +1,6 @@
 [package]
 name = "aufgabenbuch"
-version = "0.6.3"
+version = "1.1.0"
 description = "To-Do Liste für ein gestalterisches Leben; für Sophisten."
 authors = ["Isaak Engineer <i-engineer@tutamail.com>"]
 license = "AGPL-3.0-only"
