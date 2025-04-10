@@ -17,6 +17,7 @@
 		{ id: "ru", name: "русский" },
 		{ id: "hi", name: "हिंदी" },
 		{ id: "es", name: "Español" },
+		{ id: "nl", name: "Dutch"}
 		// { id: "pl", name: "Polski" },
 		// { id: "ro", name: "Română" },
 		// { id: "tr", name: "Türkçe" },
@@ -125,6 +126,7 @@
 				></span
 			>
 		</p>
+		<p>{$i18n.t("dedication", { ns: "a" })}</p>
 		<p>
 			<span
 				><a href="https://aufgabenbuch.techne.schloosser.com/"
