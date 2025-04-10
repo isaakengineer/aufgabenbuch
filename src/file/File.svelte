@@ -17,7 +17,7 @@
 		{ id: "ru", name: "русский" },
 		{ id: "hi", name: "हिंदी" },
 		{ id: "es", name: "Español" },
-		{ id: "nl", name: "Dutch"}
+		{ id: "nl", name: "Dutch" },
 		// { id: "pl", name: "Polski" },
 		// { id: "ro", name: "Română" },
 		// { id: "tr", name: "Türkçe" },
