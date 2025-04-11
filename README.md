@@ -39,35 +39,37 @@ WEBKIT_DISABLE_COMPOSITING_MODE=1 deno task tauri dev
 
 `WEBKIT_xyz` da es, entweder ein Bug, oder etwas anderes mit GTK und Tauri nicht gut zusammenspielt!
 
-## Status
+## Impressum
 
-### Maturity
+### Widmung
 
-- quality of source code: MVP 7
-- quality of documentation: durcheinander
-- stage of product growth: ausreichend
+**Für meine Seelenpaarin ohne deren Liebe ich mir meine ehrenamtlichen Taten nicht leisten könnte!**
 
-### Dedication
+### Aufbauqualität
 
-_to my soulamte_. **Valentine Gift 2025**.
+- Quelltext: MVP 7
+- Dokumentation: durcheinander
+- Gestaltung: ausreichend
 
-### Links
+### Verweise
 
 - Webseite: [https://aufgabenbuch.techne.schloosser.com](https://aufgabenbuch.techne.schloosser.com)
-- Hauptquelle des Kodes: [https://git.schloosser.net/aufgabenbuch/aufgabenbuch](https://git.schloosser.net/aufgabenbuch/aufgabenbuch)
-- Spiegel der Hauptquelle (Codeberg): [https://codeberg.org/techne/aufgabenbuch](https://codeberg.org/techne/aufgabenbuch)
-- Dokumentationen (Quellen)
-    - für NutzerInnen: [https://git.schloosser.net/aufgabenbuch/dok-gebrauch](https://git.schloosser.net/aufgabenbuch/dok-gebrauch)
-    - für Entwickelung: [https://git.schloosser.net/aufgabenbuch/dok-entwicklung](https://git.schloosser.net/aufgabenbuch/dok-entwicklung)
-    - für Organisation: [https://git.schloosser.net/aufgabenbuch/dok-org](https://git.schloosser.net/aufgabenbuch/dok-org)
 
-## Technologies
+#### Quelltext
 
-- Tauri 2
-- SvelteKit 1, Svelte 4
-- Vite
+- master:
+  - [intern](https://git.schloosser.net/aufgabenbuch/aufgabenbuch)
+  - Spiegelbild
+    - [Codeberg](https://codeberg.org/techne/aufgabenbuch) 
+    - [GitHub](https://github.com/isaakengineer/aufgabenbuch)
 
-### License
+#### Dokumentation
+
+- für NutzerInnen: [https://git.schloosser.net/aufgabenbuch/dok-gebrauch](https://git.schloosser.net/aufgabenbuch/dok-gebrauch)
+- für Entwickelung: [https://git.schloosser.net/aufgabenbuch/dok-entwicklung](https://git.schloosser.net/aufgabenbuch/dok-entwicklung)
+- für Organisation: [https://git.schloosser.net/aufgabenbuch/dok-org](https://git.schloosser.net/aufgabenbuch/dok-org)
+
+### Lizenz
 
 Copyright (C) 2025 Hossein Rezaei (penname: Isaak Engineer)
 
