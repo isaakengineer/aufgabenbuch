@@ -54,6 +54,8 @@ WEBKIT_DISABLE_COMPOSITING_MODE=1 deno task tauri dev
 ### Verweise
 
 - Webseite: [https://aufgabenbuch.techne.schloosser.com](https://aufgabenbuch.techne.schloosser.com)
+- Herstellergruppe: **[Techne](https://techne.schloosser.com)**
+- Muttergrupper der Herstellergruppe: **[Schlösser](https://schloosser.com)**
 
 #### Quelltext
 
